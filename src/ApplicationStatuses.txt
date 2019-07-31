@@ -1,0 +1,13 @@
+Created, CRTD
+Applied, APPL
+Denied, DENY
+Conditionally Admitted, COND
+Admitted, ADMT
+Withdrawn, WADM
+Offer Accepted, DEIN
+Decision Deffered, DDEF
+On Waiting List, WAIT
+Firm Offer Deferred, WAPP
+Conditional Admittance Revoked, ADRV
+Offer Rejected, WAPP
+Deffered, DEFR
