@@ -7,6 +7,12 @@ public class InternationalApplicant extends Applicant {
 		super();
 		setPassport("");
 	}
+	
+	public InternationalApplicant(Applicant applicant)
+	{
+		super(applicant);
+		passport = "";
+	}
 
 	/**
 	 * Method return the passport number belonging to this international applicant.

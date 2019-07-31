@@ -12,6 +12,16 @@ public class User {
 		
 	}
 	
+	public User(User user)
+	{
+		this.surname = user.getSurname();
+		this.firstName = user.getFirstName();
+		this.title = user.getTitle();
+		this.email = user.getEmail();
+		this.cellPhone = user.getCellPhone();
+		this.password = user.getPassword();
+	}
+	
 	/**
 	 * Retrieve surname of applicant or academic.
 	 * @return the surname of the user.

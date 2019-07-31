@@ -11,6 +11,16 @@ public Applicant()
 	super();
 }
 
+public Applicant(Applicant applicant)
+{
+	super((User) applicant);
+	this.applicantNumber = applicant.getApplicantNumber();
+	this.citizenship = applicant.getCitizenship();
+	this.citizenshipCountry = applicant.getCitizenshipCountry();
+	this.residenceAddress = applicant.getResidenceAddress();
+	this.previousQualification = applicant.getPreviousQualification();
+}
+
 
 /**
  * Method return the country in which thus applicant has citizenship.

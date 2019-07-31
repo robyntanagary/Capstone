@@ -90,4 +90,22 @@ public class UserController {
 		//needs logic!!!
 		return false;
 	}
+	
+	public boolean insertOrUpdateApplicant(Applicant applicant)
+	{
+		//needs logic!!!
+		return true;
+	}
+	
+	public boolean insertOrUpdateInternationalApplicant(InternationalApplicant internationalApplicant)
+	{
+		//needs logic!!!
+		return true;
+	}
+	
+	public boolean insertOrUpdateSouthAfricanApplicant(SouthAfricanApplicant southAfricanApplicant)
+	{
+		//needs logic!!!
+		return true;
+	}
 }

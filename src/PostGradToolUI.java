@@ -34,6 +34,8 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.io.IOException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class PostGradToolUI {
@@ -181,6 +183,9 @@ public class PostGradToolUI {
 	private String[] NQF;
 	private JCheckBox chkbxFundingStatement;
 	private JTextField txtSignEmail;
+	private boolean bApplicantSignedIn;
+	private JComboBox cbxApplicationApplicationStatus;
+	private JComboBox cbxApplicationStatusReason;
 	
 	/**
 	 * Run Postgraduate Application Tool.
@@ -226,6 +231,248 @@ public class PostGradToolUI {
 		frmSchoolOfIt.getContentPane().add(pnlApplicationUI);
 		pnlApplicationUI.setLayout(null);
 		
+		pnlProgrammeOfStudy = new JPanel();
+		pnlProgrammeOfStudy.setBounds(235, 86, 459, 282);
+		pnlApplicationUI.add(pnlProgrammeOfStudy);
+		pnlProgrammeOfStudy.setLayout(null);
+		
+		lblProgrammeOfStudy = new JLabel("Programme of Study:");
+		lblProgrammeOfStudy.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblProgrammeOfStudy.setBounds(10, 12, 125, 25);
+		pnlProgrammeOfStudy.add(lblProgrammeOfStudy);
+		
+		txtStudyProgramOther = new JTextField();
+		txtStudyProgramOther.setFont(new Font("Calibri", Font.PLAIN, 12));
+		txtStudyProgramOther.setColumns(10);
+		txtStudyProgramOther.setBounds(219, 46, 188, 25);
+		pnlProgrammeOfStudy.add(txtStudyProgramOther);
+		
+		lblIfOtherSpecify = new JLabel("If Other, Specify:");
+		lblIfOtherSpecify.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblIfOtherSpecify.setBounds(10, 46, 124, 24);
+		pnlProgrammeOfStudy.add(lblIfOtherSpecify);
+		
+		cbxStudyProgram = new JComboBox<String>();
+		cbxStudyProgram.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) {
+				String studyProgram = cbxStudyProgram.getSelectedItem().toString();
+				
+				lblIfOtherSpecify.setVisible(studyProgram.equals("Other"));
+				txtStudyProgramOther.setVisible(studyProgram.equals("Other"));
+				
+				lblPriorItExperience.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				spnYearsITExperience.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				lblLevelOfUndergraduate.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				spnLevelUndergrad.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				chckbxPreviousDegreeHadProjectThesis.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+			}
+		});
+		cbxStudyProgram.setBounds(219, 11, 188, 22);
+		pnlProgrammeOfStudy.add(cbxStudyProgram);
+		
+		lblPriorItExperience = new JLabel("Years of Prior IT Experience:");
+		lblPriorItExperience.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblPriorItExperience.setBounds(10, 83, 150, 24);
+		pnlProgrammeOfStudy.add(lblPriorItExperience);
+		
+		lblLevelOfUndergraduate = new JLabel("Level of Undergraduate Mathematics:");
+		lblLevelOfUndergraduate.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblLevelOfUndergraduate.setBounds(10, 128, 209, 24);
+		pnlProgrammeOfStudy.add(lblLevelOfUndergraduate);
+		
+		spnLevelUndergrad = new JSpinner();
+		spnLevelUndergrad.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) {
+				displayUndergradMathInputs(Integer.getInteger(spnLevelUndergrad.getValue().toString()));
+			}
+		});
+		spnLevelUndergrad.setModel(new SpinnerNumberModel(0, 0, 4, 1));
+		spnLevelUndergrad.setFont(new Font("Calibri", Font.PLAIN, 12));
+		spnLevelUndergrad.setBounds(219, 130, 30, 20);
+		pnlProgrammeOfStudy.add(spnLevelUndergrad);
+		
+		lblAveragesPerMathematics = new JLabel("Averages per Mathematics Level:");
+		lblAveragesPerMathematics.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblAveragesPerMathematics.setBounds(10, 175, 209, 24);
+		pnlProgrammeOfStudy.add(lblAveragesPerMathematics);
+		
+		txtAverageMathLevel1 = new JTextField();
+		txtAverageMathLevel1.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+		});
+		txtAverageMathLevel1.setBounds(219, 175, 50, 20);
+		pnlProgrammeOfStudy.add(txtAverageMathLevel1);
+		txtAverageMathLevel1.setColumns(10);
+		
+		txtAverageMathLevel2 = new JTextField();
+		txtAverageMathLevel2.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+		});
+		txtAverageMathLevel2.setBounds(279, 175, 50, 20);
+		pnlProgrammeOfStudy.add(txtAverageMathLevel2);
+		txtAverageMathLevel2.setColumns(10);
+		
+		txtAverageMathLevel3 = new JTextField();
+		txtAverageMathLevel3.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+		});
+		txtAverageMathLevel3.setBounds(339, 175, 50, 20);
+		pnlProgrammeOfStudy.add(txtAverageMathLevel3);
+		txtAverageMathLevel3.setColumns(10);
+		
+		lblAverageMathLevel1 = new JLabel("Level 1");
+		lblAverageMathLevel1.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblAverageMathLevel1.setBounds(219, 153, 50, 21);
+		pnlProgrammeOfStudy.add(lblAverageMathLevel1);
+		
+		spnYearsITExperience = new JSpinner();
+		spnYearsITExperience.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+		});
+		spnYearsITExperience.setFont(new Font("Calibri", Font.PLAIN, 12));
+		spnYearsITExperience.setBounds(219, 85, 30, 20);
+		pnlProgrammeOfStudy.add(spnYearsITExperience);
+		
+		chckbxPreviousDegreeHadProjectThesis = new JCheckBox("Previous Degree had Project or Thesis Component");
+		chckbxPreviousDegreeHadProjectThesis.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+			}
+		});
+		chckbxPreviousDegreeHadProjectThesis.setBounds(10, 206, 269, 23);
+		pnlProgrammeOfStudy.add(chckbxPreviousDegreeHadProjectThesis);
+		
+		txtrProvideBriefDescription = new JTextArea();
+		txtrProvideBriefDescription.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+			}
+		});
+		txtrProvideBriefDescription.setFont(new Font("Calibri", Font.ITALIC, 12));
+		txtrProvideBriefDescription.setText("Provide Brief Description of Project or Thesis Component");
+		txtrProvideBriefDescription.setLineWrap(true);
+		txtrProvideBriefDescription.setWrapStyleWord(true);
+		txtrProvideBriefDescription.setToolTipText("Provide Brief Description of Project or Thesis Component");
+		txtrProvideBriefDescription.setBounds(10, 232, 384, 50);
+		pnlProgrammeOfStudy.add(txtrProvideBriefDescription);
+		
+		lblAverageMathLevel2 = new JLabel("Level 2");
+		lblAverageMathLevel2.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblAverageMathLevel2.setBounds(279, 153, 50, 24);
+		pnlProgrammeOfStudy.add(lblAverageMathLevel2);
+		
+		lblAverageMathLevel3 = new JLabel("Level 3");
+		lblAverageMathLevel3.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblAverageMathLevel3.setBounds(339, 153, 50, 24);
+		pnlProgrammeOfStudy.add(lblAverageMathLevel3);
+		
+		pnlAdditionalDocumentation = new JPanel();
+		pnlAdditionalDocumentation.setBounds(235, 90, 459, 282);
+		pnlApplicationUI.add(pnlAdditionalDocumentation);
+		pnlAdditionalDocumentation.setLayout(null);
+		
+		txtrTheFollowingDocuments = new JTextArea();
+		txtrTheFollowingDocuments.setBackground(SystemColor.menu);
+		txtrTheFollowingDocuments.setText("The following documents (which are ticked) needs to be uploaded as a single PDF:");
+		txtrTheFollowingDocuments.setWrapStyleWord(true);
+		txtrTheFollowingDocuments.setLineWrap(true);
+		txtrTheFollowingDocuments.setFont(new Font("Calibri", Font.PLAIN, 12));
+		txtrTheFollowingDocuments.setBounds(10, 9, 439, 34);
+		pnlAdditionalDocumentation.add(txtrTheFollowingDocuments);
+		
+		chckbxCertifiedTranscript = new JCheckBox("Certified Transcript");
+		chckbxCertifiedTranscript.setFont(new Font("Calibri", Font.PLAIN, 12));
+		chckbxCertifiedTranscript.setEnabled(false);
+		chckbxCertifiedTranscript.setBounds(10, 45, 141, 23);
+		pnlAdditionalDocumentation.add(chckbxCertifiedTranscript);
+		
+		chckbxCurriculumVitaecv = new JCheckBox("Curriculum Vitae (CV)");
+		chckbxCurriculumVitaecv.setFont(new Font("Calibri", Font.PLAIN, 12));
+		chckbxCurriculumVitaecv.setEnabled(false);
+		chckbxCurriculumVitaecv.setBounds(232, 45, 141, 23);
+		pnlAdditionalDocumentation.add(chckbxCurriculumVitaecv);
+		
+		chckbxResearchStatement = new JCheckBox("Research Statement");
+		chckbxResearchStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
+		chckbxResearchStatement.setEnabled(false);
+		chckbxResearchStatement.setBounds(10, 71, 141, 23);
+		pnlAdditionalDocumentation.add(chckbxResearchStatement);
+		
+		chckbxRefereesNames = new JCheckBox("Referees' Names");
+		chckbxRefereesNames.setFont(new Font("Calibri", Font.PLAIN, 12));
+		chckbxRefereesNames.setEnabled(false);
+		chckbxRefereesNames.setBounds(232, 69, 141, 23);
+		pnlAdditionalDocumentation.add(chckbxRefereesNames);
+		
+		chckbxMotivation = new JCheckBox("Motivation");
+		chckbxMotivation.setFont(new Font("Calibri", Font.PLAIN, 12));
+		chckbxMotivation.setEnabled(false);
+		chckbxMotivation.setBounds(232, 95, 141, 23);
+		pnlAdditionalDocumentation.add(chckbxMotivation);
+		
+		lblPdfOfAdditional = new JLabel("PDF of Additional Documentation:");
+		lblPdfOfAdditional.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblPdfOfAdditional.setBounds(10, 170, 204, 23);
+		pnlAdditionalDocumentation.add(lblPdfOfAdditional);
+		
+		btnChoosePDF = new JButton("Choose File");
+		btnChoosePDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblPDFName.setText(appController.showChosenPDF());
+				btnUploadFile.setVisible(true);
+			}
+			});
+		
+		btnChoosePDF.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnChoosePDF.setBounds(202, 194, 119, 23);
+		pnlAdditionalDocumentation.add(btnChoosePDF);
+		
+		btnUploadFile = new JButton("Upload File");
+		btnUploadFile.setVisible(false);
+		btnUploadFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!appController.uploadPDF(lblPDFName.getText()))
+				{
+					//show error
+				}
+				btnUploadFile.setVisible(false);
+			}
+			});
+		btnUploadFile.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnUploadFile.setBounds(202, 225, 119, 23);
+		pnlAdditionalDocumentation.add(btnUploadFile);
+		
+		lblPDFName = new JLabel("");
+		lblPDFName.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblPDFName.setBounds(224, 170, 204, 23);
+		pnlAdditionalDocumentation.add(lblPDFName);
+		
+		btnDownloadPDF = new JButton("Download File");
+		btnDownloadPDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				appController.downloadPDF(lblPDFName.getText().trim());
+			}
+		});
+		btnDownloadPDF.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnDownloadPDF.setBounds(330, 192, 119, 23);
+		pnlAdditionalDocumentation.add(btnDownloadPDF);
+		
+		chkbxFundingStatement = new JCheckBox("Funding Statement");
+		chkbxFundingStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
+		chkbxFundingStatement.setEnabled(false);
+		chkbxFundingStatement.setBounds(10, 95, 141, 23);
+		pnlAdditionalDocumentation.add(chkbxFundingStatement);
+		
 		pnlPersonalDetails = new JPanel();
 		pnlPersonalDetails.setBounds(235, 87, 459, 282);
 		pnlApplicationUI.add(pnlPersonalDetails);
@@ -268,12 +515,14 @@ public class PostGradToolUI {
 		
 		lblIdPassport = new JLabel("ID / Passport:");
 		lblIdPassport.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblIdPassport.setBounds(10, 184, 124, 24);
+		lblIdPassport.setBounds(10, 213, 124, 24);
+		lblIdPassport.setVisible(false);
 		pnlPersonalDetails.add(lblIdPassport);
 		
 		lblRace = new JLabel("Race:");
 		lblRace.setFont(new Font("Calibri", Font.PLAIN, 12));
 		lblRace.setBounds(10, 248, 124, 24);
+		lblRace.setVisible(false);
 		pnlPersonalDetails.add(lblRace);
 		
 		txtSurname = new JTextField();
@@ -323,13 +572,14 @@ public class PostGradToolUI {
 		});
 		txtIDPassport.setFont(new Font("Calibri", Font.PLAIN, 12));
 		txtIDPassport.setColumns(10);
-		txtIDPassport.setBounds(160, 184, 188, 25);
+		txtIDPassport.setBounds(160, 213, 188, 25);
+		txtIDPassport.setVisible(false);
 		pnlPersonalDetails.add(txtIDPassport);
 		
 		cbxCitizenship = new JComboBox<String>();
 		cbxCitizenship.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
-				
+				//if South African, set cbxCountry to South Africa
 			}
 		});
 		cbxCitizenship.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -337,6 +587,7 @@ public class PostGradToolUI {
 		pnlPersonalDetails.add(cbxCitizenship);
 		
 		cbxRace = new JComboBox<String>();
+		cbxRace.setVisible(false);
 		cbxRace.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
 			}
@@ -347,7 +598,7 @@ public class PostGradToolUI {
 		
 		lblCountry = new JLabel("Country");
 		lblCountry.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblCountry.setBounds(11, 219, 124, 24);
+		lblCountry.setBounds(11, 185, 124, 24);
 		pnlPersonalDetails.add(lblCountry);
 		
 		cbxCountry = new JComboBox<String>();
@@ -356,7 +607,7 @@ public class PostGradToolUI {
 			}
 		});
 		cbxCountry.setFont(new Font("Calibri", Font.PLAIN, 12));
-		cbxCountry.setBounds(160, 218, 188, 22);
+		cbxCountry.setBounds(160, 185, 188, 22);
 		pnlPersonalDetails.add(cbxCountry);
 		
 		pnlContactDetails = new JPanel();
@@ -529,228 +780,6 @@ public class PostGradToolUI {
 		txtDegUniversity.setBounds(267, 224, 182, 25);
 		pnlTertiaryQualifications.add(txtDegUniversity);
 		
-		pnlProgrammeOfStudy = new JPanel();
-		pnlProgrammeOfStudy.setBounds(235, 86, 459, 282);
-		pnlApplicationUI.add(pnlProgrammeOfStudy);
-		pnlProgrammeOfStudy.setLayout(null);
-		
-		lblProgrammeOfStudy = new JLabel("Programme of Study:");
-		lblProgrammeOfStudy.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblProgrammeOfStudy.setBounds(10, 12, 125, 25);
-		pnlProgrammeOfStudy.add(lblProgrammeOfStudy);
-		
-		txtStudyProgramOther = new JTextField();
-		txtStudyProgramOther.setFont(new Font("Calibri", Font.PLAIN, 12));
-		txtStudyProgramOther.setColumns(10);
-		txtStudyProgramOther.setBounds(219, 46, 188, 25);
-		pnlProgrammeOfStudy.add(txtStudyProgramOther);
-		
-		lblIfOtherSpecify = new JLabel("If Other, Specify:");
-		lblIfOtherSpecify.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblIfOtherSpecify.setBounds(10, 46, 124, 24);
-		pnlProgrammeOfStudy.add(lblIfOtherSpecify);
-		
-		cbxStudyProgram = new JComboBox<String>();
-		cbxStudyProgram.addFocusListener(new FocusAdapter() {
-			public void focusLost(FocusEvent e) {
-				
-			}
-		});
-		cbxStudyProgram.setBounds(219, 11, 188, 22);
-		pnlProgrammeOfStudy.add(cbxStudyProgram);
-		
-		lblPriorItExperience = new JLabel("Years of Prior IT Experience:");
-		lblPriorItExperience.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblPriorItExperience.setBounds(10, 83, 150, 24);
-		pnlProgrammeOfStudy.add(lblPriorItExperience);
-		
-		lblLevelOfUndergraduate = new JLabel("Level of Undergraduate Mathematics:");
-		lblLevelOfUndergraduate.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblLevelOfUndergraduate.setBounds(10, 128, 209, 24);
-		pnlProgrammeOfStudy.add(lblLevelOfUndergraduate);
-		
-		spnLevelUndergrad = new JSpinner();
-		spnLevelUndergrad.addFocusListener(new FocusAdapter() {
-			public void focusLost(FocusEvent e) {
-			}
-		});
-		spnLevelUndergrad.setModel(new SpinnerNumberModel(0, 0, 4, 1));
-		spnLevelUndergrad.setFont(new Font("Calibri", Font.PLAIN, 12));
-		spnLevelUndergrad.setBounds(219, 130, 30, 20);
-		pnlProgrammeOfStudy.add(spnLevelUndergrad);
-		
-		lblAveragesPerMathematics = new JLabel("Averages per Mathematics Level:");
-		lblAveragesPerMathematics.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblAveragesPerMathematics.setBounds(10, 175, 209, 24);
-		pnlProgrammeOfStudy.add(lblAveragesPerMathematics);
-		
-		txtAverageMathLevel1 = new JTextField();
-		txtAverageMathLevel1.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-		});
-		txtAverageMathLevel1.setBounds(219, 175, 50, 20);
-		pnlProgrammeOfStudy.add(txtAverageMathLevel1);
-		txtAverageMathLevel1.setColumns(10);
-		
-		txtAverageMathLevel2 = new JTextField();
-		txtAverageMathLevel2.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-		});
-		txtAverageMathLevel2.setBounds(279, 175, 50, 20);
-		pnlProgrammeOfStudy.add(txtAverageMathLevel2);
-		txtAverageMathLevel2.setColumns(10);
-		
-		txtAverageMathLevel3 = new JTextField();
-		txtAverageMathLevel3.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-		});
-		txtAverageMathLevel3.setBounds(339, 175, 50, 20);
-		pnlProgrammeOfStudy.add(txtAverageMathLevel3);
-		txtAverageMathLevel3.setColumns(10);
-		
-		lblAverageMathLevel1 = new JLabel("Level 1");
-		lblAverageMathLevel1.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblAverageMathLevel1.setBounds(219, 153, 50, 21);
-		pnlProgrammeOfStudy.add(lblAverageMathLevel1);
-		
-		spnYearsITExperience = new JSpinner();
-		spnYearsITExperience.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-		});
-		spnYearsITExperience.setFont(new Font("Calibri", Font.PLAIN, 12));
-		spnYearsITExperience.setBounds(219, 85, 30, 20);
-		pnlProgrammeOfStudy.add(spnYearsITExperience);
-		
-		chckbxPreviousDegreeHadProjectThesis = new JCheckBox("Previous Degree had Project or Thesis Component");
-		chckbxPreviousDegreeHadProjectThesis.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-			}
-		});
-		chckbxPreviousDegreeHadProjectThesis.setBounds(10, 206, 269, 23);
-		pnlProgrammeOfStudy.add(chckbxPreviousDegreeHadProjectThesis);
-		
-		txtrProvideBriefDescription = new JTextArea();
-		txtrProvideBriefDescription.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-			}
-		});
-		txtrProvideBriefDescription.setFont(new Font("Calibri", Font.ITALIC, 12));
-		txtrProvideBriefDescription.setText("Provide Brief Description of Project or Thesis Component");
-		txtrProvideBriefDescription.setLineWrap(true);
-		txtrProvideBriefDescription.setWrapStyleWord(true);
-		txtrProvideBriefDescription.setToolTipText("Provide Brief Description of Project or Thesis Component");
-		txtrProvideBriefDescription.setBounds(10, 232, 384, 50);
-		pnlProgrammeOfStudy.add(txtrProvideBriefDescription);
-		
-		lblAverageMathLevel2 = new JLabel("Level 2");
-		lblAverageMathLevel2.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblAverageMathLevel2.setBounds(279, 153, 50, 24);
-		pnlProgrammeOfStudy.add(lblAverageMathLevel2);
-		
-		lblAverageMathLevel3 = new JLabel("Level 3");
-		lblAverageMathLevel3.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblAverageMathLevel3.setBounds(339, 153, 50, 24);
-		pnlProgrammeOfStudy.add(lblAverageMathLevel3);
-		
-		pnlAdditionalDocumentation = new JPanel();
-		pnlAdditionalDocumentation.setBounds(235, 90, 459, 282);
-		pnlApplicationUI.add(pnlAdditionalDocumentation);
-		pnlAdditionalDocumentation.setLayout(null);
-		
-		txtrTheFollowingDocuments = new JTextArea();
-		txtrTheFollowingDocuments.setBackground(SystemColor.menu);
-		txtrTheFollowingDocuments.setText("The following documents (which are ticked) needs to be uploaded as a single PDF:");
-		txtrTheFollowingDocuments.setWrapStyleWord(true);
-		txtrTheFollowingDocuments.setLineWrap(true);
-		txtrTheFollowingDocuments.setFont(new Font("Calibri", Font.PLAIN, 12));
-		txtrTheFollowingDocuments.setBounds(10, 9, 439, 34);
-		pnlAdditionalDocumentation.add(txtrTheFollowingDocuments);
-		
-		chckbxCertifiedTranscript = new JCheckBox("Certified Transcript");
-		chckbxCertifiedTranscript.setFont(new Font("Calibri", Font.PLAIN, 12));
-		chckbxCertifiedTranscript.setEnabled(false);
-		chckbxCertifiedTranscript.setBounds(10, 45, 141, 23);
-		pnlAdditionalDocumentation.add(chckbxCertifiedTranscript);
-		
-		chckbxCurriculumVitaecv = new JCheckBox("Curriculum Vitae (CV)");
-		chckbxCurriculumVitaecv.setFont(new Font("Calibri", Font.PLAIN, 12));
-		chckbxCurriculumVitaecv.setEnabled(false);
-		chckbxCurriculumVitaecv.setBounds(232, 45, 141, 23);
-		pnlAdditionalDocumentation.add(chckbxCurriculumVitaecv);
-		
-		chckbxResearchStatement = new JCheckBox("Research Statement");
-		chckbxResearchStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
-		chckbxResearchStatement.setEnabled(false);
-		chckbxResearchStatement.setBounds(10, 71, 141, 23);
-		pnlAdditionalDocumentation.add(chckbxResearchStatement);
-		
-		chckbxRefereesNames = new JCheckBox("Referees' Names");
-		chckbxRefereesNames.setFont(new Font("Calibri", Font.PLAIN, 12));
-		chckbxRefereesNames.setEnabled(false);
-		chckbxRefereesNames.setBounds(232, 69, 141, 23);
-		pnlAdditionalDocumentation.add(chckbxRefereesNames);
-		
-		chckbxMotivation = new JCheckBox("Motivation");
-		chckbxMotivation.setFont(new Font("Calibri", Font.PLAIN, 12));
-		chckbxMotivation.setEnabled(false);
-		chckbxMotivation.setBounds(232, 95, 141, 23);
-		pnlAdditionalDocumentation.add(chckbxMotivation);
-		
-		lblPdfOfAdditional = new JLabel("PDF of Additional Documentation:");
-		lblPdfOfAdditional.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblPdfOfAdditional.setBounds(10, 170, 204, 23);
-		pnlAdditionalDocumentation.add(lblPdfOfAdditional);
-		
-		btnChoosePDF = new JButton("Choose File");
-		btnChoosePDF.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnChoosePDF.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnChoosePDF.setBounds(202, 194, 119, 23);
-		pnlAdditionalDocumentation.add(btnChoosePDF);
-		
-		btnUploadFile = new JButton("Upload File");
-		btnUploadFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnUploadFile.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnUploadFile.setBounds(202, 225, 119, 23);
-		pnlAdditionalDocumentation.add(btnUploadFile);
-		
-		lblPDFName = new JLabel("");
-		lblPDFName.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblPDFName.setBounds(224, 170, 204, 23);
-		pnlAdditionalDocumentation.add(lblPDFName);
-		
-		btnDownloadPDF = new JButton("Download File");
-		btnDownloadPDF.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnDownloadPDF.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnDownloadPDF.setBounds(330, 192, 119, 23);
-		pnlAdditionalDocumentation.add(btnDownloadPDF);
-		
-		chkbxFundingStatement = new JCheckBox("Funding Statement");
-		chkbxFundingStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
-		chkbxFundingStatement.setEnabled(false);
-		chkbxFundingStatement.setBounds(10, 95, 141, 23);
-		pnlAdditionalDocumentation.add(chkbxFundingStatement);
-		
 		pnlApplicationFieldCats = new JPanel();
 		pnlApplicationFieldCats.setBounds(32, 76, 193, 162);
 		pnlApplicationUI.add(pnlApplicationFieldCats);
@@ -827,6 +856,20 @@ public class PostGradToolUI {
 		btnSaveUpdate = new JButton("Save / Update");
 		btnSaveUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (applicant.getCitizenship().equals(""))
+				{
+					userController.insertOrUpdateApplicant(applicant);
+				}
+				else if (applicant.getCitizenship().equals("International"))
+				{
+					userController.insertOrUpdateInternationalApplicant(intApplicant);
+				}
+				else
+				{
+					userController.insertOrUpdateSouthAfricanApplicant(rsaApplicant);
+				}
+				
+				appController.insertOrUpdateApplication(application);
 			}
 		});
 		btnSaveUpdate.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -836,6 +879,27 @@ public class PostGradToolUI {
 		btnSubmitReturn = new JButton("Submit / Return");
 		btnSubmitReturn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application -> submit
+				{
+					if (applicant.getCitizenship().equals(""))
+					{
+						userController.insertOrUpdateApplicant(applicant);
+					}
+					else if (applicant.getCitizenship().equals("International"))
+					{
+						userController.insertOrUpdateInternationalApplicant(intApplicant);
+					}
+					else
+					{
+						userController.insertOrUpdateSouthAfricanApplicant(rsaApplicant);
+					}
+					
+					appController.submitApplication(application);
+				}
+				else //existing application
+				{
+					showApplicantEntryInterface();
+				}
 			}
 		});
 		btnSubmitReturn.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -845,6 +909,34 @@ public class PostGradToolUI {
 		btnChangeStatus = new JButton("Change Status");
 		btnChangeStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (btnChangeStatus.getText().equals("Change Status"))
+				{
+					btnChangeStatus.setText("Commit Appl. Status Changes");
+					
+					cbxApplicationApplicationStatus.setSelectedItem(txtApplicationStatus.getText().trim());
+					cbxApplicationApplicationStatus.setVisible(true);
+					txtApplicationStatus.setVisible(false);
+					
+					cbxApplicationStatusReason.setSelectedItem(txtApplicationReasonStatus.getText().trim());
+					cbxApplicationStatusReason.setVisible(true);
+					txtStatusReason.setVisible(false);
+				}
+				else
+				{
+					btnChangeStatus.setText("Change Status");
+					
+					String status = cbxApplicationApplicationStatus.getSelectedItem().toString();
+					txtApplicationStatus.setText(status);
+					cbxApplicationApplicationStatus.setVisible(false);
+					txtApplicationStatus.setVisible(true);
+					
+					String reason = cbxApplicationStatusReason.getSelectedItem().toString();
+					txtApplicationReasonStatus.setText(reason);
+					cbxApplicationStatusReason.setVisible(false);
+					txtStatusReason.setVisible(true);
+					
+					application.setApplicationStatus(new ApplicationStatus(status, reason));
+				}
 			}
 		});
 		btnChangeStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -896,144 +988,17 @@ public class PostGradToolUI {
 		txtApplicationReasonStatus.setBounds(232, 56, 273, 20);
 		pnlApplicationUI.add(txtApplicationReasonStatus);
 		
-		//Sign-In and Sign-Up UI & all its components
-		pnlSignInUI = new JPanel();
-		pnlSignInUI.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
-		pnlSignInUI.setBounds(0, 0, 718, 390);
-		frmSchoolOfIt.getContentPane().add(pnlSignInUI);
-		pnlSignInUI.setLayout(null);
+		cbxApplicationApplicationStatus = new JComboBox();
+		cbxApplicationApplicationStatus.setFont(new Font("Calibri", Font.PLAIN, 11));
+		cbxApplicationApplicationStatus.setBounds(232, 34, 273, 22);
+		cbxApplicationApplicationStatus.setVisible(false);
+		pnlApplicationUI.add(cbxApplicationApplicationStatus);
 		
-		lblSignInApplicantNumber = new JLabel("UCT Applicant / Student Number:");
-		lblSignInApplicantNumber.setBounds(140, 151, 195, 14);
-		lblSignInApplicantNumber.setFont(new Font("Calibri", Font.PLAIN, 12));
-		pnlSignInUI.add(lblSignInApplicantNumber);
-		
-		txtSignInApplicantNumber = new JTextField();
-		txtSignInApplicantNumber.setBounds(362, 146, 214, 20);
-		pnlSignInUI.add(txtSignInApplicantNumber);
-		txtSignInApplicantNumber.setColumns(10);
-		
-		lblPassword = new JLabel("Password:");
-		lblPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblPassword.setBounds(140, 217, 195, 14);
-		pnlSignInUI.add(lblPassword);
-		
-		pswPassword = new JPasswordField();
-		pswPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
-		pswPassword.setBounds(362, 212, 214, 20);
-		pnlSignInUI.add(pswPassword);
-		
-		pswConfirmPassword = new JPasswordField();
-		pswConfirmPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
-		pswConfirmPassword.setBounds(362, 243, 214, 20);
-		pswConfirmPassword.setVisible(false);
-		pnlSignInUI.add(pswConfirmPassword);
-		
-		lblConfirmPassword = new JLabel("Confirm Password:");
-		lblConfirmPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblConfirmPassword.setBounds(140, 246, 195, 14);
-		lblConfirmPassword.setVisible(false);
-		pnlSignInUI.add(lblConfirmPassword);
-		
-		lblNewMessage = new JLabel("New to School of IT Application System? Click Sign-Up.");
-		lblNewMessage.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblNewMessage.setBounds(140, 107, 303, 14);
-		pnlSignInUI.add(lblNewMessage);
-		
-		btnGoToSignUpProcess = new JButton("Sign-Up");
-		btnGoToSignUpProcess.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				prepareSignUp();
-			}
-		});
-		btnGoToSignUpProcess.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnGoToSignUpProcess.setBounds(487, 101, 89, 23);
-		pnlSignInUI.add(btnGoToSignUpProcess);
-		
-		btnSign = new JButton("Sign-In");
-		btnSign.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String number = txtSignInApplicantNumber.getText().toString(); //get number repressing username
-				String password = pswPassword.getPassword().toString(); //get password
-				if (bSignIn) //Need to sign in applicant / academic.
-				{ 
-					if (userController.isApplicant(number, password)) //in the case of an applicant
-					{
-						applicant = userController.getApplicant(number);
-						userController.setApplicantOfFocus(applicant);
-						pnlSignInUI.setVisible(false); //leave current interface
-						
-						if (appController.noExistingApplication(number)) //first-time application
-						{
-							application = appController.createNewApplication(number);
-							showPersonalDetails();
-						}
-						else
-						{
-							application = appController.getApplicationOfApplicant(number);
-							appController.setApplicationOfFocus(application);
-							populateApplicationFields(applicant, application);
-							showPersonalDetails();
-						}
-					}
-					else if (userController.isFOacademic(number, password)) //in the case of an academic
-					{
-						applicant = userController.getApplicant(number);
-						userController.setApplicantOfFocus(applicant);
-						showAcademicEntryInterface();
-					}
-					else
-					{
-						txtSignInApplicantNumber.setText("");
-						txtSignEmail.setText("");
-						pswPassword.setText("");
-						pswConfirmPassword.setText("");
-						showSignInInterface();
-						//display error message!!!
-					}
-				}
-				else //need to sign up applicant and return to sign in
-				{
-					boolean bSuccessful = userController.registerNewApplicant(number, txtSignEmail.getText().trim(), password, pswConfirmPassword.getPassword().toString());
-					if (bSuccessful)
-					{
-						populateApplicationFields(applicant, application);
-						showPersonalDetails();
-					}
-					else
-					{
-						txtSignInApplicantNumber.setText("");
-						txtSignEmail.setText("");
-						pswPassword.setText("");
-						pswConfirmPassword.setText("");
-						ShowSignInInterface();
-					}
-		
-				}
-			}
-		});
-		btnSign.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnSign.setBounds(487, 279, 89, 23);
-		pnlSignInUI.add(btnSign);
-		
-		txtrApplicantNumberWarning = new JTextArea();
-		txtrApplicantNumberWarning.setWrapStyleWord(true);
-		txtrApplicantNumberWarning.setLineWrap(true);
-		txtrApplicantNumberWarning.setEditable(false);
-		txtrApplicantNumberWarning.setText("Please note all potential applicants: One needs to apply first at UCT Online Applications to receive an Applicant Number, unless you already have a UCT Student Nuber.");
-		txtrApplicantNumberWarning.setFont(new Font("Calibri", Font.PLAIN, 12));
-		txtrApplicantNumberWarning.setBounds(502, 11, 206, 79);
-		pnlSignInUI.add(txtrApplicantNumberWarning);
-		
-		txtSignEmail = new JTextField();
-		txtSignEmail.setColumns(10);
-		txtSignEmail.setBounds(362, 176, 214, 20);
-		pnlSignInUI.add(txtSignEmail);
-		
-		JLabel lblSignEmail = new JLabel("Email:");
-		lblSignEmail.setFont(new Font("Calibri", Font.PLAIN, 12));
-		lblSignEmail.setBounds(140, 181, 195, 14);
-		pnlSignInUI.add(lblSignEmail);
+		cbxApplicationStatusReason = new JComboBox();
+		cbxApplicationStatusReason.setFont(new Font("Calibri", Font.PLAIN, 11));
+		cbxApplicationStatusReason.setBounds(232, 59, 273, 22);
+		cbxApplicationStatusReason.setVisible(false);
+		pnlApplicationUI.add(cbxApplicationStatusReason);
 		
 		pnlApplicantEntry = new JPanel();
 		pnlApplicantEntry.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
@@ -1118,6 +1083,14 @@ public class PostGradToolUI {
 		pnlAcademicEntryUI.setLayout(null);
 		
 		tblApplications = new JTable();
+		tblApplications.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//fetch application
+				
+				//check if application is viewable
+			}
+		});
 		tblApplications.setFont(new Font("Calibri", Font.PLAIN, 12));
 		tblApplications.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -1219,6 +1192,150 @@ public class PostGradToolUI {
 		btnViewApplication_1.setFont(new Font("Calibri", Font.PLAIN, 12));
 		btnViewApplication_1.setBounds(33, 267, 246, 23);
 		pnlAcademicEntryUI.add(btnViewApplication_1);
+		
+		//Sign-In and Sign-Up UI & all its components
+		pnlSignInUI = new JPanel();
+		pnlSignInUI.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
+		pnlSignInUI.setBounds(0, 0, 718, 390);
+		frmSchoolOfIt.getContentPane().add(pnlSignInUI);
+		pnlSignInUI.setLayout(null);
+		
+		lblSignInApplicantNumber = new JLabel("UCT Applicant / Student Number:");
+		lblSignInApplicantNumber.setBounds(140, 151, 195, 14);
+		lblSignInApplicantNumber.setFont(new Font("Calibri", Font.PLAIN, 12));
+		pnlSignInUI.add(lblSignInApplicantNumber);
+		
+		txtSignInApplicantNumber = new JTextField();
+		txtSignInApplicantNumber.setBounds(362, 146, 214, 20);
+		pnlSignInUI.add(txtSignInApplicantNumber);
+		txtSignInApplicantNumber.setColumns(10);
+		
+		lblPassword = new JLabel("Password:");
+		lblPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblPassword.setBounds(140, 217, 195, 14);
+		pnlSignInUI.add(lblPassword);
+		
+		pswPassword = new JPasswordField();
+		pswPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
+		pswPassword.setBounds(362, 212, 214, 20);
+		pnlSignInUI.add(pswPassword);
+		
+		pswConfirmPassword = new JPasswordField();
+		pswConfirmPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
+		pswConfirmPassword.setBounds(362, 243, 214, 20);
+		pswConfirmPassword.setVisible(false);
+		pnlSignInUI.add(pswConfirmPassword);
+		
+		lblConfirmPassword = new JLabel("Confirm Password:");
+		lblConfirmPassword.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblConfirmPassword.setBounds(140, 246, 195, 14);
+		lblConfirmPassword.setVisible(false);
+		pnlSignInUI.add(lblConfirmPassword);
+		
+		lblNewMessage = new JLabel("New to School of IT Application System? Click Sign-Up.");
+		lblNewMessage.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblNewMessage.setBounds(140, 107, 303, 14);
+		pnlSignInUI.add(lblNewMessage);
+		
+		btnGoToSignUpProcess = new JButton("Sign-Up");
+		btnGoToSignUpProcess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				prepareSignUp();
+			}
+		});
+		btnGoToSignUpProcess.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnGoToSignUpProcess.setBounds(487, 101, 89, 23);
+		pnlSignInUI.add(btnGoToSignUpProcess);
+		
+		btnSign = new JButton("Sign-In");
+		btnSign.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String number = txtSignInApplicantNumber.getText().toString(); //get number repressing username
+				String password = pswPassword.getPassword().toString(); //get password
+				if (bSignIn) //Need to sign in applicant / academic.
+				{ 
+					if (userController.isApplicant(number, password)) //in the case of an applicant
+					{
+						applicant = userController.getApplicant(number);
+						userController.setApplicantOfFocus(applicant);
+						bApplicantSignedIn = true;
+						pnlSignInUI.setVisible(false); //leave current interface
+						
+						if (appController.noExistingApplication(number)) //first-time application
+						{
+							application = appController.createNewApplication(number);
+							showPersonalDetails();
+						}
+						else
+						{
+							application = appController.getApplicationOfApplicant(number);
+							appController.setApplicationOfFocus(application);
+							populateApplicationFields(applicant, application);
+							showPersonalDetails();
+						}
+					}
+					else if (userController.isFOacademic(number, password)) //in the case of an academic
+					{
+						applicant = userController.getApplicant(number);
+						userController.setApplicantOfFocus(applicant);
+						bApplicantSignedIn = false;
+						showAcademicEntryInterface();
+					}
+					else
+					{
+						txtSignInApplicantNumber.setText("");
+						txtSignEmail.setText("");
+						pswPassword.setText("");
+						pswConfirmPassword.setText("");
+						bApplicantSignedIn = false;
+						showSignInInterface();
+						//display error message!!!
+					}
+				}
+				else //need to sign up applicant and return to sign in
+				{
+					boolean bSuccessful = userController.registerNewApplicant(number, txtSignEmail.getText().trim(), password, pswConfirmPassword.getPassword().toString());
+					if (bSuccessful)
+					{
+						populateApplicationFields(applicant, application);
+						lblConfirmPassword.setVisible(false);
+						pswConfirmPassword.setVisible(false);
+						showSignInInterface();
+					}
+					else
+					{
+						txtSignInApplicantNumber.setText("");
+						txtSignEmail.setText("");
+						pswPassword.setText("");
+						pswConfirmPassword.setText("");
+						showSignInInterface();
+					}
+		
+				}
+			}
+		});
+		btnSign.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnSign.setBounds(487, 279, 89, 23);
+		pnlSignInUI.add(btnSign);
+		
+		txtrApplicantNumberWarning = new JTextArea();
+		txtrApplicantNumberWarning.setWrapStyleWord(true);
+		txtrApplicantNumberWarning.setLineWrap(true);
+		txtrApplicantNumberWarning.setEditable(false);
+		txtrApplicantNumberWarning.setText("Please note all potential applicants: One needs to apply first at UCT Online Applications to receive an Applicant Number, unless you already have a UCT Student Nuber.");
+		txtrApplicantNumberWarning.setFont(new Font("Calibri", Font.PLAIN, 12));
+		txtrApplicantNumberWarning.setBounds(502, 11, 206, 79);
+		pnlSignInUI.add(txtrApplicantNumberWarning);
+		
+		txtSignEmail = new JTextField();
+		txtSignEmail.setColumns(10);
+		txtSignEmail.setBounds(362, 176, 214, 20);
+		pnlSignInUI.add(txtSignEmail);
+		
+		JLabel lblSignEmail = new JLabel("Email:");
+		lblSignEmail.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblSignEmail.setBounds(140, 181, 195, 14);
+		pnlSignInUI.add(lblSignEmail);
 	}
 	
 	/**
@@ -1478,6 +1595,16 @@ public class PostGradToolUI {
 		mntmTertiaryQual.setSelected(false);
 		mntmProgrammeOfStudy.setSelected(false);
 		mntmRequiredDocumentation.setSelected(false);
+		
+		
+		if (appController.applicantionEditable(application.getApplicationNumber()))
+		{
+			btnEditApplication.setVisible(true);
+		}
+		else
+		{
+			btnEditApplication.setVisible(false);
+		}
 	}
 	
 	private void showPersonalDetails()
@@ -1499,6 +1626,47 @@ public class PostGradToolUI {
 		mntmTertiaryQual.setSelected(false);
 		mntmProgrammeOfStudy.setSelected(false);
 		mntmRequiredDocumentation.setSelected(false);
+		
+		
+		if (!bApplicantSignedIn) //academic signed-in -> fields view only
+		{
+			txtApplicantNumber.setEditable(false);
+			txtSurname.setEditable(false);
+			txtFirstName.setEditable(false);
+			cbxTitle.setEditable(false);
+			cbxCitizenship.setEditable(false);
+			cbxCountry.setEditable(false);
+			txtIDPassport.setEditable(false);
+			cbxRace.setEditable(false);
+			btnPdfOfApplication.setVisible(true);
+			btnChangeStatus.setVisible(true);
+			
+		}
+		else //applicant signed in
+		{
+			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
+			
+			txtApplicantNumber.setEditable(bEditable);
+			txtSurname.setEditable(bEditable);
+			txtFirstName.setEditable(bEditable);
+			cbxTitle.setEditable(bEditable);
+			cbxCitizenship.setEditable(bEditable);
+			cbxCountry.setEditable(bEditable);
+			txtIDPassport.setEditable(bEditable);
+			cbxRace.setEditable(bEditable);
+				
+			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
+			{
+				btnSaveUpdate.setText("Save");
+				btnSubmitReturn.setText("Submit");
+			}
+			else //existing application
+			{
+				btnSaveUpdate.setText("Update");
+				btnSubmitReturn.setText("Return");
+			}
+		}
+		
 	}
 	
 	private void showContactDetails()
@@ -1520,6 +1688,46 @@ public class PostGradToolUI {
 		mntmTertiaryQual.setSelected(false);
 		mntmProgrammeOfStudy.setSelected(false);
 		mntmRequiredDocumentation.setSelected(false);
+		
+		//
+		if (!bApplicantSignedIn) //academic signed-in -> fields view only
+		{
+			txtApplicantNumber.setEditable(false);
+			txtSurname.setEditable(false);
+			txtFirstName.setEditable(false);
+			cbxTitle.setEditable(false);
+			cbxCitizenship.setEditable(false);
+			cbxCountry.setEditable(false);
+			txtIDPassport.setEditable(false);
+			cbxRace.setEditable(false);
+			btnPdfOfApplication.setVisible(true);
+			btnChangeStatus.setVisible(true);
+			
+		}
+		else //applicant signed in
+		{
+			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
+			
+			txtApplicantNumber.setEditable(bEditable);
+			txtSurname.setEditable(bEditable);
+			txtFirstName.setEditable(bEditable);
+			cbxTitle.setEditable(bEditable);
+			cbxCitizenship.setEditable(bEditable);
+			cbxCountry.setEditable(bEditable);
+			txtIDPassport.setEditable(bEditable);
+			cbxRace.setEditable(bEditable);
+				
+			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
+			{
+				btnSaveUpdate.setText("Save");
+				btnSubmitReturn.setText("Submit");
+			}
+			else //existing application
+			{
+				btnSaveUpdate.setText("Update");
+				btnSubmitReturn.setText("Return");
+			}
+		}
 	}
 	
 	private void showTertiaryQualifications()
@@ -1562,6 +1770,46 @@ public class PostGradToolUI {
 		mntmTertiaryQual.setSelected(false);
 		mntmProgrammeOfStudy.setSelected(true);
 		mntmRequiredDocumentation.setSelected(false);
+		
+		//
+		if (!bApplicantSignedIn) //academic signed-in -> fields view only
+		{
+			txtApplicantNumber.setEditable(false);
+			txtSurname.setEditable(false);
+			txtFirstName.setEditable(false);
+			cbxTitle.setEditable(false);
+			cbxCitizenship.setEditable(false);
+			cbxCountry.setEditable(false);
+			txtIDPassport.setEditable(false);
+			cbxRace.setEditable(false);
+			btnPdfOfApplication.setVisible(true);
+			btnChangeStatus.setVisible(true);
+			
+		}
+		else //applicant signed in
+		{
+			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
+			
+			txtApplicantNumber.setEditable(bEditable);
+			txtSurname.setEditable(bEditable);
+			txtFirstName.setEditable(bEditable);
+			cbxTitle.setEditable(bEditable);
+			cbxCitizenship.setEditable(bEditable);
+			cbxCountry.setEditable(bEditable);
+			txtIDPassport.setEditable(bEditable);
+			cbxRace.setEditable(bEditable);
+			
+			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
+			{
+				btnSaveUpdate.setText("Save");
+				btnSubmitReturn.setText("Submit");
+			}
+			else //existing application
+			{
+				btnSaveUpdate.setText("Update");
+				btnSubmitReturn.setText("Return");
+			}
+		}
 	}
 	
 	private void showAdditionalDocumentation()
@@ -1583,5 +1831,75 @@ public class PostGradToolUI {
 		mntmTertiaryQual.setSelected(false);
 		mntmProgrammeOfStudy.setSelected(false);
 		mntmRequiredDocumentation.setSelected(true);
+		
+		//
+		if (!bApplicantSignedIn) //academic signed-in -> fields view only
+		{
+			btnChoosePDF.setVisible(false);
+			btnUploadFile.setVisible(false);
+			btnDownloadPDF.setVisible(true);
+			
+		}
+		else //applicant signed in
+		{
+			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
+			btnChoosePDF.setVisible(bEditable);
+			btnUploadFile.setVisible(bEditable);
+			btnDownloadPDF.setVisible(!bEditable);
+			
+				
+			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
+			{
+				btnSaveUpdate.setText("Save");
+				btnSubmitReturn.setText("Submit");
+			}
+			else //existing application
+			{
+				btnSaveUpdate.setText("Update");
+				btnSubmitReturn.setText("Return");
+			}
+		}
+	}
+	
+	private String checkPersonalDetails()
+	{
+		//needs logic!
+		return "";
+	}
+	
+	private String checkContactDetails()
+	{
+		//needs logic!
+		return "";
+	}
+	
+	private String checkQualificationDetails()
+	{
+		//needs logic!
+		return "";
+	}
+	
+	private String checkStudyProgramDetails()
+	{
+		//needs logic!
+		return "";
+	}
+	
+	private String checkAdditionalDocuments()
+	{
+		//needs logic!
+		return "";
+	}
+	
+	private void displayUndergradMathInputs(int level)
+	{
+		lblAverageMathLevel1.setVisible((level > 0));
+		txtAverageMathLevel1.setVisible((level > 0));
+		
+		lblAverageMathLevel2.setVisible((level > 1));
+		txtAverageMathLevel2.setVisible((level > 1));
+		
+		lblAverageMathLevel3.setVisible((level > 2));
+		txtAverageMathLevel3.setVisible((level > 2));
 	}
 }

@@ -10,7 +10,7 @@ public class ApplicationStatus {
 		
 	}
 	
-	public ApplicationStatus(String statusCode, String reasonCode)
+	public ApplicationStatus(String statusDescription, String reasonDescription)
 	{
 		
 	}

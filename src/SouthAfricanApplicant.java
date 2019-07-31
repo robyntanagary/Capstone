@@ -7,6 +7,16 @@ public class SouthAfricanApplicant extends Applicant{
 	public SouthAfricanApplicant()
 	{
 		super();
+		ID = "";
+		race = "";
+	}
+	
+	public SouthAfricanApplicant(Applicant applicant)
+	{
+		super(applicant);
+		
+		ID = "";
+		race = "";
 	}
 
 	/**

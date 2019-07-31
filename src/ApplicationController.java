@@ -30,8 +30,51 @@ public class ApplicationController {
 	
 	public Application createNewApplication(String applicantNumber)
 	{
+		//needs logic!!!
 		return application;
 	}
 	
+	public boolean submitApplication(Application anApplication)
+	{
+		//needs logic
+		
+		return true;
+	}
 	
+	public boolean insertOrUpdateApplication(Application anApplication)
+	{
+		//needs logic
+		
+		return true;
+	}
+	
+	public boolean uploadPDF(String pdfName)
+	{
+		//needs logic!!!
+		return true;
+	}
+	
+	public String showChosenPDF()
+	{
+		//needs logic!
+		return "";
+	}
+	
+	public String downloadPDF(String pdfName)
+	{
+		//needs logic
+		return "";
+	}
+	
+	public boolean applicantionEditable(String applicationNumber)
+	{
+		//needs logic
+		return true;
+	}
+	
+	public boolean applicantionViewable(String applicationNumber)
+	{
+		//needs logic
+		return true;
+	}
 }
