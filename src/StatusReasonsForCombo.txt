@@ -1,0 +1,31 @@
+Applicant started application process
+Applicant submitted application
+Applicant withdraws application
+Applicant reconsider programme of study
+HOD / Programme Convenor must decide
+Faculty Admittance Committee must decide
+Waiting for Information
+Waiting for English Proficiency Results
+Waiting for External Tertiary results
+Waiting for UCT results
+No Special Reason
+Defer decision of making firm offer
+Application re-instated
+Faculty Office withdraws application due to applicant changing programme choice
+Faculty Office withdraws application due to fraudalent information
+Faculty Office withdraws application due to necessary documentation not provided
+Faculty Office withdraws application due to offer beinf made on another application in faculty
+Faculty Office withdraws application due to programme unavailability
+Faculty Office withdraws application due to never registered
+Conditional Offer withdrawn as admission conditions not met
+On condition of cetified transcript
+On condition of receipt of relevant information
+On condition of school-leaving results
+On condition of final results
+On condition of final tertiary results, TERT
+Special Offer for Top Applicants, STAR
+Firm Offer Made, CONF
+Application denied due to competition, COMP
+Application denied due to late application, LATE
+Application denied due to inadequate research proposal, PROP
+Application denied due to inappropriate supervisor, SUPV

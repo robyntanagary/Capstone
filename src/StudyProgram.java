@@ -10,6 +10,16 @@ public class StudyProgram {
 	private boolean requireMotivation;
 	private boolean requireFundingStatement;
 	
+	public StudyProgram()
+	{
+		
+	}
+	
+	public StudyProgram(String studyProgramName)
+	{
+		
+	}
+	
 	public StudyProgram(QualificationLevel qualificationLevel, String academicQualification, String specialisationOrMajor, boolean requireTranscript, boolean requireCV, boolean requireResearchOutline, boolean requireRefereesNames, boolean requireMotivation)
 	{
 		this.qualificationLevel = qualificationLevel;
@@ -42,37 +52,37 @@ public class StudyProgram {
 	/**
 	 * @return the requireTranscript
 	 */
-	public boolean isRequireTranscript() {
+	public boolean requireTranscript() {
 		return requireTranscript;
 	}
 	/**
 	 * @return the requireCV
 	 */
-	public boolean isRequireCV() {
+	public boolean requireCV() {
 		return requireCV;
 	}
 	/**
 	 * @return the requireResearchOutline
 	 */
-	public boolean isRequireResearchStatement() {
+	public boolean requireResearchStatement() {
 		return requireResearchStatement;
 	}
 	/**
 	 * @return the requireRefereesNames
 	 */
-	public boolean isRequireRefereesNames() {
+	public boolean requireRefereesNames() {
 		return requireRefereesNames;
 	}
 	/**
 	 * @return the requireMotivation
 	 */
-	public boolean isRequireMotivation() {
+	public boolean requireMotivation() {
 		return requireMotivation;
 	}
 	/**
 	 * @return the requireFundingStatement
 	 */
-	public boolean isRequireFundingStatement() {
+	public boolean requireFundingStatement() {
 		return requireFundingStatement;
 	}
 }

@@ -1,7 +1,14 @@
 
 public class UndergraduateMathematics {
 	private int level;
-	private double avarage;
+	private double average;
+	
+	public UndergraduateMathematics(int level, double average)
+	{
+		this.level = level;
+		this.average = average;
+	}
+	
 	/**
 	 * @return the level
 	 */
@@ -17,13 +24,13 @@ public class UndergraduateMathematics {
 	/**
 	 * @return the avarage
 	 */
-	public double getAvarage() {
-		return avarage;
+	public double getAverage() {
+		return average;
 	}
 	/**
 	 * @param avarage the avarage to set
 	 */
-	public void setAvarage(double avarage) {
-		this.avarage = avarage;
+	public void setAverage(double avarage) {
+		this.average = avarage;
 	}
 }

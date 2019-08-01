@@ -72,6 +72,12 @@ public class ApplicationController {
 		return true;
 	}
 	
+	public StudyProgram getStudyProgram(String studyProgramName)
+	{
+		//needs logic!!!
+		return new StudyProgram(studyProgramName);
+	}
+	
 	public boolean applicantionViewable(String applicationNumber)
 	{
 		//needs logic
