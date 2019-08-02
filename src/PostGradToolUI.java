@@ -19,6 +19,7 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -28,7 +29,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ChangeEvent;
+
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -221,6 +226,11 @@ public class PostGradToolUI {
 		frmSchoolOfIt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmSchoolOfIt.getContentPane().setLayout(null);
 		
+		pnlApplicationUI = new JPanel();
+		pnlApplicationUI.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
+		pnlApplicationUI.setBounds(0, 0, 718, 390);
+		pnlApplicationUI.setVisible(false);
+		
 		//Sign-In and Sign-Up UI & all its components
 		pnlSignInUI = new JPanel();
 		pnlSignInUI.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
@@ -364,11 +374,6 @@ public class PostGradToolUI {
 		lblSignEmail.setFont(new Font("Calibri", Font.PLAIN, 12));
 		lblSignEmail.setBounds(140, 181, 195, 14);
 		pnlSignInUI.add(lblSignEmail);
-		
-		pnlApplicationUI = new JPanel();
-		pnlApplicationUI.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
-		pnlApplicationUI.setBounds(0, 0, 718, 390);
-		pnlApplicationUI.setVisible(false);
 		frmSchoolOfIt.getContentPane().add(pnlApplicationUI);
 		pnlApplicationUI.setLayout(null);
 		
@@ -657,14 +662,13 @@ public class PostGradToolUI {
 		txtDegCountryOther.setFont(new Font("Calibri", Font.PLAIN, 12));
 		txtDegCountryOther.setColumns(10);
 		txtDegCountryOther.setBounds(267, 48, 182, 25);
-		String sDegCountry = cbxDegCountry.getSelectedItem().toString().trim();
-		txtDegCountryOther.setVisible(sDegCountry.equals("Other"));
+		txtDegCountryOther.setVisible(cbxDegCountry.getSelectedItem().toString().trim().equals("Other"));
 		pnlTertiaryQualifications.add(txtDegCountryOther);
 		
 		lblPreviousDegree = new JLabel("If Other, Specify:");
 		lblPreviousDegree.setFont(new Font("Calibri", Font.PLAIN, 12));
 		lblPreviousDegree.setBounds(10, 46, 124, 24);
-		lblPreviousDegree.setVisible(sDegCountry.equals("Other"));
+		lblPreviousDegree.setVisible(cbxDegCountry.getSelectedItem().toString().trim().equals("Other"));
 		pnlTertiaryQualifications.add(lblPreviousDegree);
 		
 		cbxDegCountry = new JComboBox<String>();
@@ -987,9 +991,17 @@ public class PostGradToolUI {
 		btnChoosePDF = new JButton("Choose File");
 		btnChoosePDF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblPDFName.setText(appController.showChosenPDF());
-				btnUploadFile.setVisible(true);
-			}
+				JFileChooser fileChooser = new JFileChooser(); //create a file chooser
+				int returnVal = fileChooser.showOpenDialog(frmSchoolOfIt); //show file chooser for selecting file
+				if (returnVal == JFileChooser.APPROVE_OPTION) //user has selected file
+				{
+					File file = fileChooser.getSelectedFile(); //fetch file chosen
+					String fileName = file.getName(); //get name of file
+					lblPDFName.setText(fileName); //name of file
+					appController.chosenPDF(file);//prepare file for upload
+					btnUploadFile.setVisible(true);
+				}
+				}
 			});
 		
 		btnChoosePDF.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1128,27 +1140,42 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				if (pnlPersonalDetails.isVisible())
 				{
-					pnlPersonalDetails.setVisible(false);
+					if (checkPersonalDetails())
+					{
+						pnlPersonalDetails.setVisible(false);
+					}
 				}
 				else if (pnlContactDetails.isVisible())
 				{
-					pnlContactDetails.setVisible(false);
-					showPersonalDetails();
+					if (checkContactDetails())
+					{
+						pnlContactDetails.setVisible(false);
+						showPersonalDetails();
+					}
 				}
 				else if (pnlTertiaryQualifications.isVisible())
 				{
+					if (checkQualificationDetails())
+					{
 					pnlTertiaryQualifications.setVisible(false);
 					showContactDetails();
+					}
 				}
 				else if (pnlProgrammeOfStudy.isVisible())
 				{
-					pnlProgrammeOfStudy.setVisible(false);
-					showTertiaryQualifications();
+					if (checkStudyProgramDetails())
+					{
+						pnlProgrammeOfStudy.setVisible(false);
+						showTertiaryQualifications();
+					}
 				}
 				else if (pnlAdditionalDocumentation.isVisible())
 				{
+					if (checkAdditionalDocuments())
+					{
 					pnlAdditionalDocumentation.setVisible(false);
 					showStudyProgram();
+					}
 				}
 			}
 		});
@@ -1161,27 +1188,42 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				if (pnlPersonalDetails.isVisible())
 				{
-					pnlPersonalDetails.setVisible(false);
-					showContactDetails();
+					if (checkPersonalDetails())
+					{
+						pnlPersonalDetails.setVisible(false);
+						showContactDetails();
+					}
 				}
 				else if (pnlContactDetails.isVisible())
 				{
-					pnlContactDetails.setVisible(false);
-					showTertiaryQualifications();
+					if (checkContactDetails())
+					{
+						pnlContactDetails.setVisible(false);
+						showTertiaryQualifications();
+					}
 				}
 				else if (pnlTertiaryQualifications.isVisible())
 				{
-					pnlTertiaryQualifications.setVisible(false);
-					showStudyProgram();
+					if (checkQualificationDetails())
+					{
+						pnlTertiaryQualifications.setVisible(false);
+						showStudyProgram();
+					}
 				}
 				else if (pnlProgrammeOfStudy.isVisible())
 				{
-					pnlProgrammeOfStudy.setVisible(false);
-					showAdditionalDocumentation();
+					if (checkStudyProgramDetails())
+					{
+						pnlProgrammeOfStudy.setVisible(false);
+						showAdditionalDocumentation();
+					}
 				}
 				else if (pnlAdditionalDocumentation.isVisible())
 				{
-					pnlAdditionalDocumentation.setVisible(false);
+					if (checkAdditionalDocuments())
+					{
+						pnlAdditionalDocumentation.setVisible(false);
+					}
 				}
 			}
 		});
@@ -1194,14 +1236,19 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				if (applicant.getCitizenship().equals(""))
 				{
+					
 					userController.insertOrUpdateApplicant(applicant);
 				}
 				else if (applicant.getCitizenship().equals("International"))
 				{
+					if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+					if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
 					userController.insertOrUpdateInternationalApplicant(intApplicant);
 				}
 				else
 				{
+					if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+					if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
 					userController.insertOrUpdateSouthAfricanApplicant(rsaApplicant);
 				}
 				
@@ -1223,10 +1270,14 @@ public class PostGradToolUI {
 					}
 					else if (applicant.getCitizenship().equals("International"))
 					{
+						if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+						if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
 						userController.insertOrUpdateInternationalApplicant(intApplicant);
 					}
 					else
 					{
+						if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+						if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
 						userController.insertOrUpdateSouthAfricanApplicant(rsaApplicant);
 					}
 					
@@ -1282,6 +1333,7 @@ public class PostGradToolUI {
 		btnPdfOfApplication = new JButton("PDF of Application Details");
 		btnPdfOfApplication.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				appController.requestPDFofApplicantDetails(applicant.getApplicantNumber(), appController.getApplicationOfApplicant(applicant.getApplicantNumber()).getApplicationNumber());
 			}
 		});
 		btnPdfOfApplication.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1329,18 +1381,31 @@ public class PostGradToolUI {
 		cbxApplicationApplicationStatus.setFont(new Font("Calibri", Font.PLAIN, 11));
 		cbxApplicationApplicationStatus.setBounds(232, 34, 273, 22);
 		cbxApplicationApplicationStatus.setVisible(false);
-		pnlApplicationUI.add(cbxApplicationApplicationStatus);
+		cbxApplicationApplicationStatus.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) {
+				application.changeStatus(cbxApplicationApplicationStatus.getSelectedItem().toString().trim());
+			}
+		});
 		
-		cbxApplicationStatusReason = new JComboBox();
-		populateComboBox(cbxApplicationStatusReason, "StatusReasonsForCombo.txt");
-		cbxApplicationStatusReason.setFont(new Font("Calibri", Font.PLAIN, 11));
-		cbxApplicationStatusReason.setBounds(232, 59, 273, 22);
-		cbxApplicationStatusReason.setVisible(false);
-		pnlApplicationUI.add(cbxApplicationStatusReason);
+				pnlApplicationUI.add(cbxApplicationApplicationStatus);
+				
+				cbxApplicationStatusReason = new JComboBox();
+				populateComboBox(cbxApplicationStatusReason, "StatusReasonsForCombo.txt");
+				cbxApplicationStatusReason.setFont(new Font("Calibri", Font.PLAIN, 11));
+				cbxApplicationStatusReason.setBounds(232, 59, 273, 22);
+				cbxApplicationStatusReason.setVisible(false);
+				cbxApplicationApplicationStatus.addFocusListener(new FocusAdapter() {
+					public void focusLost(FocusEvent e) {
+						application.addReasonForStatus(cbxApplicationStatusReason.getSelectedItem().toString().trim());
+					}
+				});
+				pnlApplicationUI.add(cbxApplicationStatusReason);
+				String sDegCountry = cbxDegCountry.getSelectedItem().toString().trim();
 		
 		pnlApplicantEntry = new JPanel();
 		pnlApplicantEntry.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
 		pnlApplicantEntry.setBounds(0, 0, 718, 390);
+		pnlApplicantEntry.setVisible(false);
 		frmSchoolOfIt.getContentPane().add(pnlApplicantEntry);
 		pnlApplicantEntry.setLayout(null);
 		
@@ -1388,8 +1453,11 @@ public class PostGradToolUI {
 		pnlApplicantEntry.add(txtrMessage);
 		
 		btnViewApplication = new JButton("View Application");
+		btnViewApplication.setEnabled(!tblApplications.getSelectionModel().isSelectionEmpty());
 		btnViewApplication.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				populateApplicationFields(applicant, application);
+				showPersonalDetails();
 			}
 		});
 		btnViewApplication.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1399,6 +1467,8 @@ public class PostGradToolUI {
 		btnEditApplication = new JButton("Edit Application");
 		btnEditApplication.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				populateApplicationFields(applicant, application);
+				showPersonalDetails();
 			}
 		});
 		btnEditApplication.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1408,6 +1478,9 @@ public class PostGradToolUI {
 		btnRemoveApplication = new JButton("Remove Application");
 		btnRemoveApplication.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				application.changeStatus("Withdrawn");
+				application.addReasonForStatus("Applicant withdraws application");
+				showSignInInterface();
 			}
 		});
 		btnRemoveApplication.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1417,6 +1490,7 @@ public class PostGradToolUI {
 		pnlAcademicEntryUI = new JPanel();
 		pnlAcademicEntryUI.setBackground(UIManager.getColor("InternalFrame.inactiveTitleGradient"));
 		pnlAcademicEntryUI.setBounds(0, 0, 718, 390);
+		pnlAcademicEntryUI.setVisible(false);
 		frmSchoolOfIt.getContentPane().add(pnlAcademicEntryUI);
 		pnlAcademicEntryUI.setLayout(null);
 		
@@ -1434,7 +1508,7 @@ public class PostGradToolUI {
 			new Object[][] {
 			},
 			new String[] {
-				"Application #", "Country of Citizenship", "Previous Qualification", "Programme of Study", "Reason for Status", "Applicant #", "Application Status"
+				"Application #", "Applicant #", "Application Status", "Reason for Status",  "Previous Qualification", "Instituition of Previous Qualification", "Programme of Study"  
 			}
 		) {
 			Class[] columnTypes = new Class[] {
@@ -1450,11 +1524,41 @@ public class PostGradToolUI {
 		tblApplications.getColumnModel().getColumn(5).setResizable(false);
 		tblApplications.getColumnModel().getColumn(6).setPreferredWidth(103);
 		tblApplications.setBounds(33, 36, 661, 220);
+		tblApplications.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
+				      public void valueChanged(ListSelectionEvent e) {
+				    	  applicant = userController.getApplicant(tblApplications.getValueAt(tblApplications.getSelectedRow(), 1).toString().trim());
+				    	  userController.setApplicantOfFocus(applicant);
+				    	  application = appController.getApplicationOfApplicant(applicant.getApplicantNumber());
+				    	  appController.setApplicationOfFocus(application);
+				    	  if (applicant.getCitizenship().equals("International"))
+				    	  {
+				    		  intApplicant = userController.getInternationalApplicant(applicant.getApplicantNumber());
+				    		  userController.setInternationalApplicantOfFocus(intApplicant);
+				    	  }
+				    	  else if (applicant.getCitizenship().contains("South African"))
+				    	  {
+				    		  rsaApplicant = userController.getSouthAfricanApplicant(applicant.getApplicantNumber());
+				    		  userController.setSouthAfricanApplicantOfFocus(rsaApplicant);
+				    	  }
+				      }}
+				);
+		appController.populateApplicationsTable(tblApplications);
 		pnlAcademicEntryUI.add(tblApplications);
 		
 		btnChooseCSV = new JButton("Choose CSV");
 		btnChooseCSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser(); //create a file chooser
+				int returnVal = fileChooser.showOpenDialog(frmSchoolOfIt); //show file chooser for selecting file
+				if (returnVal == JFileChooser.APPROVE_OPTION)  //user has selected file
+				{
+					File file = fileChooser.getSelectedFile(); //fetch file chosen
+					String fileName = file.getName(); //get name of file
+					lblNameOfCSVFile.setText(fileName); //name of file
+					appController.chosenCSV(file); //prepare file for upload
+					btnUploadCsv.setVisible(true);
+				}
 			}
 		});
 		btnChooseCSV.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1466,8 +1570,11 @@ public class PostGradToolUI {
 		pnlAcademicEntryUI.add(lblUploadCSVMessage);
 		
 		btnUploadCsv = new JButton("Upload CSV");
+		btnUploadCsv.setVisible(false);
 		btnUploadCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				appController.notifyApplicants(lblNameOfCSVFile.getText().toString().trim());
+				btnUploadCsv.setVisible(false);
 			}
 		});
 		btnUploadCsv.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1481,6 +1588,9 @@ public class PostGradToolUI {
 		btnGenerateCsv = new JButton("Generate CSV");
 		btnGenerateCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				{
+					appController.getFilteredApplicantListAsCSV(appController.getFilteredList(cbxStudyPrograms.getSelectedItem().toString().trim(), cbxLevel.getSelectedItem().toString().trim(),cbxApplicationStatus.getSelectedItem().toString().trim()));
+				}
 			}
 		});
 		btnGenerateCsv.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1501,7 +1611,7 @@ public class PostGradToolUI {
 		pnlAcademicEntryUI.add(lblAcademicEntryMessage);
 		
 		cbxStudyPrograms = new JComboBox<String>();
-		populateComboBox(cbxStudyPrograms, "Degrees.txt");
+		populateComboBox(cbxStudyPrograms, "DegreesForFilters.txt");
 		cbxStudyPrograms.setBounds(537, 277, 157, 22);
 		pnlAcademicEntryUI.add(cbxStudyPrograms);
 		
@@ -1510,11 +1620,13 @@ public class PostGradToolUI {
 		pnlAcademicEntryUI.add(lblStudyProgram);
 		
 		cbxLevel = new JComboBox<String>();
+		populateComboBox(cbxLevel, "Levels.txt");
 		cbxLevel.setFont(new Font("Calibri", Font.PLAIN, 12));
 		cbxLevel.setBounds(537, 304, 157, 22);
 		pnlAcademicEntryUI.add(cbxLevel);
 		
 		cbxApplicationStatus = new JComboBox<String>();
+		populateComboBox(cbxStudyPrograms, "ApplicationStatusesForFilters.txt");
 		cbxApplicationStatus.setBounds(537, 331, 157, 22);
 		pnlAcademicEntryUI.add(cbxApplicationStatus);
 		
@@ -1525,7 +1637,8 @@ public class PostGradToolUI {
 		JButton btnViewApplication_1 = new JButton("View Application");
 		btnViewApplication_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				populateApplicationFields(applicant, application);
+				showPersonalDetails();
 			}
 		});
 		btnViewApplication_1.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -1769,6 +1882,8 @@ public class PostGradToolUI {
 		mntmTertiaryQual.setSelected(false);
 		mntmProgrammeOfStudy.setSelected(false);
 		mntmRequiredDocumentation.setSelected(false);
+		
+		lblNameOfCSVFile.setText("");
 	}
 	
 	private void showApplicantEntryInterface()
@@ -2129,34 +2244,34 @@ public class PostGradToolUI {
 		}
 	}
 	
-	private String checkPersonalDetails()
+	private boolean checkPersonalDetails()
 	{
 		//needs logic!
-		return "";
+		return true;
 	}
 	
-	private String checkContactDetails()
+	private boolean checkContactDetails()
 	{
 		//needs logic!
-		return "";
+		return true;
 	}
 	
-	private String checkQualificationDetails()
+	private boolean checkQualificationDetails()
 	{
 		//needs logic!
-		return "";
+		return true;
 	}
 	
-	private String checkStudyProgramDetails()
+	private boolean checkStudyProgramDetails()
 	{
 		//needs logic!
-		return "";
+		return true;
 	}
 	
-	private String checkAdditionalDocuments()
+	private boolean checkAdditionalDocuments()
 	{
 		//needs logic!
-		return "";
+		return true;
 	}
 	
 	private void displayUndergradMathInputs(int level)

@@ -1,0 +1,14 @@
+All
+Created
+Applied
+Denied
+Conditionally Admitted
+Admitted
+Withdrawn
+Offer Accepted
+Decision Deffered
+On Waiting List
+Firm Offer Deferred
+Conditional Admittance Revoked
+Offer Rejected
+Deffered

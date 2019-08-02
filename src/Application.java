@@ -41,4 +41,15 @@ public class Application {
 		this.studyProgram = studyProgram;
 	}
 	
+	public boolean changeStatus(String status)
+	{
+		//needs logic!!!
+		return true;
+	}
+	
+	public boolean addReasonForStatus(String statusReason)
+	{
+		//needs logic!!
+		return true;
+	}
 }
