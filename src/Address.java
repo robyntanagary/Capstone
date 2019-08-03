@@ -8,6 +8,12 @@ public class Address {
 		setLineAddress("");
 		setCountry("Unknown");
 	}
+	
+	public Address(String line, String country)
+	{
+		setLineAddress(line);
+		setCountry(country);
+	}
 
 	/**
 	 * Retrieves the lineAddress

@@ -7,11 +7,18 @@ public class UserController {
 	private SouthAfricanApplicant rsaApplicant;
 	private InternationalApplicant internationalApplicant;
 	private FOacademic academic;
+	private DataReaderWriter dataAccess;
 	
 	public UserController()
 	{
 		applicant = new Applicant();
 		academic = new FOacademic();
+	}
+	
+	public UserController(DataReaderWriter data)
+	{
+		this();
+		dataAccess = data;
 	}
 	
 	public boolean isApplicant(String applicantNumber, String password)
@@ -87,7 +94,13 @@ public class UserController {
 	
 	public boolean registerNewApplicant(String applicantNumber, String email, String password, String confirmPassword)
 	{
-		//needs logic!!!
+		if (password.equals(confirmPassword))
+		{
+			applicant = new Applicant(applicantNumber, email, password, confirmPassword);
+			Application theirApplication = new Application();
+			dataAccess.getApplicantsAndTheirApplications().add(new ApplicantApplicationReference(applicant, theirApplication));
+			return true;
+		}
 		return false;
 	}
 	

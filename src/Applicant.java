@@ -21,6 +21,12 @@ public Applicant(Applicant applicant)
 	this.previousQualification = applicant.getPreviousQualification();
 }
 
+public Applicant(String applicantNumber, String email, String password, String confirmPassword)
+{
+	super(email, password);
+	this.applicantNumber = applicantNumber;
+}
+
 
 /**
  * Method return the country in which thus applicant has citizenship.

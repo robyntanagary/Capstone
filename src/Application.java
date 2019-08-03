@@ -3,7 +3,18 @@ public class Application {
 	private String applicationNumber;
 	private ApplicationStatus applicationStatus;
 	private StudyProgram studyProgram;
-	//need to add PDF!!!
+	private String pdfName;
+	private String pdfPath;
+	
+	public Application()
+	{
+		applicationNumber = "";
+		studyProgram = new StudyProgram();
+		pdfName = "";
+		pdfPath = "";
+		applicationStatus = new ApplicationStatus();
+	}
+	
 	/**
 	 * @return the applicationNumber
 	 */
@@ -51,5 +62,29 @@ public class Application {
 	{
 		//needs logic!!
 		return true;
+	}
+	/**
+	 * @return the pdfName
+	 */
+	public String getPdfName() {
+		return pdfName;
+	}
+	/**
+	 * @param pdfName the pdfName to set
+	 */
+	public void setPdfName(String pdfName) {
+		this.pdfName = pdfName;
+	}
+	/**
+	 * @return the pdfPath
+	 */
+	public String getPdfPath() {
+		return pdfPath;
+	}
+	/**
+	 * @param pdfPath the pdfPath to set
+	 */
+	public void setPdfPath(String pdfPath) {
+		this.pdfPath = pdfPath;
 	}
 }

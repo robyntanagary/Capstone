@@ -5,6 +5,22 @@ public class TertiaryQualificationForMIT extends TertiaryQualification {
 	private String descriptionProjectThesis;
 	private int highestLevelUndergradMathematcs;
 	private UndergraduateMathematics[] undergradMaths;
+	
+	public TertiaryQualificationForMIT()
+	{
+		super();
+	}
+	
+	public TertiaryQualificationForMIT(String degree, String university, String country, int duration, String NQF, int itExperience, boolean hasThesis, String thesis, int HighestLevel, UndergraduateMathematics[] undergradMaths)
+	{
+		super(degree, university, country, duration, NQF);
+		this.priorITExperience = itExperience;
+		this.presenceProjectThesis = hasThesis;
+		this.descriptionProjectThesis = thesis;
+		this.highestLevelUndergradMathematcs = HighestLevel;
+		this.undergradMaths = undergradMaths;
+	}
+	
 	/**
 	 * @return the priorITExperience
 	 */

@@ -5,21 +5,33 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class ApplicationController {
 	private Application application;
-	ArrayList<File> files;
+	private ArrayList<File> files;
+	private DataReaderWriter dataAccess;
+	
+	
 	/**
 	 * Method creates a controller object responsible for managing applications.
 	 */
 	public ApplicationController()
 	{
-		
+		application = null; //no application have yet been created or selected
+		files = new ArrayList<File>(); //no file have yet been included
+	}
+	
+	public ApplicationController(DataReaderWriter data)
+	{
+		this();
+		dataAccess = data;
 	}
 	
 	public Application getApplicationOfApplicant(String applicantNumber)
 	{
-		return application; //needs logic!!!
+		
+		return dataAccess.getApplicationOfApplicant(applicantNumber); //see DataReaderWriter
 	}
 	
 	/**
@@ -33,26 +45,28 @@ public class ApplicationController {
 	
 	public boolean noExistingApplication(String applicantNumber)
 	{
-		return true; //needs logic!!!
+		return dataAccess.getApplicationOfApplicant(applicantNumber).equals(null); 
 	}
 	
 	public Application createNewApplication(String applicantNumber)
 	{
-		//needs logic!!!
+		application = new Application();
+		int applicationNumber = dataAccess.getMaxApplicationNumber() + 1;
+		application.setApplicationNumber(String.valueOf(applicationNumber));
+		dataAccess.setApplicationOfApplicant(applicantNumber, application);
 		return application;
 	}
 	
 	public boolean submitApplication(Application anApplication)
 	{
-		//needs logic
-		
+		anApplication.setApplicationStatus(new ApplicationStatus("Applied", "Applicant submitted application"));
+		dataAccess.getApplicantApplicationRefByApplication(anApplication.getApplicationNumber()).setApplicationRef(anApplication);
 		return true;
 	}
 	
 	public boolean insertOrUpdateApplication(Application anApplication)
 	{
-		//needs logic
-		
+		dataAccess.getApplicantApplicationRefByApplication(anApplication.getApplicationNumber()).setApplicationRef(anApplication);
 		return true;
 	}
 	
@@ -71,16 +85,18 @@ public class ApplicationController {
 		files.add(file);
 	}
 	
-	public boolean downloadPDF(String pdfName)
+	public boolean downloadPDF(String pdfName, File fileToSave)
 	{
+		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
 		//needs logic
 		return true;
 	}
 	
 	public boolean applicantionEditable(String applicationNumber)
 	{
-		//needs logic
-		return true;
+		String status = dataAccess.getApplicantApplicationRefByApplication(applicationNumber).getApplicationRef().getApplicationStatus().getStatusDescripition();
+		status = status.trim();
+		return (status.equals("Created") || status.equals("Applied") || status.equals("Decision Deffered") || status.equals("On Waiting List") || status.equals("Firm Offer Deferred"));
 	}
 	
 	public StudyProgram getStudyProgram(String studyProgramName)
@@ -91,19 +107,38 @@ public class ApplicationController {
 	
 	public boolean applicantionViewable(String applicationNumber)
 	{
-		//needs logic
-		return true;
+		String status = dataAccess.getApplicantApplicationRefByApplication(applicationNumber).getApplicationRef().getApplicationStatus().getStatusDescripition();
+		status = status.trim();
+		return (!status.equals("Withdrawn"));
 	}
 	
-	public boolean requestPDFofApplicantDetails(String applicantNumber, String application)
+	public boolean requestPDFofApplicantDetails(String applicantNumber, String application, File fileToSave)
 	{
+		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
 		//needs logic!
 		return true;
 	}
 	
-	public void populateApplicationsTable(JTable tableToPopulate)
+	public DefaultTableModel populateApplicationsTable(DefaultTableModel model)
 	{
-		//
+		ArrayList<ApplicantApplicationReference> applicationRefererences = dataAccess.getApplicantsAndTheirApplications();
+		String[] cellValues = new String[6];
+		
+		applicationRefererences.trimToSize();
+		
+		for (int i=0; i<applicationRefererences.size();i++)
+		{
+			cellValues[0] = applicationRefererences.get(i).getApplicationRef().getApplicationNumber();
+			cellValues[1] = applicationRefererences.get(i).getApplicantRef().getApplicantNumber();
+			cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
+			cellValues[3] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
+			cellValues[4] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
+			cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
+		
+			model.addRow(cellValues);
+		}
+		
+		return model;
 	}
 	
 	/**
@@ -125,12 +160,12 @@ public class ApplicationController {
 					
 			while (csvApplicantsList.hasNext())
 			{
-				String[] applicantRow = csvApplicantsList.nextLine().split(",");
-				String firstName = applicantRow[1];
-				String lastName = applicantRow[1];
-				String applicantNumber = applicantRow[1];
-				String email = applicantNumber + "@myUCT.ac.za"; //E-mail?
-				notifyApplicant(firstName,lastName, applicantNumber, email);
+				String[] applicantRow = csvApplicantsList.nextLine().split(","); //extract potential applicant from list
+				String firstName = applicantRow[6]; //extract first name
+				String lastName = applicantRow[5]; //extract last name
+				String applicantNumber = applicantRow[1]; //extract applicant number
+				String email = applicantNumber + "@myUCT.ac.za"; //E-mail? 
+				notifyApplicant(firstName,lastName, applicantNumber, email); //notify potential applicant
 			}
 		}
 		catch(IOException e)
@@ -147,65 +182,58 @@ public class ApplicationController {
 		return true;
 	}
 	
-	public ArrayList<String> getFilteredList(String studyProgram, String level, String applicationStatus)
+	public ArrayList<ApplicantApplicationReference> getFilteredList(String studyProgram, String level, String applicationStatus)
 	{
 		return filterListByApplicationStatus( filterListByLevel(filterListByStudyProgramme(getApplicantApplicationList(), studyProgram), level), applicationStatus);
 	}
 	
-	public ArrayList<String> getApplicantApplicationList()
+	public ArrayList<ApplicantApplicationReference> getApplicantApplicationList()
 	{
-		//needs logic!!!
-		return new ArrayList<String>();
+		return dataAccess.getApplicantsAndTheirApplications();
 	}
 	
-	public ArrayList<String> filterListByStudyProgramme(ArrayList<String> list, String studyProgramme)
+	public ArrayList<ApplicantApplicationReference> filterListByStudyProgramme(ArrayList<ApplicantApplicationReference> list, String studyProgramme)
 	{
 		//needs logic
 		if (studyProgramme.equals("All"))
 		{
-			
+			return list;
 		}
 		else if (studyProgramme.equals("Other"))
 		{
-			
+			 return dataAccess.filterByStudyProgram(list, studyProgramme);
 		}
 		else
 		{
-			
+			 return dataAccess.filterByStudyProgram(list, studyProgramme);
 		}
-		return list;
 	}
 	
-	public ArrayList<String> filterListByLevel(ArrayList<String>list, String level)
+	public ArrayList<ApplicantApplicationReference> filterListByLevel(ArrayList<ApplicantApplicationReference>list, String level)
 	{
 		//needs logic
 		if (level.equals("All"))
 		{
-			
+			return list;
 		}
 		else
 		{
-			
+			return dataAccess.filterByStudyProgram(list, level);
+		}
+	}
+	
+	public ArrayList<ApplicantApplicationReference> filterListByApplicationStatus(ArrayList<ApplicantApplicationReference>list, String appStatus)
+	{
+		if (!appStatus.equals("All"))
+		{
+			return dataAccess.filterByApplicationStatus(list, appStatus);
 		}
 		return list;
 	}
 	
-	public ArrayList<String> filterListByApplicationStatus(ArrayList<String>list, String appStatus)
+	public void getFilteredApplicantListAsCSV(ArrayList<ApplicantApplicationReference> filteredApplicantList, File fileToSave)
 	{
-		//needs logic
-		if (appStatus.equals("All"))
-		{
-			
-		}
-		else
-		{
-			
-		}
-		return list;
-	}
-	
-	public void getFilteredApplicantListAsCSV(ArrayList<String> filteredApplicantList)
-	{
+		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
 		//needs logic
 	}
 	
@@ -213,6 +241,7 @@ public class ApplicationController {
 	{
 		//needs logic
 	}
+	
 	
 	/**
 	 * Method return file uploaded to tool as specified fileName
@@ -228,4 +257,6 @@ public class ApplicationController {
 		}
 		return null;
 	}
+	
+	
 }

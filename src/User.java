@@ -22,6 +22,26 @@ public class User {
 		this.password = user.getPassword();
 	}
 	
+	public User(String surname, String firstName, String password, String title, String email, String cellphone)
+	{
+		this.surname = surname;
+		this.firstName = firstName;
+		this.title = title;
+		this.email = email;
+		this.cellPhone = cellphone;
+		this.password = password;
+	}
+	
+	public User(String email, String password)
+	{
+		this.surname = "";
+		this.firstName = "";
+		this.title = "";
+		this.email = email;
+		this.cellPhone = "";
+		this.password = password;
+	}
+	
 	/**
 	 * Retrieve surname of applicant or academic.
 	 * @return the surname of the user.

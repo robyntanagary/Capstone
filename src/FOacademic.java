@@ -7,6 +7,12 @@ public class FOacademic extends User {
 	{
 		super();
 	}
+	
+	public FOacademic(String surname, String firstName, String number, String password, String title, String email, String cellphone)
+	{
+		super(surname, firstName, password, title, email, cellphone);
+		staffNumber = number;
+	}
 
 	/**
 	 * Retrieve the staff number of this academic processing applications for the Faculty Offices.

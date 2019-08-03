@@ -13,6 +13,15 @@ public class TertiaryQualification {
 		setNQFEquivalence("");
 		setMinDuration(0);
 	}
+	
+	public TertiaryQualification(String degree, String university, String country, int duration, String NQF)
+	{
+		this.tertiaryInstitution = university;
+		this.country = country;
+		this.NQFEquivalence = NQF;
+		this.minDuration = duration;
+		this.degree = degree;
+	}
 
 	/**
 	 * Return the tertiary institution at which this qualification has been obtained.
