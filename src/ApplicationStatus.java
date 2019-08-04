@@ -19,8 +19,127 @@ public class ApplicationStatus {
 	
 	public String generateMessageForApplicant()
 	{
+		if ((statusCode.equalsIgnoreCase("ADMT")) && (reasonCode.equalsIgnoreCase("FIRM")))
+		{
+			return "Firm offer of place made. Letter to follow.";
+		}
+		else if ((statusCode.equalsIgnoreCase("ADRV")) && (reasonCode.equalsIgnoreCase("COND")))
+		{
+			return "Offer revoked as conditions have not been met.";
+		}
+		else if ((statusCode.equalsIgnoreCase("APPL")) && (reasonCode.equalsIgnoreCase("REIN")))
+		{
+			return "Your application has been reinstated.";
+		}
+		else if ((statusCode.equalsIgnoreCase("COND")) && (reasonCode.equalsIgnoreCase("CERT")))
+		{
+			return "Your offer will be confirmed upon receipt of a certified copy of your transcript, see letter for details";
+		}
+		else if ((statusCode.equalsIgnoreCase("COND")) && (reasonCode.equalsIgnoreCase("RCPT") || reasonCode.equalsIgnoreCase("RSLT") || reasonCode.contains("RES") || reasonCode.equalsIgnoreCase("TERT")))
+		{
+			return "Conditional offer made. See letter with conditions.";
+		}
+		else if ((statusCode.equalsIgnoreCase("COND")) && (reasonCode.equalsIgnoreCase("STAR")))
+		{
+			return "Offer made. See letter for conditions.";
+		}
+		else if ((statusCode.equalsIgnoreCase("ADMT")) && (reasonCode.equalsIgnoreCase("CONF")))
+		{
+			return "Condition of offer met. Your offer of a place has been confirmed";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("ALT")))
+		{
+			return "Decision deferred pending response from applicant";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("HOD")))
+		{
+			return "Application under consideration by the Head of Department";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("INFO")))
+		{
+			return "Further information/documentation required. Check your “to-do” list.";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("LANG")))
+		{
+			return "Proof of English Proficiency required.";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("RFAC")))
+		{
+			return "Your application is under consideration by the Faculty Admissions Committee";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("RPL")))
+		{
+			return "Your application is pending the outcome of the evaluation assessment (RPL)";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("TERT")))
+		{
+			return "Your application will be decided when we receive your tertiary results.";
+		}
+		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("TUCT")))
+		{
+			return "Your application will be decided when we know your UCT results";
+		}
+		else if ((statusCode.equalsIgnoreCase("DEFR")))
+		{
+			return "Application deferred to the next semester.";
+		}
+		else if ((statusCode.equalsIgnoreCase("DEIN")))
+		{
+			return "We have received your acceptance of our offer.";
+		}
+		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("COMP")))
+		{
+			return "Application unsuccessful –not competitive. For undergraduate study options contact http://cach.dhet.gov.za or 0860 111 673";
+		}
+		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("LATE")))
+		{
+			return "Ineligible late application. For undergraduate study options contact http://cach.dhet.gov.za or 0860 111 673";
+		}
+		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("PROP")))
+		{
+			return "Application unsuccessful –inadequate research outline.";
+		}
+		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("SUPV")))
+		{
+			return "Application unsuccessful – no suitable supervisor available for your research.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WADM")) && (reasonCode.equalsIgnoreCase("CHNG")))
+		{
+			return "Your application has been cancelled and changed to a different programme.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WADM")) && (reasonCode.equalsIgnoreCase("CLAP") || reasonCode.equalsIgnoreCase("FRAD")))
+		{
+			return "Your offer has been withdrawn. Please contact the Faculty Office for further details.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WADM")) && (reasonCode.equalsIgnoreCase("ICOM")))
+		{
+			return "Application cancelled. University has not been provided with information requested.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WADM")) && (reasonCode.equalsIgnoreCase("OFFER")))
+		{
+			return "Application for this qualification has been withdrawn. Offer made on your other application.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WADM")) && (reasonCode.equalsIgnoreCase("PWIT")))
+		{
+			return "Your application has been withdrawn due to the unavailability of the programme.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WAIT")) && (reasonCode.equalsIgnoreCase("GENW")))
+		{
+			return "You have been placed on the waiting list. You will be advised when your status changes.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WAPP")) && (reasonCode.equalsIgnoreCase("GAP")))
+		{
+			return "Your offer has been deferred at your request";
+		}
+		else if ((statusCode.equalsIgnoreCase("WAPP")) && (reasonCode.equalsIgnoreCase("REJO")))
+		{
+			return "Your offer has been cancelled at your request or on your indication of preference for another offer.";
+		}
+		else if ((statusCode.equalsIgnoreCase("WAPP")) && (reasonCode.equalsIgnoreCase("WDRN")))
+		{
+			return "Your application has beenwithdrawn at your request.";
+		}
 		return "";
-		//needs logic!!!
 	}
 
 	/**

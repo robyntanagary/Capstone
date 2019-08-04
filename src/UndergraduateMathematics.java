@@ -22,13 +22,13 @@ public class UndergraduateMathematics {
 		this.level = level;
 	}
 	/**
-	 * @return the avarage
+	 * @return the average
 	 */
 	public double getAverage() {
 		return average;
 	}
 	/**
-	 * @param avarage the avarage to set
+	 * @param avarage the average to set
 	 */
 	public void setAverage(double avarage) {
 		this.average = avarage;

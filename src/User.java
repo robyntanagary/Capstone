@@ -9,7 +9,12 @@ public class User {
 	
 	public User()
 	{
-		
+		this.surname = "";
+		this.firstName = "";
+		this.title = "";
+		this.email = "";
+		this.cellPhone = "";
+		this.password = "";
 	}
 	
 	public User(User user)

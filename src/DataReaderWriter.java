@@ -252,11 +252,14 @@ public class DataReaderWriter {
 		}
 		catch(IOException e)
 		{
-			
+			System.out.println("error");
 		}
 		finally
 		{
-			
+			if (writer!=null)
+			{
+				writer.close();
+			}
 		}
 	}
 	

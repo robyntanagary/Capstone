@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class UserController {
 	/**
@@ -23,7 +24,7 @@ public class UserController {
 	
 	public boolean isApplicant(String applicantNumber, String password)
 	{
-		return false; //needs logic!!!
+		return (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber)!=null) && (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef().getPassword().equals(password));
 	}
 	
 	/**
@@ -33,7 +34,7 @@ public class UserController {
 	 */
 	public Applicant getApplicant(String applicantNumber)
 	{
-		return applicant; //needs logic!!!
+		return dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef();
 	}
 	
 	/**
@@ -47,12 +48,27 @@ public class UserController {
 	
 	public boolean isFOacademic(String staffNumber, String password)
 	{
-		return false; //needs logic!!!
+		ArrayList<FOacademic> FOacademics = dataAccess.getAcademics();
+		FOacademics.trimToSize();
+		for (int i=0; i<FOacademics.size(); i++)
+		{
+			if ((FOacademics.get(i).getStaffNumber().equalsIgnoreCase(staffNumber)) && (FOacademics.get(i).getPassword().equals(password))) {return true; }
+		}
+		return false; 
 	}
 	
 	public FOacademic getFOacademic(String staffNumber)
 	{
-		return academic; //needs logic!!!
+		ArrayList<FOacademic> FOacademics = dataAccess.getAcademics();
+		FOacademics.trimToSize();
+		for (int i=0; i<FOacademics.size(); i++)
+		{
+			if ((FOacademics.get(i).getStaffNumber().equalsIgnoreCase(staffNumber))) 
+			{	
+				academic = FOacademics.get(i);
+				return academic; }
+		}
+		return null;
 	}
 	
 	/**
@@ -66,7 +82,13 @@ public class UserController {
 	
 	public InternationalApplicant getInternationalApplicant(String applicantNumber)
 	{
-		return internationalApplicant; //needs logic!!!
+		Applicant app = dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef();
+		if ((app != null) && (app.getCitizenship().equalsIgnoreCase("International")))
+		{
+			internationalApplicant = (InternationalApplicant) app;
+			return internationalApplicant;
+		}
+		return null;
 	}
 	
 	/**
@@ -80,7 +102,13 @@ public class UserController {
 	
 	public SouthAfricanApplicant getSouthAfricanApplicant(String applicantNumber)
 	{
-		return rsaApplicant; //needs logic!!!
+		Applicant app = dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef();
+		if ((app != null) && (app.getCitizenship().contains("South African")))
+		{
+			rsaApplicant = (SouthAfricanApplicant) app;
+			return null;
+		}
+		return null;
 	}
 	
 	/**
@@ -106,19 +134,19 @@ public class UserController {
 	
 	public boolean insertOrUpdateApplicant(Applicant applicant)
 	{
-		//needs logic!!!
+		dataAccess.getApplicantApplicationRefByApplicant(applicant.getApplicantNumber()).setApplicantRef(applicant);
 		return true;
 	}
 	
-	public boolean insertOrUpdateInternationalApplicant(InternationalApplicant internationalApplicant)
+	public boolean insertOrUpdateInternationalApplicant(InternationalApplicant intApplicant)
 	{
-		//needs logic!!!
+		dataAccess.getApplicantApplicationRefByApplicant(intApplicant.getApplicantNumber()).setApplicantRef(intApplicant);
 		return true;
 	}
 	
 	public boolean insertOrUpdateSouthAfricanApplicant(SouthAfricanApplicant southAfricanApplicant)
 	{
-		//needs logic!!!
+		dataAccess.getApplicantApplicationRefByApplicant(southAfricanApplicant.getApplicantNumber()).setApplicantRef(southAfricanApplicant);
 		return true;
 	}
 }

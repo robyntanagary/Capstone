@@ -32,6 +32,7 @@ import java.awt.event.FocusEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.event.ChangeEvent;
 
 import java.io.File;
@@ -1013,6 +1014,7 @@ public class PostGradToolUI {
 		btnChoosePDF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(); //create a file chooser
+				fileChooser.setFileFilter(new FileExtensionFilter(".pdf"));
 				int returnVal = fileChooser.showOpenDialog(frmSchoolOfIt); //show file chooser for selecting file
 				if (returnVal == JFileChooser.APPROVE_OPTION) //user has selected file
 				{
@@ -1056,7 +1058,7 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(); //create JFileChooser for user to indicate location to save file.
 				fileChooser.setDialogTitle("Specify location to save PDF of Application Details");   
-				 
+				fileChooser.setFileFilter(new FileExtensionFilter(".pdf"));
 				int returnVal = fileChooser.showSaveDialog(frmSchoolOfIt); //show save dialog
 				 
 				if (returnVal == JFileChooser.APPROVE_OPTION) { //if the user has selected a location and filename
@@ -1386,7 +1388,7 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(); //create JFileChooser for user to indicate location to save file.
 				fileChooser.setDialogTitle("Specify location to save PDF of Application Details");   
-				 
+				fileChooser.setFileFilter(new FileExtensionFilter(".pdf"));
 				int returnVal = fileChooser.showSaveDialog(frmSchoolOfIt); //show save dialog
 				 
 				if (returnVal == JFileChooser.APPROVE_OPTION) { //if the user has selected a location and filename
@@ -1602,6 +1604,7 @@ public class PostGradToolUI {
 		btnChooseCSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(); //create a file chooser
+				fileChooser.setFileFilter(new FileExtensionFilter(".csv"));
 				int returnVal = fileChooser.showOpenDialog(frmSchoolOfIt); //show file chooser for selecting file
 				if (returnVal == JFileChooser.APPROVE_OPTION)  //user has selected file
 				{
@@ -1642,12 +1645,15 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				{
 					JFileChooser fileChooser = new JFileChooser(); //create JFileChooser for user to indicate location to save file.
-					fileChooser.setDialogTitle("Specify location to save CSV of Applicants");   
-					 
+					fileChooser.setDialogTitle("Specify location to save CSV of Applicants");  
+					fileChooser.setFileFilter(new FileExtensionFilter(".csv"));
+					
 					int returnVal = fileChooser.showSaveDialog(frmSchoolOfIt); //show save dialog
 					 
 					if (returnVal == JFileChooser.APPROVE_OPTION) { //if the user has selected a location and filename
 					    File fileToSave = fileChooser.getSelectedFile(); //get information about file
+					    
+					   
 					    appController.getFilteredApplicantListAsCSV(appController.getFilteredList(cbxStudyPrograms.getSelectedItem().toString().trim(), cbxLevel.getSelectedItem().toString().trim(),cbxApplicationStatus.getSelectedItem().toString().trim()), fileToSave);
 					}
 				}
