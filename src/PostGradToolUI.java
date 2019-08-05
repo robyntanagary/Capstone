@@ -600,7 +600,6 @@ public class PostGradToolUI {
 		pnlContactDetails.add(lblEmail);
 		
 		txtEmail = new JTextField();
-		txtEmail.setText(applicant.getEmail());
 		txtEmail.setEditable(false);
 		txtEmail.setBounds(160, 10, 190, 25);
 		pnlContactDetails.add(txtEmail);
@@ -676,13 +675,13 @@ public class PostGradToolUI {
 		txtDegCountryOther.setFont(new Font("Calibri", Font.PLAIN, 12));
 		txtDegCountryOther.setColumns(10);
 		txtDegCountryOther.setBounds(267, 48, 182, 25);
-		txtDegCountryOther.setVisible(cbxDegCountry.getSelectedItem().toString().trim().equals("Other"));
+		//txtDegCountryOther.setVisible(cbxDegCountry.getSelectedItem().toString().trim().equals("Other"));
 		pnlTertiaryQualifications.add(txtDegCountryOther);
 		
 		lblPreviousDegree = new JLabel("If Other, Specify:");
 		lblPreviousDegree.setFont(new Font("Calibri", Font.PLAIN, 12));
 		lblPreviousDegree.setBounds(10, 46, 124, 24);
-		lblPreviousDegree.setVisible(cbxDegCountry.getSelectedItem().toString().trim().equals("Other"));
+		//lblPreviousDegree.setVisible(cbxDegCountry.getSelectedItem().toString().trim().equals("Other"));
 		pnlTertiaryQualifications.add(lblPreviousDegree);
 		
 		cbxDegCountry = new JComboBox<String>();
@@ -691,8 +690,8 @@ public class PostGradToolUI {
 			public void focusLost(FocusEvent e) {
 				String sDegCountry = cbxDegCountry.getSelectedItem().toString().trim();
 				applicant.getPreviousQualification().setCountry(sDegCountry);
-				txtDegCountryOther.setVisible(sDegCountry.equals("Other"));
-				lblPreviousDegree.setVisible(sDegCountry.equals("Other"));
+				//txtDegCountryOther.setVisible(sDegCountry.equals("Other"));
+				//lblPreviousDegree.setVisible(sDegCountry.equals("Other"));
 			}
 		});
 		cbxDegCountry.setBounds(267, 11, 182, 22);
@@ -709,16 +708,16 @@ public class PostGradToolUI {
 			public void focusLost(FocusEvent e) {
 				String sDegree = cbxDegree.getSelectedItem().toString().trim();
 				applicant.getPreviousQualification().setDegree(sDegree);
-				txtDegOther.setVisible(sDegree.equals("Other"));
-				lblDegOther.setVisible(sDegree.equals("Other"));
+				//txtDegOther.setVisible(sDegree.equals("Other"));
+				//lblDegOther.setVisible(sDegree.equals("Other"));
 			}
 		});
 		cbxDegree.setBounds(267, 81, 182, 22);
 		pnlTertiaryQualifications.add(cbxDegree);
 		
 		txtDegOther = new JTextField();
-		String sDegree = cbxDegree.getSelectedItem().toString().trim();
-		txtDegOther.setVisible(sDegree.equals("Other"));
+		//String sDegree = cbxDegree.getSelectedItem().toString().trim();
+		//txtDegOther.setVisible(sDegree.equals("Other"));
 		txtDegOther.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
 				applicant.getPreviousQualification().setDegree(txtDegOther.getText().toString().trim());
@@ -732,7 +731,7 @@ public class PostGradToolUI {
 		lblDegOther = new JLabel("If Other, Specify:");
 		lblDegOther.setFont(new Font("Calibri", Font.PLAIN, 12));
 		lblDegOther.setBounds(10, 116, 124, 24);
-		lblDegOther.setVisible(sDegree.equals("Other"));
+		//lblDegOther.setVisible(sDegree.equals("Other"));
 		pnlTertiaryQualifications.add(lblDegOther);
 		
 		lblNqfEquivalentOf = new JLabel("NQF Equivalent of Previous Degree:");
@@ -810,14 +809,14 @@ public class PostGradToolUI {
 		pnlProgrammeOfStudy.add(lblIfOtherSpecify);
 		
 		cbxStudyProgram = new JComboBox<String>();
-		populateComboBox(cbxStudyProgram, "Degrees");
+		populateComboBox(cbxStudyProgram, "Degrees.txt");
 		cbxStudyProgram.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
 				String studyProgram = cbxStudyProgram.getSelectedItem().toString();
 				application.setStudyProgram(appController.getStudyProgram(studyProgram));
 				
-				lblIfOtherSpecify.setVisible(studyProgram.equals("Other"));
-				txtStudyProgramOther.setVisible(studyProgram.equals("Other"));
+				//lblIfOtherSpecify.setVisible(studyProgram.equals("Other"));
+				//txtStudyProgramOther.setVisible(studyProgram.equals("Other"));
 				
 				if (studyProgram.contains("MIT") && (applicant.getPreviousQualification().getDegree().contains("Computer") || applicant.getPreviousQualification().getDegree().contains("Technology") || applicant.getPreviousQualification().getDegree().contains("Systems")))
 				{
@@ -826,11 +825,11 @@ public class PostGradToolUI {
 				}
 				else
 				{
-				lblPriorItExperience.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
-				spnYearsITExperience.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
-				lblLevelOfUndergraduate.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
-				spnLevelUndergrad.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
-				chckbxPreviousDegreeHadProjectThesis.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				//lblPriorItExperience.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				//spnYearsITExperience.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				//lblLevelOfUndergraduate.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				//spnLevelUndergrad.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
+				//chckbxPreviousDegreeHadProjectThesis.setVisible(studyProgram.equals("Masters in Information Technology (MIT)"));
 				}
 			}
 		});
@@ -920,7 +919,7 @@ public class PostGradToolUI {
 		chckbxPreviousDegreeHadProjectThesis.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				((TertiaryQualificationForMIT) applicant.getPreviousQualification()).PresenceProjectThesisPresent(chckbxPreviousDegreeHadProjectThesis.isSelected());
-				txtrProvideBriefDescription.setVisible(chckbxPreviousDegreeHadProjectThesis.isSelected());
+				//txtrProvideBriefDescription.setVisible(chckbxPreviousDegreeHadProjectThesis.isSelected());
 			}
 		});
 		chckbxPreviousDegreeHadProjectThesis.setBounds(10, 206, 269, 23);
@@ -971,35 +970,35 @@ public class PostGradToolUI {
 		pnlAdditionalDocumentation.add(txtrTheFollowingDocuments);
 		
 		chckbxCertifiedTranscript = new JCheckBox("Certified Transcript");
-		chckbxCertifiedTranscript.setSelected(application.getStudyProgram().requireTranscript());
+		//chckbxCertifiedTranscript.setSelected(application.getStudyProgram().requireTranscript());
 		chckbxCertifiedTranscript.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxCertifiedTranscript.setEnabled(false);
 		chckbxCertifiedTranscript.setBounds(10, 45, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxCertifiedTranscript);
 		
 		chckbxCurriculumVitaecv = new JCheckBox("Curriculum Vitae (CV)");
-		chckbxCurriculumVitaecv.setSelected(application.getStudyProgram().requireCV());
+		//chckbxCurriculumVitaecv.setSelected(application.getStudyProgram().requireCV());
 		chckbxCurriculumVitaecv.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxCurriculumVitaecv.setEnabled(false);
 		chckbxCurriculumVitaecv.setBounds(232, 45, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxCurriculumVitaecv);
 		
 		chckbxResearchStatement = new JCheckBox("Research Statement");
-		chckbxResearchStatement.setSelected(application.getStudyProgram().requireResearchStatement());
+		//chckbxResearchStatement.setSelected(application.getStudyProgram().requireResearchStatement());
 		chckbxResearchStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxResearchStatement.setEnabled(false);
 		chckbxResearchStatement.setBounds(10, 71, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxResearchStatement);
 		
 		chckbxRefereesNames = new JCheckBox("Referees' Names");
-		chckbxRefereesNames.setSelected(application.getStudyProgram().requireRefereesNames());
+		//chckbxRefereesNames.setSelected(application.getStudyProgram().requireRefereesNames());
 		chckbxRefereesNames.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxRefereesNames.setEnabled(false);
 		chckbxRefereesNames.setBounds(232, 69, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxRefereesNames);
 		
 		chckbxMotivation = new JCheckBox("Motivation");
-		chckbxMotivation.setSelected(application.getStudyProgram().requireMotivation());
+		//chckbxMotivation.setSelected(application.getStudyProgram().requireMotivation());
 		chckbxMotivation.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxMotivation.setEnabled(false);
 		chckbxMotivation.setBounds(232, 95, 141, 23);
@@ -1073,7 +1072,7 @@ public class PostGradToolUI {
 		pnlAdditionalDocumentation.add(btnDownloadPDF);
 		
 		chkbxFundingStatement = new JCheckBox("Funding Statement");
-		chkbxFundingStatement.setSelected(application.getStudyProgram().requireFundingStatement());
+		//chkbxFundingStatement.setSelected(application.getStudyProgram().requireFundingStatement());
 		chkbxFundingStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chkbxFundingStatement.setEnabled(false);
 		chkbxFundingStatement.setBounds(10, 95, 141, 23);
@@ -1462,8 +1461,8 @@ public class PostGradToolUI {
 					}
 				});
 				pnlApplicationUI.add(cbxApplicationStatusReason);
-				String sDegCountry = cbxDegCountry.getSelectedItem().toString().trim();
-		btnViewApplication.setEnabled(!tblApplications.getSelectionModel().isSelectionEmpty());
+				//String sDegCountry = cbxDegCountry.getSelectedItem().toString().trim();
+		//btnViewApplication.setEnabled(!tblApplications.getSelectionModel().isSelectionEmpty());
 		frmSchoolOfIt.getContentPane().add(pnlApplicantEntry);
 		pnlApplicantEntry.setLayout(null);
 		
@@ -1555,7 +1554,7 @@ public class PostGradToolUI {
 		pnlApplicantEntry.add(btnLogOut_1);
 		frmSchoolOfIt.getContentPane().add(pnlAcademicEntryUI);
 		pnlAcademicEntryUI.setLayout(null);
-		
+		/*
 		tblApplications = new JTable();
 		tblApplications.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1599,7 +1598,7 @@ public class PostGradToolUI {
 				      }}
 				);
 		pnlAcademicEntryUI.add(tblApplications);
-		
+		*/
 		btnChooseCSV = new JButton("Choose CSV");
 		btnChooseCSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1879,10 +1878,11 @@ public class PostGradToolUI {
 		
 		//read items
 		Scanner comboItems = null;
-		
+		System.out.println(fileName);
 		try
 		{
 			comboItems = new Scanner(new FileReader(fileName));
+			
 			
 			while (comboItems.hasNextLine())
 			{

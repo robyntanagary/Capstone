@@ -13,6 +13,8 @@ public class DataReaderWriter {
 	public DataReaderWriter()
 	{
 		maxApplicationNumber = 0;
+		applicationRefererences  = new ArrayList<ApplicantApplicationReference>(); //mapping between applicant number and application number
+		facultyOfficeAcademics = new ArrayList<FOacademic>();
 		readDataIn();
 	}
 	
@@ -23,6 +25,8 @@ public class DataReaderWriter {
 		try
 		{
 			references = new Scanner(new FileReader("SampleData.csv"));
+			
+			
 			
 			while (references.hasNextLine())
 			{
@@ -62,7 +66,7 @@ public class DataReaderWriter {
 					theirApplication.setApplicationStatus(new ApplicationStatus(fields[27].trim(), fields[28].trim()));
 					theirApplication.setPdfName(fields[29].trim());
 					theirApplication.setPdfPath(fields[30].trim());
-				
+					
 					if (theirApplication.getStudyProgram().getAcademicQualification().contains("MIT"))
 					{
 						int itExperience = Integer.valueOf(fields[19]);
@@ -74,7 +78,7 @@ public class DataReaderWriter {
 						
 						if (highestMLevel > 0) {maths[0] = new UndergraduateMathematics(1, Integer.valueOf(fields[22].trim()));}
 						if (highestMLevel > 1) {maths[1] = new UndergraduateMathematics(2, Integer.valueOf(fields[23].trim()));}
-						if (highestMLevel > 2) {maths[3] = new UndergraduateMathematics(3, Integer.valueOf(fields[24].trim()));}
+						if (highestMLevel > 2) {maths[2] = new UndergraduateMathematics(3, Integer.valueOf(fields[24].trim()));}
 						
 						anApplicant.setPreviousQualification(new TertiaryQualificationForMIT(prevDegree, prevDegreeUniversity, prevDegreeCountry, prevDegreeDuration, prevDegreeNQF, itExperience, prevDegreeHadThesis, thesis, highestMLevel, maths));
 					}
@@ -92,7 +96,8 @@ public class DataReaderWriter {
 					{
 						anApplicant = new SouthAfricanApplicant();
 						((SouthAfricanApplicant) anApplicant).setID(fields[8].trim());
-						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());				
+						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());	
+						
 					}
 					
 					applicationRefererences.add(new ApplicantApplicationReference(anApplicant, theirApplication));
