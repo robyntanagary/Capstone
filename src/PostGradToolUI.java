@@ -303,7 +303,7 @@ public class PostGradToolUI {
 		btnSign.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String number = txtSignInApplicantNumber.getText().toString(); //get number repressing username
-				String password = pswPassword.getPassword().toString(); //get password
+				String password = String.valueOf(pswPassword.getPassword()); //get password
 				if (bSignIn) //Need to sign in applicant / academic.
 				{ 
 					if (userController.isApplicant(number, password)) //in the case of an applicant
@@ -1062,7 +1062,7 @@ public class PostGradToolUI {
 				 
 				if (returnVal == JFileChooser.APPROVE_OPTION) { //if the user has selected a location and filename
 				    File fileToSave = fileChooser.getSelectedFile(); //get information about file
-				    appController.downloadPDF(lblPDFName.getText().trim(), fileToSave);
+				    appController.downloadPDF(applicant.getApplicantNumber(), fileToSave);
 				}
 				
 			}
@@ -1554,7 +1554,7 @@ public class PostGradToolUI {
 		pnlApplicantEntry.add(btnLogOut_1);
 		frmSchoolOfIt.getContentPane().add(pnlAcademicEntryUI);
 		pnlAcademicEntryUI.setLayout(null);
-		/*
+		
 		tblApplications = new JTable();
 		tblApplications.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1598,7 +1598,7 @@ public class PostGradToolUI {
 				      }}
 				);
 		pnlAcademicEntryUI.add(tblApplications);
-		*/
+		
 		btnChooseCSV = new JButton("Choose CSV");
 		btnChooseCSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

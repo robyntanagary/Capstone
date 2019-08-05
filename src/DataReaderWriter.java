@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DataReaderWriter {
-	private ArrayList<ApplicantApplicationReference> applicationRefererences; //mapping between applicant number and application number
+	private ArrayList<ApplicantApplicationReference> applicationReferences; //mapping between applicant number and application number
 	private ArrayList<FOacademic> facultyOfficeAcademics;
 	public int maxApplicationNumber;
 	
 	public DataReaderWriter()
 	{
 		maxApplicationNumber = 0;
-		applicationRefererences  = new ArrayList<ApplicantApplicationReference>(); //mapping between applicant number and application number
+		applicationReferences  = new ArrayList<ApplicantApplicationReference>(); //mapping between applicant number and application number
 		facultyOfficeAcademics = new ArrayList<FOacademic>();
 		readDataIn();
 	}
@@ -25,8 +25,6 @@ public class DataReaderWriter {
 		try
 		{
 			references = new Scanner(new FileReader("SampleData.csv"));
-			
-			
 			
 			while (references.hasNextLine())
 			{
@@ -49,6 +47,20 @@ public class DataReaderWriter {
 					Applicant anApplicant = new Applicant();
 					Application theirApplication = new Application();
 					
+					if (fields[5].trim().equals("International"))
+					{
+						anApplicant = new InternationalApplicant();
+						((InternationalApplicant) anApplicant).setPassport(fields[7].trim());
+					}
+					else if (fields[5].trim().contains("South African"))
+					{
+						anApplicant = new SouthAfricanApplicant();
+						((SouthAfricanApplicant) anApplicant).setID(fields[8].trim());
+						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());	
+						
+					}
+					
+					anApplicant.setApplicantNumber(fields[2].trim());
 					anApplicant.setCitizenship(fields[5].trim());
 					anApplicant.setCitizenshipCountry(fields[6].trim());
 					String residenceLine = fields[12].trim();
@@ -59,7 +71,7 @@ public class DataReaderWriter {
 					String prevDegreeCountry = fields[16].trim();
 					int prevDegreeDuration = Integer.valueOf(fields[17].trim());
 					String prevDegreeNQF = fields[18].trim();
-					String applicationNumber = fields[19].trim();
+					String applicationNumber = fields[25].trim();
 					theirApplication.setApplicationNumber(applicationNumber);
 					maxApplicationNumber = Math.max(Integer.valueOf(applicationNumber), maxApplicationNumber);
 					theirApplication.setStudyProgram(new StudyProgram(fields[26].trim()));
@@ -89,18 +101,18 @@ public class DataReaderWriter {
 					
 					if (anApplicant.getCitizenship().equals("International"))
 					{
-						anApplicant = new InternationalApplicant(anApplicant);
-						((InternationalApplicant) anApplicant).setPassport(fields[7].trim());
+//						anApplicant = new InternationalApplicant(anApplicant);
+//						((InternationalApplicant) anApplicant).setPassport(fields[7].trim());
 					}
 					else if (anApplicant.getCitizenship().contains("South African"))
 					{
-						anApplicant = new SouthAfricanApplicant();
-						((SouthAfricanApplicant) anApplicant).setID(fields[8].trim());
-						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());	
+//						anApplicant = new SouthAfricanApplicant();
+//						((SouthAfricanApplicant) anApplicant).setID(fields[8].trim());
+//						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());	
 						
 					}
 					
-					applicationRefererences.add(new ApplicantApplicationReference(anApplicant, theirApplication));
+					applicationReferences.add(new ApplicantApplicationReference(anApplicant, theirApplication));
 				}	
 			}
 		}
@@ -119,7 +131,7 @@ public class DataReaderWriter {
 	
 	public ArrayList<ApplicantApplicationReference> getApplicantsAndTheirApplications()
 	{
-		return applicationRefererences;
+		return applicationReferences;
 	}
 	
 	public ArrayList<FOacademic> getAcademics()
@@ -129,7 +141,7 @@ public class DataReaderWriter {
 	
 	public void setApplicantsAndTheirApplications(ArrayList<ApplicantApplicationReference> references)
 	{
-		applicationRefererences = references;
+		applicationReferences = references;
 	}
 	
 	public void setAcademics(ArrayList<FOacademic> academics)
@@ -145,21 +157,21 @@ public class DataReaderWriter {
 		{
 			writer = new PrintWriter(new FileWriter("SampleData.txt", false));
 			
-			applicationRefererences.trimToSize(); 
+			applicationReferences.trimToSize(); 
 			
-			for (int i=0; i<applicationRefererences.size(); i++)
+			for (int i=0; i<applicationReferences.size(); i++)
 			{
-				String temp = applicationRefererences.get(i).getApplicantRef().getSurname();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getFirstName();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getApplicantNumber();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getPassword();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getTitle();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getCitizenship();
-				temp += "," +applicationRefererences.get(i).getApplicantRef().getCitizenshipCountry();
+				String temp = applicationReferences.get(i).getApplicantRef().getSurname();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getFirstName();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getApplicantNumber();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getPassword();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getTitle();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getCitizenship();
+				temp += "," +applicationReferences.get(i).getApplicantRef().getCitizenshipCountry();
 				
-				if (applicationRefererences.get(i).getApplicantRef().getCitizenship().equalsIgnoreCase("International"))
+				if (applicationReferences.get(i).getApplicantRef().getCitizenship().equalsIgnoreCase("International"))
 				{
-					temp += "," + ((InternationalApplicant) applicationRefererences.get(i).getApplicantRef()).getPassport();
+					temp += "," + ((InternationalApplicant) applicationReferences.get(i).getApplicantRef()).getPassport();
 				}
 				else
 				{
@@ -167,35 +179,35 @@ public class DataReaderWriter {
 				}
 				
 				
-				if ((applicationRefererences.get(i).getApplicantRef().getCitizenship().contains("South African")))
+				if ((applicationReferences.get(i).getApplicantRef().getCitizenship().contains("South African")))
 				{
-					temp += "," + ((SouthAfricanApplicant) applicationRefererences.get(i).getApplicantRef()).getID();
-					temp += "," + ((SouthAfricanApplicant) applicationRefererences.get(i).getApplicantRef()).getRace();
+					temp += "," + ((SouthAfricanApplicant) applicationReferences.get(i).getApplicantRef()).getID();
+					temp += "," + ((SouthAfricanApplicant) applicationReferences.get(i).getApplicantRef()).getRace();
 				}
 				else
 				{
-					temp += ",,";
+					temp += ",";
 				}
 				
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getEmail();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getCellPhone();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getResidenceAddress().getLineAddress();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getResidenceAddress().getCountry();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getTertiaryInstitution();
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
-				temp += "," + String.valueOf(applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getMinDuration());
-				temp += "," + applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getNQFEquivalence();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getEmail();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getCellPhone();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getResidenceAddress().getLineAddress();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getResidenceAddress().getCountry();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getPreviousQualification().getDegree();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getPreviousQualification().getTertiaryInstitution();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getPreviousQualification().getCountry();
+				temp += "," + String.valueOf(applicationReferences.get(i).getApplicantRef().getPreviousQualification().getMinDuration());
+				temp += "," + applicationReferences.get(i).getApplicantRef().getPreviousQualification().getNQFEquivalence();
 				
-				if (applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification().contains("MIT"))
+				if (applicationReferences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification().contains("MIT"))
 				{
-					temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationRefererences.get(i).getApplicantRef().getPreviousQualification()).getPriorITExperience());
-					temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationRefererences.get(i).getApplicantRef().getPreviousQualification()).getDescriptionProjectThesis());
-					int MathLevel = ((TertiaryQualificationForMIT) applicationRefererences.get(i).getApplicantRef().getPreviousQualification()).getHighestLevelUndergradMathematcs();
+					temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationReferences.get(i).getApplicantRef().getPreviousQualification()).getPriorITExperience());
+					temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationReferences.get(i).getApplicantRef().getPreviousQualification()).getDescriptionProjectThesis());
+					int MathLevel = ((TertiaryQualificationForMIT) applicationReferences.get(i).getApplicantRef().getPreviousQualification()).getHighestLevelUndergradMathematcs();
 					temp += "," + String.valueOf(MathLevel);
 					if (MathLevel > 0)
 					{
-						temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationRefererences.get(i).getApplicantRef().getPreviousQualification()).getUndergradMaths()[0].getAverage());
+						temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationReferences.get(i).getApplicantRef().getPreviousQualification()).getUndergradMaths()[0].getAverage());
 					}
 					else
 					{
@@ -204,7 +216,7 @@ public class DataReaderWriter {
 					
 					if (MathLevel > 1)
 					{
-						temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationRefererences.get(i).getApplicantRef().getPreviousQualification()).getUndergradMaths()[1].getAverage());
+						temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationReferences.get(i).getApplicantRef().getPreviousQualification()).getUndergradMaths()[1].getAverage());
 					}
 					else
 					{
@@ -213,7 +225,7 @@ public class DataReaderWriter {
 					
 					if (MathLevel > 2)
 					{
-						temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationRefererences.get(i).getApplicantRef().getPreviousQualification()).getUndergradMaths()[2].getAverage());
+						temp += "," + String.valueOf(((TertiaryQualificationForMIT) applicationReferences.get(i).getApplicantRef().getPreviousQualification()).getUndergradMaths()[2].getAverage());
 					}
 					else
 					{
@@ -225,12 +237,12 @@ public class DataReaderWriter {
 					temp += ",,,,,,";
 				}
 				
-				temp += "," + applicationRefererences.get(i).getApplicationRef().getApplicationNumber();
-				temp += "," + applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
-				temp += "," + applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
-				temp += "," + applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getReasonDescription();
-				temp += "," + applicationRefererences.get(i).getApplicationRef().getPdfName();
-				temp += "," + applicationRefererences.get(i).getApplicationRef().getPdfPath();
+				temp += "," + applicationReferences.get(i).getApplicationRef().getApplicationNumber();
+				temp += "," + applicationReferences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
+				temp += "," + applicationReferences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
+				temp += "," + applicationReferences.get(i).getApplicationRef().getApplicationStatus().getReasonDescription();
+				temp += "," + applicationReferences.get(i).getApplicationRef().getPdfName();
+				temp += "," + applicationReferences.get(i).getApplicationRef().getPdfPath();
 				
 				writer.println(temp);
 			}
@@ -270,11 +282,11 @@ public class DataReaderWriter {
 	
 	public Application getApplicationOfApplicant(String applicantNumber)
 	{
-		for (int i=0; i<applicationRefererences.size(); i++)
+		for (int i=0; i<applicationReferences.size(); i++)
 		{
-			if (applicationRefererences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
+			if (applicationReferences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
 			{
-				return applicationRefererences.get(i).getApplicationRef();
+				return applicationReferences.get(i).getApplicationRef();
 			}
 		}
 		return null;
@@ -292,22 +304,22 @@ public class DataReaderWriter {
 	
 	public void setApplicationOfApplicant(String applicantNumber, Application app)
 	{
-		for (int i=0; i<applicationRefererences.size(); i++)
+		for (int i=0; i<applicationReferences.size(); i++)
 		{
-			if (applicationRefererences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
+			if (applicationReferences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
 			{
-				applicationRefererences.get(i).setApplicationRef(app);;
+				applicationReferences.get(i).setApplicationRef(app);
 			}
 		}
 	}
 	
 	public ApplicantApplicationReference getApplicantApplicationRefByApplication(String applicationNumber)
 	{
-		for (int i=0; i<applicationRefererences.size(); i++)
+		for (int i=0; i<applicationReferences.size(); i++)
 		{
-			if (applicationRefererences.get(i).getApplicationRef().getApplicationNumber().equals(applicationNumber))
+			if (applicationReferences.get(i).getApplicationRef().getApplicationNumber().equals(applicationNumber))
 			{
-				return applicationRefererences.get(i);
+				return applicationReferences.get(i);
 			}
 		}
 		return null;
@@ -315,11 +327,11 @@ public class DataReaderWriter {
 	
 	public ApplicantApplicationReference getApplicantApplicationRefByApplicant(String applicantNumber)
 	{
-		for (int i=0; i<applicationRefererences.size(); i++)
+		for (int i=0; i<applicationReferences.size(); i++)
 		{
-			if (applicationRefererences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
+			if (applicationReferences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
 			{
-				return applicationRefererences.get(i);
+				return applicationReferences.get(i);
 			}
 		}
 		return null;

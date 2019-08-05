@@ -125,8 +125,11 @@ public class ApplicationController {
 		
 		if (file!=null)
 		{
-			//needs logic
-			return true;
+			FileExtensionFilter filter = new FileExtensionFilter(".pdf");
+			if (filter.accept(file))
+			{
+				
+			}
 		}
 		return false;
 	}
@@ -146,10 +149,11 @@ public class ApplicationController {
 	 * @param fileToSave Specified file to save.
 	 * @return
 	 */
-	public boolean downloadPDF(String pdfName, File fileToSave)
+	public boolean downloadPDF(String applicantNumber, File fileToSave)
 	{
+		dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicationRef().getPdfPath();
 		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
-		//needs logic
+		
 		return true;
 	}
 	
@@ -217,10 +221,10 @@ public class ApplicationController {
 		{
 			cellValues[0] = applicationRefererences.get(i).getApplicationRef().getApplicationNumber();
 			cellValues[1] = applicationRefererences.get(i).getApplicantRef().getApplicantNumber();
-			cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
-			cellValues[3] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
-			cellValues[4] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
-			cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
+			//cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
+			//cellValues[3] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
+			//cellValues[4] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
+			//cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
 		
 			model.addRow(cellValues);
 		}

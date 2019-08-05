@@ -10,8 +10,8 @@
 		public ApplicantApplicationReference(Applicant applicantRef, Application applicationRef)
 		{
 			//instantiate fields
-			this.setApplicantRef(applicantRef);
-			this.setApplicationRef(applicationRef);
+			this.applicantRef = applicantRef;
+			this.applicationRef = applicationRef;
 		}
 
 		/**
@@ -41,5 +41,4 @@
 		public void setApplicationRef(Application applicationRef) {
 			this.applicationRef = applicationRef;
 		}
-		
 	}

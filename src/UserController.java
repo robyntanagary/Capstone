@@ -10,20 +10,21 @@ public class UserController {
 	private FOacademic academic;
 	private DataReaderWriter dataAccess;
 	
-	public UserController()
-	{
-		applicant = new Applicant();
-		academic = new FOacademic();
-	}
+//	public UserController()
+//	{
+//		applicant = new Applicant();
+//		academic = new FOacademic();
+//	}
 	
 	public UserController(DataReaderWriter data)
 	{
-		this();
+		//this();
 		dataAccess = data;
 	}
 	
 	public boolean isApplicant(String applicantNumber, String password)
 	{
+		System.out.println("tracer UserController 27 " + applicantNumber + password);
 		return (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber)!=null) && (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef().getPassword().equals(password));
 	}
 	

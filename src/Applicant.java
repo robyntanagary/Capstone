@@ -11,11 +11,13 @@ public Applicant()
 	super();
 }
 
-public Applicant(Applicant applicant)
+public Applicant(Applicant applicant) //NEVER GETS RUN!
 {
 	super((User) applicant);
 	this.applicantNumber = applicant.getApplicantNumber();
+	System.out.println("tracer Applicant 18 " + applicantNumber);
 	this.citizenship = applicant.getCitizenship();
+	System.out.println("tracer Applicant 20 " + citizenship);
 	this.citizenshipCountry = applicant.getCitizenshipCountry();
 	this.residenceAddress = applicant.getResidenceAddress();
 	this.previousQualification = applicant.getPreviousQualification();
