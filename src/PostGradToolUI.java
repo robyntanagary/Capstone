@@ -309,7 +309,6 @@ public class PostGradToolUI {
 				{ 
 					if (userController.isApplicant(number, password)) //in the case of an applicant
 					{
-						System.out.println("kinda works!");
 						applicant = userController.getApplicant(number);
 						userController.setApplicantOfFocus(applicant);
 						bApplicantSignedIn = true;
@@ -1750,7 +1749,6 @@ public class PostGradToolUI {
 		txtStatusReason.setText(theirApplication.getApplicationStatus().getReasonDescription());
 		txtrMessage.setText(theirApplication.getApplicationStatus().generateMessageForApplicant());
 		
-		
 		txtApplicantNumber.setText(anApplicant.getApplicantNumber());
 		txtSurname.setText(anApplicant.getSurname());
 		txtFirstName.setText(anApplicant.getFirstName());
@@ -1825,6 +1823,7 @@ public class PostGradToolUI {
 			userController.setSouthAfricanApplicantOfFocus(rsaApplicant);
 			lblIdPassport.setText("ID number:");
 			lblIdPassport.setVisible(true);
+			System.out.println(rsaApplicant == null);
 			txtIDPassport.setText(rsaApplicant.getID());
 			lblRace.setVisible(true);
 			cbxRace.setSelectedItem(((SouthAfricanApplicant) anApplicant).getRace());
