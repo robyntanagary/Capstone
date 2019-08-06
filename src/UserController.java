@@ -106,7 +106,7 @@ public class UserController {
 		if ((app != null) && (app.getCitizenship().contains("South African")))
 		{
 			rsaApplicant = (SouthAfricanApplicant) app;
-			return null;
+			return (SouthAfricanApplicant)app;
 		}
 		return null;
 	}

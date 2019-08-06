@@ -49,15 +49,18 @@ public class DataReaderWriter {
 					
 					if (fields[5].trim().equals("International"))
 					{
+						System.out.println("int");
 						anApplicant = new InternationalApplicant();
 						((InternationalApplicant) anApplicant).setPassport(fields[7].trim());
 					}
 					else if (fields[5].trim().contains("South African"))
 					{
+						System.out.println("sa");
 						anApplicant = new SouthAfricanApplicant();
 						((SouthAfricanApplicant) anApplicant).setID(fields[8].trim());
-						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());	
-						
+						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());
+						System.out.println(((SouthAfricanApplicant) anApplicant).getID());
+						System.out.println(((SouthAfricanApplicant) anApplicant).getRace());
 					}
 					anApplicant.setSurname(surname);
 					anApplicant.setFirstName(firstName);
@@ -102,19 +105,6 @@ public class DataReaderWriter {
 					else
 					{
 						anApplicant.setPreviousQualification(new TertiaryQualification(prevDegree, prevDegreeUniversity, prevDegreeCountry, prevDegreeDuration, prevDegreeNQF));
-					}
-					
-					if (anApplicant.getCitizenship().equals("International"))
-					{
-//						anApplicant = new InternationalApplicant(anApplicant);
-//						((InternationalApplicant) anApplicant).setPassport(fields[7].trim());
-					}
-					else if (anApplicant.getCitizenship().contains("South African"))
-					{
-//						anApplicant = new SouthAfricanApplicant();
-//						((SouthAfricanApplicant) anApplicant).setID(fields[8].trim());
-//						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());	
-						
 					}
 					
 					applicationReferences.add(new ApplicantApplicationReference(anApplicant, theirApplication));
