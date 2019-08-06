@@ -59,8 +59,13 @@ public class DataReaderWriter {
 						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());	
 						
 					}
-					
-					anApplicant.setApplicantNumber(fields[2].trim());
+					anApplicant.setSurname(surname);
+					anApplicant.setFirstName(firstName);
+					anApplicant.setApplicantNumber(applicantNumber);
+					anApplicant.setPassword(password);
+					anApplicant.setTitle(title);
+					anApplicant.setEmail(email);
+					anApplicant.setCellPhone(cellPhone);
 					anApplicant.setCitizenship(fields[5].trim());
 					anApplicant.setCitizenshipCountry(fields[6].trim());
 					String residenceLine = fields[12].trim();

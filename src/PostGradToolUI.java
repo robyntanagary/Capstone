@@ -302,12 +302,14 @@ public class PostGradToolUI {
 		btnSign = new JButton("Sign-In");
 		btnSign.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String number = txtSignInApplicantNumber.getText().toString(); //get number repressing username
+				String number = txtSignInApplicantNumber.getText().toString(); //get number representing username
 				String password = String.valueOf(pswPassword.getPassword()); //get password
+				System.out.println(number + " " + password);
 				if (bSignIn) //Need to sign in applicant / academic.
 				{ 
 					if (userController.isApplicant(number, password)) //in the case of an applicant
 					{
+						System.out.println("kinda works!");
 						applicant = userController.getApplicant(number);
 						userController.setApplicantOfFocus(applicant);
 						bApplicantSignedIn = true;
@@ -341,6 +343,7 @@ public class PostGradToolUI {
 						pswConfirmPassword.setText("");
 						bApplicantSignedIn = false;
 						showSignInInterface();
+						System.out.println("didnt work!");
 						//display error message!!!
 					}
 				}

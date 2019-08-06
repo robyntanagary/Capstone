@@ -24,7 +24,6 @@ public class UserController {
 	
 	public boolean isApplicant(String applicantNumber, String password)
 	{
-		System.out.println("tracer UserController 27 " + applicantNumber + password);
 		return (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber)!=null) && (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef().getPassword().equals(password));
 	}
 	
