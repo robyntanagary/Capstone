@@ -144,6 +144,27 @@ public class DataReaderWriter {
 		facultyOfficeAcademics = academics;
 	}
 	
+	public void createNewApplicant()
+	{
+		PrintWriter writer;
+		
+		try
+		{
+			writer = new PrintWriter(new FileWriter("SampleData.txt", false));
+			
+			applicationReferences.trimToSize();
+			
+			String temp = ",,";
+			//temp += applicationReferences.get(i).getApplicantRef().getApplicantNumber();
+			//",p,,,,,,e,,,,,,,,,,,,,,,,,,,,";
+		}
+		
+		catch(Exception e)
+		{
+			
+		}
+	}
+	
 	public void writeDataBack()
 	{
 		PrintWriter writer = null;
@@ -162,7 +183,7 @@ public class DataReaderWriter {
 				temp += "," + applicationReferences.get(i).getApplicantRef().getPassword();
 				temp += "," + applicationReferences.get(i).getApplicantRef().getTitle();
 				temp += "," + applicationReferences.get(i).getApplicantRef().getCitizenship();
-				temp += "," +applicationReferences.get(i).getApplicantRef().getCitizenshipCountry();
+				temp += "," + applicationReferences.get(i).getApplicantRef().getCitizenshipCountry();
 				
 				if (applicationReferences.get(i).getApplicantRef().getCitizenship().equalsIgnoreCase("International"))
 				{

@@ -68,6 +68,7 @@ public class TertiaryQualification {
 	 * @param nQFEquivalence The specified the NQF Equivalent of this qualification if known else "Not Known".
 	 */
 	public void setNQFEquivalence(String nQFEquivalence) {
+		System.out.println(NQFEquivalence + " BROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		NQFEquivalence = nQFEquivalence;
 	}
 

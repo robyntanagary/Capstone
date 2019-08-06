@@ -353,15 +353,14 @@ public class PostGradToolUI {
 						bApplicantSignedIn = false;
 						showSignInInterface();
 						infoBox("The credentials you have provided are incorrect, please try again.", "Error");
-						//display error message!!!
 					}
 				}
 				else //need to sign up applicant and return to sign in
 				{
-					boolean bSuccessful = userController.registerNewApplicant(number, txtSignEmail.getText().trim(), password, pswConfirmPassword.getPassword().toString());
+					boolean bSuccessful = userController.registerNewApplicant(number, txtSignEmail.getText().trim(), password, String.copyValueOf(pswConfirmPassword.getPassword()));
 					if (bSuccessful)
 					{
-						populateApplicationFields(applicant, application);
+						//populateApplicationFields(applicant, application);
 						lblConfirmPassword.setVisible(false);
 						pswConfirmPassword.setVisible(false);
 						showSignInInterface();
@@ -755,7 +754,8 @@ public class PostGradToolUI {
 		populateComboBox(cbxNQF, "NQF.txt");
 		cbxNQF.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
-				applicant.getPreviousQualification().setNQFEquivalence(cbxNQF.getSelectedItem().toString().trim());
+				String sNQF = cbxNQF.getSelectedItem().toString().trim();
+				applicant.getPreviousQualification().setNQFEquivalence(sNQF);
 			}
 		});
 		cbxNQF.setBounds(267, 154, 182, 22);
@@ -1741,6 +1741,8 @@ public class PostGradToolUI {
 		bSignIn = false;
 		lblNewMessage.setVisible(false); 
 		btnGoToSignUpProcess.setVisible(false);
+		lblConfirmPassword.setVisible(true);
+		pswConfirmPassword.setVisible(true);
 		btnSign.setText("Sign-Up");
 	}
 	
@@ -1794,7 +1796,7 @@ public class PostGradToolUI {
 			lblDegOther.setVisible(true);
 			txtDegOther.setText(anApplicant.getPreviousQualification().getDegree());
 		}
-		cbxNQF.setSelectedItem(anApplicant.getPreviousQualification().getDegree());
+		cbxNQF.setSelectedItem(anApplicant.getPreviousQualification().getNQFEquivalence());
 		spnMinDuration.setValue(anApplicant.getPreviousQualification().getMinDuration());
 		
 		
@@ -1934,7 +1936,7 @@ public class PostGradToolUI {
 	
 	private void showSignInInterface()
 	{
-		data.writeDataBack();
+		//data.writeDataBack();
 		pnlSignInUI.setVisible(true);
 		pnlApplicationUI.setVisible(false);
 		pnlApplicantEntry.setVisible(false);
