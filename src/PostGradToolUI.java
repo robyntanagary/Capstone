@@ -220,8 +220,18 @@ public class PostGradToolUI {
 	}
 
 	/**
+	 * general infoBox to act as pop-up messages
+	 */
+	
+	public static void infoBox(String infoMessage, String titleBar)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
+	
+	/**
 	 * Initialize the contents of the frame.
 	 */
+	
 	private void initialize() {
 		frmSchoolOfIt = new JFrame();
 		frmSchoolOfIt.setTitle("School of IT");
@@ -284,7 +294,7 @@ public class PostGradToolUI {
 		lblConfirmPassword.setVisible(false);
 		pnlSignInUI.add(lblConfirmPassword);
 		
-		lblNewMessage = new JLabel("New to School of IT Application System? Click Sign-Up.");
+		lblNewMessage = new JLabel("New to the School of IT Application System? Click Sign-Up.");
 		lblNewMessage.setFont(new Font("Calibri", Font.PLAIN, 12));
 		lblNewMessage.setBounds(140, 107, 303, 14);
 		pnlSignInUI.add(lblNewMessage);
@@ -329,8 +339,8 @@ public class PostGradToolUI {
 					}
 					else if (userController.isFOacademic(number, password)) //in the case of an academic
 					{
-						applicant = userController.getApplicant(number);
-						userController.setApplicantOfFocus(applicant);
+						academic = userController.getFOacademic(number);
+						userController.setFOAcademicEvaluating(academic);;
 						bApplicantSignedIn = false;
 						showAcademicEntryInterface();
 					}
@@ -342,7 +352,7 @@ public class PostGradToolUI {
 						pswConfirmPassword.setText("");
 						bApplicantSignedIn = false;
 						showSignInInterface();
-						System.out.println("didnt work!");
+						infoBox("The credentials you have provided are incorrect, please try again.", "Error");
 						//display error message!!!
 					}
 				}
@@ -376,7 +386,7 @@ public class PostGradToolUI {
 		txtrApplicantNumberWarning.setWrapStyleWord(true);
 		txtrApplicantNumberWarning.setLineWrap(true);
 		txtrApplicantNumberWarning.setEditable(false);
-		txtrApplicantNumberWarning.setText("Please note all potential applicants: One needs to apply first at UCT Online Applications to receive an Applicant Number, unless you already have a UCT Student Nuber.");
+		txtrApplicantNumberWarning.setText("To all potential applicants: One needs to first apply at UCT Online Applications to receive an Applicant Number, unless you already have a UCT Student Number.");
 		txtrApplicantNumberWarning.setFont(new Font("Calibri", Font.PLAIN, 12));
 		txtrApplicantNumberWarning.setBounds(502, 11, 206, 79);
 		pnlSignInUI.add(txtrApplicantNumberWarning);
@@ -2080,6 +2090,7 @@ public class PostGradToolUI {
 	
 	private void showContactDetails()
 	{
+		btnNewButton.setEnabled(true);
 		pnlSignInUI.setVisible(false);
 		pnlApplicationUI.setVisible(true);
 		pnlApplicantEntry.setVisible(false);
@@ -2132,6 +2143,7 @@ public class PostGradToolUI {
 	
 	private void showTertiaryQualifications()
 	{
+		btnNewButton.setEnabled(true);
 		pnlSignInUI.setVisible(false);
 		pnlApplicationUI.setVisible(true);
 		pnlApplicantEntry.setVisible(false);
@@ -2198,6 +2210,7 @@ public class PostGradToolUI {
 	
 	private void showStudyProgram()
 	{
+		btnNewButton.setEnabled(true);
 		pnlSignInUI.setVisible(false);
 		pnlApplicationUI.setVisible(true);
 		pnlApplicantEntry.setVisible(false);
@@ -2275,6 +2288,7 @@ public class PostGradToolUI {
 	
 	private void showAdditionalDocumentation()
 	{
+		btnNewButton.setEnabled(true);
 		pnlSignInUI.setVisible(false);
 		pnlApplicationUI.setVisible(true);
 		pnlApplicantEntry.setVisible(false);
