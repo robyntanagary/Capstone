@@ -11,7 +11,8 @@ public class TertiaryQualification {
 		setTertiaryInstitution("");
 		setCountry("");
 		setNQFEquivalence("");
-		setMinDuration(0);
+		setMinDuration(1);
+		setDegree("");
 	}
 	
 	public TertiaryQualification(String degree, String university, String country, int duration, String NQF)
@@ -68,7 +69,6 @@ public class TertiaryQualification {
 	 * @param nQFEquivalence The specified the NQF Equivalent of this qualification if known else "Not Known".
 	 */
 	public void setNQFEquivalence(String nQFEquivalence) {
-		System.out.println(NQFEquivalence + " BROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		NQFEquivalence = nQFEquivalence;
 	}
 

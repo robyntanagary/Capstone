@@ -49,18 +49,14 @@ public class DataReaderWriter {
 					
 					if (fields[5].trim().equals("International"))
 					{
-						System.out.println("int");
 						anApplicant = new InternationalApplicant();
 						((InternationalApplicant) anApplicant).setPassport(fields[7].trim());
 					}
 					else if (fields[5].trim().contains("South African"))
 					{
-						System.out.println("sa");
 						anApplicant = new SouthAfricanApplicant();
 						((SouthAfricanApplicant) anApplicant).setID(fields[8].trim());
 						((SouthAfricanApplicant) anApplicant).setRace(fields[9].trim());
-						System.out.println(((SouthAfricanApplicant) anApplicant).getID());
-						System.out.println(((SouthAfricanApplicant) anApplicant).getRace());
 					}
 					anApplicant.setSurname(surname);
 					anApplicant.setFirstName(firstName);
@@ -144,26 +140,6 @@ public class DataReaderWriter {
 		facultyOfficeAcademics = academics;
 	}
 	
-	public void createNewApplicant()
-	{
-		PrintWriter writer;
-		
-		try
-		{
-			writer = new PrintWriter(new FileWriter("SampleData.txt", false));
-			
-			applicationReferences.trimToSize();
-			
-			String temp = ",,";
-			//temp += applicationReferences.get(i).getApplicantRef().getApplicantNumber();
-			//",p,,,,,,e,,,,,,,,,,,,,,,,,,,,";
-		}
-		
-		catch(Exception e)
-		{
-			
-		}
-	}
 	
 	public void writeDataBack()
 	{
@@ -378,7 +354,7 @@ public class DataReaderWriter {
 			}
 			else
 			{
-				if (applicantsAndTheirApplications.get(i).getApplicationRef().getStudyProgram().getAcademicQualification().equals(studyProgram))
+				if (applicantsAndTheirApplications.get(i).getApplicationRef().getStudyProgram().getAcademicQualification().contains(studyProgram.trim()))
 				{
 					temp.add(applicantsAndTheirApplications.get(i));
 				}
@@ -387,6 +363,34 @@ public class DataReaderWriter {
 		
 		if (temp.size() == 0) {return applicantsAndTheirApplications;}
 		return temp;
+	}
+	
+	/**
+	 * Method add a new application to array list and textfile
+	 * @param applicantAndTheirApplication Specified applicant and their application
+	 */
+	public void addNewApplicationRecord(ApplicantApplicationReference applicantAndTheirApplication)
+	{
+		applicationReferences.add(applicantAndTheirApplication);
+	}
+	
+	/**
+	 * Method update existing application 
+	 * @param applicantAndTheirApplication Specified applicant and their application
+	 */
+	public void updateApplicationRecord(ApplicantApplicationReference applicantAndTheirApplication)
+	{
+		applicationReferences.remove(getApplicantApplicationRefByApplicant(applicantAndTheirApplication.getApplicantRef().getApplicantNumber()));
+		applicationReferences.add(applicantAndTheirApplication);
+	}
+	
+	/**
+	 * Methods add record line to textfile
+	 * @param applicantAndTheirApplication Specified applicant and their application
+	 */
+	public void appendToTextfile(ApplicantApplicationReference applicantAndTheirApplication)
+	{
+		
 	}
 
 	
@@ -397,7 +401,7 @@ public class DataReaderWriter {
 		
 		for (int i=0; i<applicantsAndTheirApplications.size(); i++)
 		{
-			if (applicantsAndTheirApplications.get(i).getApplicationRef().getStudyProgram().getAcademicQualification().contains(level))
+			if (applicantsAndTheirApplications.get(i).getApplicationRef().getStudyProgram().getAcademicQualification().contains(level.trim()))
 			{
 					temp.add(applicantsAndTheirApplications.get(i));
 			}
@@ -414,7 +418,7 @@ public class DataReaderWriter {
 		
 		for (int i=0; i<applicantsAndTheirApplications.size(); i++)
 		{
-			if (applicantsAndTheirApplications.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition().equals(status))
+			if (applicantsAndTheirApplications.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition().contains(status.trim()))
 			{
 					temp.add(applicantsAndTheirApplications.get(i));
 			}

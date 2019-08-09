@@ -9,6 +9,11 @@ private TertiaryQualification previousQualification;
 public Applicant()
 {
 	super();
+	this.applicantNumber = "";
+	this.citizenship = "";
+	this.citizenshipCountry = "";
+	this.residenceAddress = new Address();
+	this.previousQualification = new TertiaryQualification();
 }
 
 public Applicant(Applicant applicant) //NEVER GETS RUN!
@@ -27,6 +32,10 @@ public Applicant(String applicantNumber, String email, String password, String c
 {
 	super(email, password);
 	this.applicantNumber = applicantNumber;
+	this.citizenship = "";
+	this.citizenshipCountry = "";
+	this.residenceAddress = new Address();
+	this.previousQualification = new TertiaryQualification();
 }
 
 

@@ -6,7 +6,7 @@ public class Address {
 	public Address()
 	{
 		setLineAddress("");
-		setCountry("Unknown");
+		setCountry("");
 	}
 	
 	public Address(String line, String country)

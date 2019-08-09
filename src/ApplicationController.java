@@ -78,7 +78,7 @@ public class ApplicationController {
 		application = new Application();
 		int applicationNumber = dataAccess.getMaxApplicationNumber() + 1;
 		application.setApplicationNumber(String.valueOf(applicationNumber));
-		dataAccess.setApplicationOfApplicant(applicantNumber, application);
+		//dataAccess.setApplicationOfApplicant(applicantNumber, application);
 		return application;
 	}
 	
@@ -101,7 +101,8 @@ public class ApplicationController {
 	 */
 	public boolean insertOrUpdateApplication(Application anApplication)
 	{
-		dataAccess.getApplicantApplicationRefByApplication(anApplication.getApplicationNumber()).setApplicationRef(anApplication);
+		//for prototype, only update
+		dataAccess.appendToTextfile(dataAccess.getApplicantApplicationRefByApplication(anApplication.getApplicationNumber()));
 		return true;
 	}
 	
@@ -151,8 +152,11 @@ public class ApplicationController {
 	 */
 	public boolean downloadPDF(String applicantNumber, File fileToSave)
 	{
+		System.out.println("Download PDF functionality to be released in stage 4");
+		/*
 		dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicationRef().getPdfPath();
 		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
+		*/
 		
 		return true;
 	}
@@ -201,6 +205,7 @@ public class ApplicationController {
 	public boolean requestPDFofApplicantDetails(String applicantNumber, String application, File fileToSave)
 	{
 		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
+		System.out.println("PDF of applicant details will be generated and displayed in stage 4");
 		//needs logic! -maybe you can copy some code from the DataReaderWriter class
 		return true;
 	}
@@ -217,14 +222,22 @@ public class ApplicationController {
 		
 		applicationRefererences.trimToSize();
 		
+		cellValues[0] = "Application Number";
+		cellValues[1] = "Applicant Number"; 
+		cellValues[2] = "Application Status"; 
+		cellValues[3] = "Prev Degree"; 
+		cellValues[4] = "Obtained in";
+		cellValues[5] = "Applied For";
+		model.addRow(cellValues);
+		
 		for (int i=0; i<applicationRefererences.size();i++)
 		{
 			cellValues[0] = applicationRefererences.get(i).getApplicationRef().getApplicationNumber();
 			cellValues[1] = applicationRefererences.get(i).getApplicantRef().getApplicantNumber();
-			//cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
-			//cellValues[3] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
-			//cellValues[4] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
-			//cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
+			cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
+			cellValues[3] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
+			cellValues[4] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
+			cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
 		
 			model.addRow(cellValues);
 		}
@@ -248,12 +261,15 @@ public class ApplicationController {
 	 */
 	public boolean notifyApplicants(String csvName)
 	{
+		//
+		System.out.println(csvName);
 		Scanner csvApplicantsList = null;
-				
 		try
 		{
-			csvApplicantsList = new Scanner(new FileReader(getFile(csvName).toString()));
+			csvApplicantsList = new Scanner(new FileReader(csvName.toString().trim()));
 					
+			csvApplicantsList.nextLine();
+			
 			while (csvApplicantsList.hasNext())
 			{
 				String[] applicantRow = csvApplicantsList.nextLine().split(","); //extract potential applicant from list
@@ -336,7 +352,7 @@ public class ApplicationController {
 		}
 		else
 		{
-			return dataAccess.filterByStudyProgram(list, level);
+			return dataAccess.filterByLevel(list, level);
 		}
 	}
 	
@@ -371,7 +387,7 @@ public class ApplicationController {
 		
 		try
 		{
-			if ((!(fullFilePathOfWhereToSaveFile.endsWith(".pdf")) && (!(fullFilePathOfWhereToSaveFile.contains("."))))) {fullFilePathOfWhereToSaveFile += ".pdf";}
+			if ((!(fullFilePathOfWhereToSaveFile.endsWith(".pdf")) && (!(fullFilePathOfWhereToSaveFile.contains("."))))) {fullFilePathOfWhereToSaveFile += ".csv";}
 			writer = new PrintWriter(new File(fullFilePathOfWhereToSaveFile));
 			
 			filteredApplicantList.trimToSize(); 
@@ -389,14 +405,9 @@ public class ApplicationController {
 				if (filteredApplicantList.get(i).getApplicantRef().getCitizenship().equalsIgnoreCase("International"))
 				{
 					temp += "," + ((InternationalApplicant) filteredApplicantList.get(i).getApplicantRef()).getPassport();
-				}
-				else
-				{
 					temp += ",";
 				}
-				
-				
-				if ((filteredApplicantList.get(i).getApplicantRef().getCitizenship().contains("South African")))
+				else if ((filteredApplicantList.get(i).getApplicantRef().getCitizenship().contains("South African")))
 				{
 					temp += "," + ((SouthAfricanApplicant) filteredApplicantList.get(i).getApplicantRef()).getID();
 					temp += "," + ((SouthAfricanApplicant) filteredApplicantList.get(i).getApplicantRef()).getRace();
@@ -461,6 +472,8 @@ public class ApplicationController {
 				temp += "," + filteredApplicantList.get(i).getApplicationRef().getPdfName();
 				temp += "," + filteredApplicantList.get(i).getApplicationRef().getPdfPath();
 				
+				System.out.println(temp);
+				
 				writer.println(temp);
 			}
 			
@@ -488,6 +501,7 @@ public class ApplicationController {
 	public void notifyApplicant(String firstName, String lastName, String applicantNumber, String email)
 	{
 		//needs logic
+		System.out.println(firstName + " " + lastName + " (" + applicantNumber + ") has been e-mailed at this address: " + email);
 	}
 	
 	

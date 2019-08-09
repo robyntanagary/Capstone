@@ -120,33 +120,34 @@ public class UserController {
 		this.internationalApplicant = internationalApplicant;
 	}
 	
-	public boolean registerNewApplicant(String applicantNumber, String email, String password, String confirmPassword)
+	public Applicant registerNewApplicant(String applicantNumber, String email, String password, String confirmPassword)
 	{
 		if (password.equals(confirmPassword))
 		{
 			applicant = new Applicant(applicantNumber, email, password, confirmPassword);
-			Application theirApplication = new Application();
-			dataAccess.getApplicantsAndTheirApplications().add(new ApplicantApplicationReference(applicant, theirApplication));
-			return true;
+			//Application theirApplication = new Application();
+			//dataAccess.getApplicantsAndTheirApplications().add(new ApplicantApplicationReference(applicant, theirApplication));
+			//with DB, insert new applicant
+			return applicant;
 		}
-		return false;
+		return null;
 	}
 	
 	public boolean insertOrUpdateApplicant(Applicant applicant)
 	{
-		dataAccess.getApplicantApplicationRefByApplicant(applicant.getApplicantNumber()).setApplicantRef(applicant);
+		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(applicant.getApplicantNumber()));
 		return true;
 	}
 	
 	public boolean insertOrUpdateInternationalApplicant(InternationalApplicant intApplicant)
 	{
-		dataAccess.getApplicantApplicationRefByApplicant(intApplicant.getApplicantNumber()).setApplicantRef(intApplicant);
+		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(intApplicant.getApplicantNumber()));
 		return true;
 	}
 	
 	public boolean insertOrUpdateSouthAfricanApplicant(SouthAfricanApplicant southAfricanApplicant)
 	{
-		dataAccess.getApplicantApplicationRefByApplicant(southAfricanApplicant.getApplicantNumber()).setApplicantRef(southAfricanApplicant);
+		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(southAfricanApplicant.getApplicantNumber()));
 		return true;
 	}
 }
