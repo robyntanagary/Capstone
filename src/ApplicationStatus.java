@@ -57,7 +57,7 @@ public class ApplicationStatus {
 		}
 		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("INFO")))
 		{
-			return "Further information/documentation required. Check your “to-do” list.";
+			return "Further information/documentation required. Check your to-do list.";
 		}
 		else if ((statusCode.equalsIgnoreCase("DDEF")) && (reasonCode.equalsIgnoreCase("LANG")))
 		{
@@ -89,7 +89,7 @@ public class ApplicationStatus {
 		}
 		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("COMP")))
 		{
-			return "Application unsuccessful –not competitive. For undergraduate study options contact http://cach.dhet.gov.za or 0860 111 673";
+			return "Application unsuccessful not competitive. For undergraduate study options contact http://cach.dhet.gov.za or 0860 111 673";
 		}
 		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("LATE")))
 		{
@@ -97,11 +97,11 @@ public class ApplicationStatus {
 		}
 		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("PROP")))
 		{
-			return "Application unsuccessful –inadequate research outline.";
+			return "Application unsuccessful inadequate research outline.";
 		}
 		else if ((statusCode.equalsIgnoreCase("DENY")) && (reasonCode.equalsIgnoreCase("SUPV")))
 		{
-			return "Application unsuccessful – no suitable supervisor available for your research.";
+			return "Application unsuccessful no suitable supervisor available for your research.";
 		}
 		else if ((statusCode.equalsIgnoreCase("WADM")) && (reasonCode.equalsIgnoreCase("CHNG")))
 		{

@@ -1,0 +1,31 @@
+Applicant started application process, STRT
+Applicant submitted application, SBMT
+Applicant withdraws application, WDRN
+Applicant reconsider programme of study, ALT
+HOD / Programme Convenor must decide, HOD
+Faculty Admittance Committee must decide, RFAC
+Waiting for Information, INFO
+Waiting for English Proficiency Results, LANG
+Waiting for External Tertiary results, TERT
+Waiting for UCT results, TUCT
+No Special Reason, GENW
+Defer decision of making firm offer, GAP
+Application re-instated, REIN
+Faculty Office withdraws application due to applicant changing programme choice, CHNG
+Faculty Office withdraws application due to fraudalent information, RFAD
+Faculty Office withdraws application due to necessary documentation not provided, ICOM
+Faculty Office withdraws application due to offer beinf made on another application in faculty,OFFER
+Faculty Office withdraws application due to programme unavailability, PWIT
+Faculty Office withdraws application due to never registered, CLAP
+Conditional Offer withdrawn as admission conditions not met, COND
+On condition of cetified transcript, CERT
+On condition of receipt of relevant information, RCPT
+On condition of school-leaving results, RSLT
+On condition of final results, RES
+On condition of final tertiary results, TERT
+Special Offer for Top Applicants, STAR
+Firm Offer Made, CONF
+Application denied due to competition, COMP
+Application denied due to late application, LATE
+Application denied due to inadequate research proposal, PROP
+Application denied due to inappropriate supervisor, SUPV

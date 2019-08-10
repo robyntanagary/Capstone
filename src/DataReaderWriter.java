@@ -87,7 +87,7 @@ public class DataReaderWriter {
 					{
 						int itExperience = Integer.valueOf(fields[19].trim());
 						String thesis = fields[20].trim();
-						boolean prevDegreeHadThesis = (!thesis.isBlank());
+						boolean prevDegreeHadThesis = (!thesis.equals(""));
 						int highestMLevel = Integer.valueOf(fields[21].trim());
 						UndergraduateMathematics[] maths= new UndergraduateMathematics[highestMLevel];
 						

@@ -2375,7 +2375,7 @@ public class PostGradToolUI {
 		mntmProgrammeOfStudy.setSelected(false);
 		mntmRequiredDocumentation.setSelected(false);
 		
-		bSignIn = false;
+		bSignIn = true;
 		lblNewMessage.setVisible(true); 
 		btnGoToSignUpProcess.setVisible(true);
 		lblConfirmPassword.setVisible(false);
@@ -2883,7 +2883,7 @@ public class PostGradToolUI {
 	
 	private boolean nullOrBlank(String input)
 	{
-		return input.equals(null) || input.isBlank();
+		return input.equals(null) || input.isEmpty() || input.equals("") || input.equals(" ");
 	}
 	
 	private void populateLists()
