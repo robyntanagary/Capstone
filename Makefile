@@ -1,6 +1,6 @@
-# CSC3002F OS2 Part 3 Makefile
-# Tana Feyt (FYTTAN001)
-# 27/04/19
+# CSC3003S Makefile
+# Tana Feyt (FYTTAN001), Gary Lu (LXXWEN005), Robyn McKenzie (MCKROB018)
+# 09/08/2019
 
 JAVAC=/usr/bin/javac
 .SUFFIXES: .java .class
@@ -13,7 +13,7 @@ JVM=java
 $(BINDIR)/%.class:$(SRCDIR)/%.java
 	$(JAVAC) -d $(BINDIR)/ -cp $(BINDIR) $<
 
-CLASSES= BarrierReusable.class Methane.class Carbon.class Hydrogen.class RunSimulation.class
+CLASSES= Address.class UndergraduateMathematics.class TertiaryQualification.class TertiaryQualificationForMIT.class User.class FOacademic.class Applicant.class InternationalApplicant.class SouthAfricanApplicant.class ApplicationStatus.class StudyProgram.class Application.class ApplicantApplicationReference.class DataReaderWriter.class ApplicationController.class UserController.class FileExtensionFilter.class PostGradToolUI.class  
 CLASS_FILES=$(CLASSES:%.class=$(BINDIR)/%.class)
 
 default: $(CLASS_FILES)
@@ -21,7 +21,7 @@ default: $(CLASS_FILES)
 compile: $(CLASS_FILES)
 
 run:	
-	$(JVM) -cp $(BINDIR) java molecule.RunSimulation 12 3
+	$(JVM) -cp $(BINDIR) java PostGradToolUI
 
 clean:
 	rm $(BINDIR)/*.class
