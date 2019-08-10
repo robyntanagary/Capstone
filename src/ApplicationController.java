@@ -215,9 +215,9 @@ public class ApplicationController {
 	 * @param model Specified table model that needs to be populated
 	 * @return the populated table model
 	 */
-	public DefaultTableModel populateApplicationsTable(DefaultTableModel model)
+	public DefaultTableModel populateApplicationsTable(DefaultTableModel model, ArrayList<ApplicantApplicationReference> applicationRefererences)
 	{
-		ArrayList<ApplicantApplicationReference> applicationRefererences = dataAccess.getApplicantsAndTheirApplications();
+		model.setRowCount(0);
 		String[] cellValues = new String[6];
 		
 		applicationRefererences.trimToSize();

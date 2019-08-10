@@ -85,10 +85,9 @@ public class DataReaderWriter {
 					
 					if (theirApplication.getStudyProgram().getAcademicQualification().contains("MIT"))
 					{
-						int itExperience = Integer.valueOf(fields[19]);
+						int itExperience = Integer.valueOf(fields[19].trim());
 						String thesis = fields[20].trim();
-						boolean prevDegreeHadThesis = true;
-						if (thesis.equals("")) {prevDegreeHadThesis = false;}
+						boolean prevDegreeHadThesis = (!thesis.isBlank());
 						int highestMLevel = Integer.valueOf(fields[21].trim());
 						UndergraduateMathematics[] maths= new UndergraduateMathematics[highestMLevel];
 						
