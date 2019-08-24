@@ -13,6 +13,13 @@ public class TertiaryQualificationForMIT extends TertiaryQualification {
 		this.descriptionProjectThesis = "";
 	}
 	
+	public TertiaryQualificationForMIT(String degree, String university, String country, int duration, String NQF)
+	{
+		super(degree, university, country, duration, NQF);
+		this.presenceProjectThesis = false;
+		this.descriptionProjectThesis = "";
+	}
+	
 	public TertiaryQualificationForMIT(String degree, String university, String country, int duration, String NQF, int itExperience, boolean hasThesis, String thesis, int HighestLevel, UndergraduateMathematics[] undergradMaths)
 	{
 		super(degree, university, country, duration, NQF);
