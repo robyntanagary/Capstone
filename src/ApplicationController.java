@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -520,5 +521,11 @@ public class ApplicationController {
 		return null;
 	}
 	
-	
+
+	public void checkEligibility(Application application, JFrame frame)
+	{
+		//needs DB functionality: country & prev degree determining eligibility for applied degree
+		//display message if possible
+		//adjust status
+	}
 }

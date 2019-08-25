@@ -961,7 +961,7 @@ public class PostGradToolUI {
 				
 		    		if (studyProgram.contains("MIT") && (applicant.getPreviousQualification().getDegree().contains("Computer") || applicant.getPreviousQualification().getDegree().contains("Technology") || applicant.getPreviousQualification().getDegree().contains("Systems")))
 		    		{
-		    			JOptionPane.showMessageDialog(frmSchoolOfIt, "Not Eligible", "Not eligible to apply for MIT", JOptionPane.ERROR_MESSAGE);
+		    			JOptionPane.showMessageDialog(frmSchoolOfIt, "Not eligible to apply for MIT", "Not Eligible", JOptionPane.ERROR_MESSAGE);
 		    			cbxStudyProgram.setSelectedIndex(-1);
 		    			lblIfOtherSpecify.setVisible(false);
 		    			txtStudyProgramOther.setVisible(false);
@@ -981,6 +981,7 @@ public class PostGradToolUI {
 		    		}
 		    		else
 		    		{
+		    			//application.setApplicationStatus(appController.checkEligibility(application, frmSchoolOfIt));
 		    			if (studyProgram.contains("MIT"))
 		    			{
 		    				String degree = applicant.getPreviousQualification().getDegree();
