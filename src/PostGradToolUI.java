@@ -221,6 +221,8 @@ public class PostGradToolUI {
 				try {
 					PostGradToolUI window1 = new PostGradToolUI();
 					window1.frmSchoolOfIt.setVisible(true);
+					DBConnect dbConnect = new DBConnect();
+					dbConnect.attemptConnect();
 			
 				} catch (Exception e) {
 					e.printStackTrace();
