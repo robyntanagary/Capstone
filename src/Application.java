@@ -1,5 +1,6 @@
 
 public class Application {
+	private String applicantNumber;
 	private String applicationNumber;
 	private ApplicationStatus applicationStatus;
 	private StudyProgram studyProgram;
@@ -13,6 +14,12 @@ public class Application {
 		pdfName = "";
 		pdfPath = "";
 		applicationStatus = new ApplicationStatus();
+	}
+	
+	public Application(String applicationNumber, String applicantNumber)
+	{
+		this.applicationNumber = applicationNumber;
+		this.applicantNumber = applicantNumber;
 	}
 	
 	/**

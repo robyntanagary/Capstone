@@ -14,13 +14,13 @@ public class DBConnect
 		{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			con = DriverManager.getConnection(url, username, password);
-			PreparedStatement ps = con.prepareStatement("INSERT INTO capstonedb.academic(academicNumber) VALUES('A000007');");
+			/*PreparedStatement ps = con.prepareStatement("INSERT INTO capstonedb.academic(academicNumber) VALUES('A000007');");
 			
 			int status = ps.executeUpdate(); //returns int value, success >0
 			if(status != 0)
 			{
 				System.out.println("success!");
-			}
+			}*/
 		}
 		
 		catch(Exception e)

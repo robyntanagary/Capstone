@@ -221,8 +221,6 @@ public class PostGradToolUI {
 				try {
 					PostGradToolUI window1 = new PostGradToolUI();
 					window1.frmSchoolOfIt.setVisible(true);
-					DBConnect dbConnect = new DBConnect();
-					dbConnect.attemptConnect();
 			
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -425,7 +423,7 @@ public class PostGradToolUI {
 						bNewApplicationStarted = true;
 						application = appController.createNewApplication(number);
 						
-						data.addNewApplicationRecord(new ApplicantApplicationReference(applicant, application));
+						//data.addNewApplicationRecord(new ApplicantApplicationReference(applicant, application));
 						
 						populateApplicationFields(applicant, application);
 						bEdit = true;
