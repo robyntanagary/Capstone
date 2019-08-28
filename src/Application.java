@@ -94,4 +94,14 @@ public class Application {
 	public void setPdfPath(String pdfPath) {
 		this.pdfPath = pdfPath;
 	}
+	
+	public void setApplicantNumber(String appNumber)
+	{
+		applicantNumber = appNumber;
+	}
+	
+	public String getApplicantNumber()
+	{
+		return applicantNumber;
+	}
 }

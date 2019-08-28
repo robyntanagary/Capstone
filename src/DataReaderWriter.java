@@ -206,6 +206,7 @@ public class DataReaderWriter {
 		String citizenship = "";
 		String citizenshipCountry = "";
 		String residenceAddress = "";
+		String residenceCountry = "";
 		String id = "";
 		String race = "";
 		String passport = "";
@@ -237,6 +238,7 @@ public class DataReaderWriter {
 			citizenship = rs.getString("applicantCitizenship");
 			citizenshipCountry = rs.getString("applicantCitizenshipCountry");
 			residenceAddress = rs.getString("applicantResidenceLineAddress");
+			residenceCountry = rs.getString("applicantResidenceCountry");
 			iTExperience = rs.getInt("iTExperience");
 			previousDegreeThesis = rs.getString("previousDegreeThesis");
 			highestMathLevel = rs.getInt("highestMathLevel");
@@ -265,16 +267,16 @@ public class DataReaderWriter {
 			
 			if(rs2.getString("studyProgram").contains("MIT"))
 			{
-				 UndergraduateMathematics[] maths = new UndergraduateMathematics[highestMathLevel - 1];
-				 boolean hadThesis = !previousDegreeThesis.equals("");
-				 if(highestMathLevel > 0)
-				 {
-					 maths[0] = new UndergraduateMathematics(1, mathLevel1);
-					 maths[1] = new UndergraduateMathematics(2, mathLevel2);
-					 maths[2] = new UndergraduateMathematics(3, mathLevel3);
-				 }
+				UndergraduateMathematics[] maths = new UndergraduateMathematics[highestMathLevel - 1];
+				boolean hadThesis = !previousDegreeThesis.equals("");
+				if(highestMathLevel > 0)
+				{
+					maths[0] = new UndergraduateMathematics(1, mathLevel1);
+					maths[1] = new UndergraduateMathematics(2, mathLevel2);
+					maths[2] = new UndergraduateMathematics(3, mathLevel3);
+				}
 				 
-				 applicant.setPreviousQualification(new TertiaryQualificationForMIT(previousDegree, previousDegreeUniversity, previousDegreeCountry, previousDegreeDuration, previousDegreeNQF, iTExperience, hadThesis, previousDegreeThesis, highestMathLevel, maths));
+			 	applicant.setPreviousQualification(new TertiaryQualificationForMIT(previousDegree, previousDegreeUniversity, previousDegreeCountry, previousDegreeDuration, previousDegreeNQF, iTExperience, hadThesis, previousDegreeThesis, highestMathLevel, maths));
 				 
 			}
 			
@@ -283,9 +285,16 @@ public class DataReaderWriter {
 				applicant.setPreviousQualification(new TertiaryQualification(previousDegree, previousDegreeUniversity, previousDegreeCountry, previousDegreeDuration, previousDegreeNQF));
 			}
 			
-			
-			//applicant = new Applicant(applicantNum, applicantNum);
-			
+			applicant.setApplicantNumber(applicantNum);
+			applicant.setSurname(surname);
+			applicant.setFirstName(firstName);
+			applicant.setTitle(title);
+			applicant.setEmail(email);
+			applicant.setCellPhone(cellphone);
+			applicant.setPassword(password);
+			applicant.setCitizenship(citizenship);
+			applicant.setCitizenshipCountry(citizenshipCountry);
+			applicant.setResidenceAddress(new Address(residenceAddress, residenceCountry));
 		}
 		
 		catch (Exception e)
@@ -338,6 +347,48 @@ public class DataReaderWriter {
 		return application;
 	}
 	
+	public Application getApplicationOfApplicant2(String appNumber)
+	{
+		/*for (int i=0; i<applicationReferences.size(); i++)
+		{
+			if (applicationReferences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
+			{
+				return applicationReferences.get(i).getApplicationRef();
+			}
+		}
+		return null;*/
+		PreparedStatement getApplication;
+		ResultSet rs = null;
+		String applicationNumber = "";
+		String applicantNum = "";
+		String applicationStatus = "";
+		String studyProgram = "";
+		Application application = null;
+		
+		try
+		{
+			getApplication = con.prepareStatement("SELECT * FROM application WHERE applicationNumber = " + appNumber.toUpperCase() + ";");
+			rs = getApplication.executeQuery();
+			
+			while(rs.next())
+			{
+				applicationNumber = rs.getString("applicationNumber");
+				applicantNum = rs.getString("applicantNumber");
+				applicationStatus = rs.getString("applicationStatus");
+				studyProgram = rs.getString("studyProgram");
+			}
+			
+			application = new Application(applicationNumber, applicantNum);
+		}
+		
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return application;
+	}
+	
 	public int getMaxApplicationNumber()
 	{
 		return maxApplicationNumber;
@@ -359,29 +410,29 @@ public class DataReaderWriter {
 		}
 	}*/
 	
-	/*public ApplicantApplicationReference getApplicantApplicationRefByApplication(String applicationNumber)
+	public ApplicantApplicationReference getApplicantApplicationRefByApplication(String applicationNumber)
 	{
-		for (int i=0; i<applicationReferences.size(); i++)
-		{
-			if (applicationReferences.get(i).getApplicationRef().getApplicationNumber().equals(applicationNumber))
-			{
-				return applicationReferences.get(i);
-			}
-		}
-		return null;
-	}*/
+		Applicant applicant = null;
+		Application application = null;
+		
+		application = getApplicationOfApplicant2(applicationNumber);
+		applicant = getApplicant(application.getApplicantNumber());
+		ApplicantApplicationReference aar = new ApplicantApplicationReference(applicant, application);
+		
+		return aar;
+	}
 	
-	/*public ApplicantApplicationReference getApplicantApplicationRefByApplicant(String applicantNumber)
+	public ApplicantApplicationReference getApplicantApplicationRefByApplicant(String applicantNumber)
 	{
-		for (int i=0; i<applicationReferences.size(); i++)
-		{
-			if (applicationReferences.get(i).getApplicantRef().getApplicantNumber().equals(applicantNumber))
-			{
-				return applicationReferences.get(i);
-			}
-		}
-		return null;
-	}*/
+		Applicant applicant = null;
+		Application application = null;
+		
+		application = getApplicationOfApplicant(applicantNumber);
+		applicant = getApplicant(applicantNumber);
+		ApplicantApplicationReference aar = new ApplicantApplicationReference(applicant, application);
+		
+		return aar;
+	}
 	
 	/*public ArrayList<ApplicantApplicationReference> filterByStudyProgram(ArrayList<ApplicantApplicationReference> applicantsAndTheirApplications, String studyProgram)
 	{
@@ -432,21 +483,24 @@ public class DataReaderWriter {
 	 * Method update existing application 
 	 * @param applicantAndTheirApplication Specified applicant and their application
 	 */
-	/*public void updateApplicationRecord(ApplicantApplicationReference applicantAndTheirApplication)
+	public void updateApplicationRecord(ApplicantApplicationReference applicantAndTheirApplication)
 	{
-		applicationReferences.remove(getApplicantApplicationRefByApplicant(applicantAndTheirApplication.getApplicantRef().getApplicantNumber()));
-		applicationReferences.add(applicantAndTheirApplication);
-	}*/
-	
-	/**
-	 * Methods add record line to textfile
-	 * @param applicantAndTheirApplication Specified applicant and their application
-	 */
-	/*public void appendToTextfile(ApplicantApplicationReference applicantAndTheirApplication)
-	{
+		Applicant applicant = applicantAndTheirApplication.getApplicantRef();
+		Application application = applicantAndTheirApplication.getApplicationRef();
+		PreparedStatement update;
+		ResultSet rs = null;
 		
-	}*/
-
+		try
+		{
+			update = con.prepareStatement("UPDATE TABLE applicant SET applicantName = " + applicant.getFirstName() + ", applicantSurname = " + applicant.getSurname() + ", applicantPassword =  " + applicant.getPassword() + ", applicantTitle = " + applicant.getTitle() + ", applicantCitizenship = "  + applicant.getCitizenship() + ", applicantCitizenshipCountry = "  + applicant.getCitizenshipCountry() + ", applicantPassport = "  + ((InternationalApplicant)applicant).getPassport() + ", applicantID = "  + ((SouthAfricanApplicant)applicant).getID() + ", applicantRace = "  + ((SouthAfricanApplicant)applicant).getRace() + ", applicantEmail = "  + applicant.getEmail() + ", applicantCellphone = "  + applicant.getCellPhone() + ", applicantResidenceLineAddress = "  + applicant.getResidenceAddress().getLineAddress() + ", applicantResidenceCountry = "  + applicant.getResidenceAddress().getCountry() + ", previousDegree = " + applicant.getPreviousQualification().getDegree() + ", previousDegreeUniversity = " + applicant.getPreviousQualification().getTertiaryInstitution() + ", previousDegreeCountry = " + applicant.getPreviousQualification().getCountry() + ", previousDegreeDuration = " + applicant.getPreviousQualification().getMinDuration() + ", previousDegreeNQF = " + applicant.getPreviousQualification().getNQFEquivalence() + ", iTExperience = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getPriorITExperience() + ", previousDegreeThesis = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getDescriptionProjectThesis() + ", highestMathLevel = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getHighestLevelUndergradMathematcs() + ", mathLevel1 = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[0] + ", mathLevel2 = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[1] + ", mathLevel3 = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[2] + ";");
+			update.executeUpdate();
+		}
+		
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
 	
 	/*public ArrayList<ApplicantApplicationReference> filterByLevel(ArrayList<ApplicantApplicationReference> applicantsAndTheirApplications, String level)
 	{
