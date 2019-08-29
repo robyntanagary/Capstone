@@ -103,7 +103,7 @@ public class ApplicationController {
 	public boolean insertOrUpdateApplication(Application anApplication)
 	{
 		//for prototype, only update
-		dataAccess.appendToTextfile(dataAccess.getApplicantApplicationRefByApplication(anApplication.getApplicationNumber()));
+		dataAccess.updateApplicationRecord((dataAccess.getApplicantApplicationRefByApplication(anApplication.getApplicationNumber())));
 		return true;
 	}
 	
@@ -305,73 +305,22 @@ public class ApplicationController {
 	 */
 	public ArrayList<ApplicantApplicationReference> getFilteredList(String studyProgram, String level, String applicationStatus)
 	{
-		return filterListByApplicationStatus( filterListByLevel(filterListByStudyProgramme(getApplicantApplicationList(), studyProgram), level), applicationStatus);
-	}
-	
-	/**
-	 * Fetches a list of details pertaining to applicants and their applications.
-	 * @return List of details pertaining to applicants and their applications.
-	 */
-	public ArrayList<ApplicantApplicationReference> getApplicantApplicationList()
-	{
-		return dataAccess.getApplicantsAndTheirApplications();
-	}
-	
-	/**
-	 * Filters list based on the study program
-	 * @param list Specified list of the filter.
-	 * @param studyProgramme Specified study program by which to filter the list
-	 * @return filtered list
-	 */
-	public ArrayList<ApplicantApplicationReference> filterListByStudyProgramme(ArrayList<ApplicantApplicationReference> list, String studyProgramme)
-	{
-		//needs logic
-		if (studyProgramme.equals("All"))
+		if(studyProgram.equals("All") && level.contentEquals("All") && applicationStatus.equals("All"))
 		{
-			return list;
+			return dataAccess.getApplicantsAndTheirApplications();
 		}
-		else if (studyProgramme.equals("Other"))
+		
+		else if(!studyProgram.contentEquals("All"))
 		{
-			 return dataAccess.filterByStudyProgram(list, studyProgramme);
+			return dataAccess.filterStudyProgram(studyProgram, applicationStatus);
 		}
+		
 		else
 		{
-			 return dataAccess.filterByStudyProgram(list, studyProgramme);
+			return dataAccess.filterLevel(level, applicationStatus);
 		}
 	}
-	/**
-	 * Filters list based on the level of the applications
-	 * @param list Specified list to filter.
-	 * @param level Specified level by which to filter the list.
-	 * @return filtered list
-	 */
-	public ArrayList<ApplicantApplicationReference> filterListByLevel(ArrayList<ApplicantApplicationReference>list, String level)
-	{
-		if (level.equals("All"))
-		{
-			return list;
-		}
-		else
-		{
-			return dataAccess.filterByLevel(list, level);
-		}
-	}
-	
-	/**
-	 * Filters list based on the status of the applications
-	 * @param list Specified list to filter.
-	 * @param appStatus Specified application status by which to filter list
-	 * @return filtered list
-	 */
-	public ArrayList<ApplicantApplicationReference> filterListByApplicationStatus(ArrayList<ApplicantApplicationReference>list, String appStatus)
-	{
-		if (!appStatus.equals("All"))
-		{
-			return dataAccess.filterByApplicationStatus(list, appStatus);
-		}
-		return list;
-	}
-	
+
 	/**
 	 * Generates CSV file of the list of application details
 	 * @param filteredApplicantList Specified list from which csv should be genereated

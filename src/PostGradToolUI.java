@@ -3053,7 +3053,7 @@ public class PostGradToolUI {
 			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
 			{
 				//btnSaveUpdate.setText("Save");
-				btnSubmitReturn.setText("Submit");
+				btnSubmitReturn.setText("");
 			}
 			else //existing application
 			{

@@ -48,27 +48,21 @@ public class UserController {
 	
 	public boolean isFOacademic(String staffNumber, String password)
 	{
-		ArrayList<FOacademic> FOacademics = dataAccess.getAcademics();
-		FOacademics.trimToSize();
-		for (int i=0; i<FOacademics.size(); i++)
+		FOacademic academic = dataAccess.getAcademic(staffNumber);
+		
+		if (academic.getStaffNumber().equalsIgnoreCase(staffNumber) && (academic.getPassword().equals(password)))
 		{
-			if ((FOacademics.get(i).getStaffNumber().equalsIgnoreCase(staffNumber)) && (FOacademics.get(i).getPassword().equals(password))) {return true; }
+			return true;
 		}
+		
 		return false; 
 	}
 	
 	public FOacademic getFOacademic(String staffNumber)
 	{
-		ArrayList<FOacademic> FOacademics = dataAccess.getAcademics();
-		FOacademics.trimToSize();
-		for (int i=0; i<FOacademics.size(); i++)
-		{
-			if ((FOacademics.get(i).getStaffNumber().equalsIgnoreCase(staffNumber))) 
-			{	
-				academic = FOacademics.get(i);
-				return academic; }
-		}
-		return null;
+		FOacademic academic = dataAccess.getAcademic(staffNumber);
+		
+		return academic;
 	}
 	
 	/**
@@ -133,21 +127,21 @@ public class UserController {
 		return null;
 	}
 	
-	public boolean insertOrUpdateApplicant(Applicant applicant)
-	{
-		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(applicant.getApplicantNumber()));
-		return true;
-	}
-	
-	public boolean insertOrUpdateInternationalApplicant(InternationalApplicant intApplicant)
-	{
-		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(intApplicant.getApplicantNumber()));
-		return true;
-	}
-	
-	public boolean insertOrUpdateSouthAfricanApplicant(SouthAfricanApplicant southAfricanApplicant)
-	{
-		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(southAfricanApplicant.getApplicantNumber()));
-		return true;
-	}
+//	public boolean insertOrUpdateApplicant(Applicant applicant)
+//	{
+//		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(applicant.getApplicantNumber()));
+//		return true;
+//	}
+//	
+//	public boolean insertOrUpdateInternationalApplicant(InternationalApplicant intApplicant)
+//	{
+//		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(intApplicant.getApplicantNumber()));
+//		return true;
+//	}
+//	
+//	public boolean insertOrUpdateSouthAfricanApplicant(SouthAfricanApplicant southAfricanApplicant)
+//	{
+//		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(southAfricanApplicant.getApplicantNumber()));
+//		return true;
+//	}
 }
