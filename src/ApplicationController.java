@@ -235,10 +235,12 @@ public class ApplicationController {
 		{
 			cellValues[0] = applicationRefererences.get(i).getApplicationRef().getApplicationNumber();
 			cellValues[1] = applicationRefererences.get(i).getApplicantRef().getApplicantNumber();
-			cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
+			//cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition(); //TODO applicationStatus is null?
+			cellValues[2] = "NULL";
 			cellValues[3] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
 			cellValues[4] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
-			cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
+			//cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification(); //Null?
+			cellValues[5] = "NULL";
 		
 			model.addRow(cellValues);
 		}
