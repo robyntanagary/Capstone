@@ -24,7 +24,12 @@ public class UserController {
 	
 	public boolean isApplicant(String applicantNumber, String password)
 	{
-		return (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber)!=null) && (dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef().getPassword().equals(password));
+		if(dataAccess.getApplicant(applicantNumber) == null)
+		{
+			return false;
+		}
+		System.out.println(dataAccess.getApplicant(applicantNumber).getPassword());
+		return dataAccess.getApplicant(applicantNumber).getPassword().equals(password);
 	}
 	
 	/**

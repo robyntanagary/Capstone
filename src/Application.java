@@ -16,10 +16,14 @@ public class Application {
 		applicationStatus = new ApplicationStatus();
 	}
 	
-	public Application(String applicationNumber, String applicantNumber)
+	public Application(String applicationNumber, String applicantNumber, String applicationStatus, String statusReason, String studyProgram)
 	{
 		this.applicationNumber = applicationNumber;
 		this.applicantNumber = applicantNumber;
+		this.applicationStatus = new ApplicationStatus(applicationStatus, statusReason);
+		this.studyProgram = new StudyProgram(studyProgram);
+		pdfName = "";
+		pdfPath = "";
 	}
 	
 	/**
