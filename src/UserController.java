@@ -22,14 +22,14 @@ public class UserController {
 		dataAccess = data;
 	}
 	
-	public boolean isApplicant(String applicantNumber, String password)
+	public boolean isApplicant(String applicantNumber, String password, String email)
 	{
 		if(dataAccess.getApplicant(applicantNumber) == null)
 		{
 			return false;
 		}
-		System.out.println(dataAccess.getApplicant(applicantNumber).getPassword());
-		return dataAccess.getApplicant(applicantNumber).getPassword().equals(password);
+		//System.out.println(dataAccess.getApplicant(applicantNumber).getPassword());
+		return dataAccess.getApplicant(applicantNumber).getPassword().equals(password) && dataAccess.getApplicant(applicantNumber).getEmail().equals(email);
 	}
 	
 	/**
@@ -51,11 +51,16 @@ public class UserController {
 		this.applicant = applicant;
 	}
 	
-	public boolean isFOacademic(String staffNumber, String password)
+	public boolean isFOacademic(String staffNumber, String password, String email)
 	{
 		FOacademic academic = dataAccess.getAcademic(staffNumber);
 		
-		if (academic.getStaffNumber().equalsIgnoreCase(staffNumber) && (academic.getPassword().equals(password)))
+		if(academic == null)
+		{
+			return false;
+		}
+		
+		if (academic.getPassword().equals(password) && academic.getEmail().equals(email))
 		{
 			return true;
 		}

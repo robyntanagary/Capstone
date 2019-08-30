@@ -348,8 +348,8 @@ public class PostGradToolUI {
 				btnChangeStatus.setVisible(false);
 				
 				if (bSignIn) //Need to sign in applicant / academic.
-				{ 
-					if (userController.isApplicant(number, password)) //in the case of an applicant
+				{
+					if (userController.isApplicant(number, password, email)) //in the case of an applicant
 					{
 						System.out.println("Applicant Sign In");
 						applicant = userController.getApplicant(number); //fetch applicant
@@ -386,11 +386,10 @@ public class PostGradToolUI {
 						}
 						*/
 					}
-					else if (userController.isFOacademic(number, password)) //in the case of an academic
+					else if (userController.isFOacademic(number, password, email)) //in the case of an academic
 					{
 						btnPdfOfApplication.setVisible(true); //only an academic can download application details
 						btnChangeStatus.setVisible(true); //only an academic can change status
-						
 						academic = userController.getFOacademic(number); //fetch academic
 						userController.setFOAcademicEvaluating(academic);
 						btnSubmitReturn.setText("Return");
@@ -399,21 +398,38 @@ public class PostGradToolUI {
 						showAcademicEntryInterface();
 						
 					}
-					else //error during sign-up
+					else //error during sign-in
 					{
 						txtSignInApplicantNumber.setText("");
 						txtSignEmail.setText("");
 						pswPassword.setText("");
 						pswConfirmPassword.setText("");
 						bApplicantSignedIn = false;
-						showSignInInterface();
-						infoBox("The credentials you have provided are incorrect, please try again.", "Error");
+						//showSignInInterface();
+						infoBox("Please ensure ALL fields are valid.", "Error");
 					}
 				}
 				else //need to sign up applicant (and return to sign in in stage 4)
 				{
 					applicant = userController.registerNewApplicant(number, email, password, passwordConfirmed);
-					if (applicant != null)
+					
+					if(number.equals(""))
+					{
+						infoBox("Please provide a valid applicant number.", "Error");
+					}
+					
+					else if(!email.contains("@") || email.equals(""))
+					{
+						txtSignEmail.setText("");
+						infoBox("Please provide a valid email address.", "Error");
+					}
+					
+					else if(password.equals(""))
+					{
+						infoBox("Please provide a valid password.", "Error");
+					}
+					
+					else if(applicant != null)
 					{		
 						System.out.println("Email Authorisation.");
 						bNewApplicationStarted = true;
@@ -431,11 +447,10 @@ public class PostGradToolUI {
 					}
 					else
 					{
-						txtSignInApplicantNumber.setText("");
-						txtSignEmail.setText("");
 						pswPassword.setText("");
 						pswConfirmPassword.setText("");
-						showSignInInterface();
+						infoBox("Your password was repeated incorrectly.", "Error");
+						//showSignInInterface();
 					}
 		
 				}
@@ -1016,6 +1031,9 @@ public class PostGradToolUI {
 		spnLevelUndergrad.setVisible(false);
 		spnLevelUndergrad.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				txtAverageMathLevel1.setText("");
+				txtAverageMathLevel2.setText("");
+				txtAverageMathLevel3.setText("");
 				int high = (int) spnLevelUndergrad.getValue();
 				undMaths = new UndergraduateMathematics[high];
 				((TertiaryQualificationForMIT) applicant.getPreviousQualification()).setHighestLevelUndergradMathematcs(high);
@@ -1220,6 +1238,7 @@ public class PostGradToolUI {
 					appController.chosenPDF(file);//prepare file for upload
 					application.setPdfName(file.getName());
 					application.setPdfPath(file.toString());
+					System.out.println("upload pdf!");
 					btnUploadFile.setVisible(true);
 				}
 				}
@@ -2071,7 +2090,7 @@ public class PostGradToolUI {
 					
 					int returnVal = fileChooser.showSaveDialog(frmSchoolOfIt); //show save dialog
 					 
-					if (returnVal == JFileChooser.APPROVE_OPTION) { //if the user has selected a location and filename
+					if (returnVal == JFileChooser.APPROVE_OPTION) {//if the user has selected a location and filename
 					    File fileToSave = fileChooser.getSelectedFile(); //get information about file
 					    
 					    try
@@ -2088,7 +2107,7 @@ public class PostGradToolUI {
 					    	}
 					    	else
 					    	{
-					    		sp = "All";
+					    		sp = "%";
 					    	}
 					    	if (cbxLevel.getSelectedIndex()>-1)
 					    	{
@@ -2096,7 +2115,7 @@ public class PostGradToolUI {
 					    	}
 					    	else
 					    	{
-					    		level = "All";
+					    		level = "%";
 					    	}
 					    	if (cbxApplicationStatus.getSelectedIndex()>-1)
 					    	{
@@ -2104,16 +2123,17 @@ public class PostGradToolUI {
 					    	}
 					    	else
 					    	{
-					    		appStatus = "All";
-					    	}		    
+					    		appStatus = "%";
+					    	}
+					    	//System.out.println(sp + " " + level + " " + appStatus);
 					    	appController.getFilteredApplicantListAsCSV(appController.getFilteredList(sp, level, appStatus), fileToSave);
-					}
+					    }
 					finally
-					 {
+					{
 						frmSchoolOfIt.setCursor(Cursor.getDefaultCursor());
 						lblPleaseWaitCSVGenerated.setVisible(false); 
-					 }
-					    }
+					}
+					}
 				}
 			}
 		});
@@ -2504,6 +2524,7 @@ public class PostGradToolUI {
 		{
 			cbxDegree.setSelectedItem("Other");
 			lblDegOther.setVisible(true);
+			System.out.println(anApplicant.getPreviousQualification().getDegree());
 			txtDegOther.setText(anApplicant.getPreviousQualification().getDegree());
 		}
 		
@@ -3048,7 +3069,7 @@ public class PostGradToolUI {
 			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
 			{
 				//btnSaveUpdate.setText("Save");
-				btnSubmitReturn.setText("");
+				btnSubmitReturn.setText("Submit");
 			}
 			else //existing application
 			{

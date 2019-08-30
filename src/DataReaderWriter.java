@@ -101,6 +101,11 @@ public class DataReaderWriter {
 			rs = getAcademic.executeQuery();
 			if(rs.next())
 			{
+				if(rs.getString("academicNumber").equals(""))
+				{
+					return null;
+				}
+				
 				academicNumber = rs.getString("academicNumber");
 				academicName = rs.getString("academicName");
 				academicSurname = rs.getString("academicSurname");
@@ -162,7 +167,7 @@ public class DataReaderWriter {
 			
 			if(rs.next())
 			{
-				if(rs.getString("applicantNumber").equals(null))
+				if(rs.getString("applicantNumber").equals(""))
 				{
 					return null;
 				}
@@ -371,8 +376,8 @@ public class DataReaderWriter {
 		
 		try
 		{
-			filter = con.prepareStatement("SELECT applicationNumber FROM capstonedb.application WHERE studyProgram LIKE ? % AND applicationStatus = ?;");
-			filter.setString(1, level);
+			filter = con.prepareStatement("SELECT applicationNumber FROM capstonedb.application WHERE studyProgram LIKE ? AND applicationStatus = ?;");
+			filter.setString(1, level + "%");
 			filter.setString(2, applicationStatus);
 			rs = filter.executeQuery();
 			
@@ -395,7 +400,7 @@ public class DataReaderWriter {
 		ArrayList<ApplicantApplicationReference> list = new ArrayList<ApplicantApplicationReference>();
 		PreparedStatement filter;
 		ResultSet rs;
-		
+		System.out.println("omghello?");
 		try
 		{
 			filter = con.prepareStatement("SELECT applicationNumber FROM capstonedb.application WHERE studyProgram = ? AND applicationStatus = ?;");
@@ -405,6 +410,7 @@ public class DataReaderWriter {
 			
 			while(rs.next())
 			{
+				System.out.println(rs.getString("applicationNumber"));
 				list.add(getApplicantApplicationRefByApplication(rs.getString("applicationNumber")));
 			}
 		}

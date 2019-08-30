@@ -421,13 +421,14 @@ public class ApplicationController {
 	 */
 	public ArrayList<ApplicantApplicationReference> getFilteredList(String studyProgram, String level, String applicationStatus)
 	{
-		if(studyProgram.equals("All") && level.contentEquals("All") && applicationStatus.equals("All"))
+		if(studyProgram.equals("%") && level.contentEquals("%") && applicationStatus.equals("%"))
 		{
 			return dataAccess.getApplicantsAndTheirApplications();
 		}
 		
-		else if(!studyProgram.contentEquals("All"))
+		else if(!studyProgram.equals("%"))
 		{
+			System.out.println("hey bro! :D :D");
 			return dataAccess.filterStudyProgram(studyProgram, applicationStatus);
 		}
 		
@@ -444,6 +445,7 @@ public class ApplicationController {
 	 */
 	public void getFilteredApplicantListAsCSV(ArrayList<ApplicantApplicationReference> filteredApplicantList, File fileToSave)
 	{
+		System.out.println(fileToSave + " hey bruv");
 		//method will definitely need debugging as I am not sure what JFileChooser save dialog returns 
 		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
 		PrintWriter writer = null;
