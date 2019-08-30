@@ -1703,14 +1703,14 @@ public class PostGradToolUI {
 								//insert applicant and submit application for prototype
 								if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
 								if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-								data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
+								data.updateApplicationRecordInt(new ApplicantApplicationReference(intApplicant, application));
 							}
 							else
 							{
 								//insert applicant and submit application for prototype
 								if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
 								if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-								data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
+								data.updateApplicationRecordSA(new ApplicantApplicationReference(rsaApplicant, application));
 							}
 							
 							bNewApplicationStarted = false;
@@ -3339,7 +3339,7 @@ public class PostGradToolUI {
 			bFieldsFine = false;
 		}
 		
-		if (nullOrBlank(txtCellphone.getText().toString().trim()))
+		/*if (nullOrBlank(txtCellphone.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide cell phone by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
 			bFieldsFine = false;
@@ -3358,7 +3358,7 @@ public class PostGradToolUI {
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Phone number should either start with code or 0, i.e. +27762613100 or 0762613100", "Field cannot be read", JOptionPane.ERROR_MESSAGE);
 			bFieldsFine = false;
-		}
+		}*/
 		
 		if (nullOrBlank(txtrLineAddress.getText().toString().trim()))
 		{

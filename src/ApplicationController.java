@@ -76,7 +76,7 @@ public class ApplicationController {
 	 */
 	public Application createNewApplication(String applicantNumber)
 	{
-		application = new Application();
+		application = new Application(applicantNumber);
 		int applicationNumber = dataAccess.getMaxApplicationNumber() + 1;
 		application.setApplicationNumber(String.valueOf(applicationNumber));
 		//dataAccess.setApplicationOfApplicant(applicantNumber, application);

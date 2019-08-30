@@ -392,6 +392,7 @@ public class DataReaderWriter {
 		Application application = null;
 		
 		application = getApplicationOfApplicant2(applicationNumber);
+		System.out.println(application.getApplicantNumber());
 		applicant = getApplicant(application.getApplicantNumber());
 		ApplicantApplicationReference aar = new ApplicantApplicationReference(applicant, application);
 		

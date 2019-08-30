@@ -7,8 +7,9 @@ public class Application {
 	private String pdfName;
 	private String pdfPath;
 	
-	public Application()
+	public Application(String applicantNumber)
 	{
+		this.applicantNumber = applicantNumber;
 		applicationNumber = "";
 		studyProgram = new StudyProgram();
 		pdfName = "";
