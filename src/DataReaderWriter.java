@@ -481,39 +481,53 @@ public class DataReaderWriter {
 		PreparedStatement updateApplication;
 		
 		try
-		{
-			updateApplicant = con.prepareStatement("REPLACE INTO capstonedb.applicant(applicantNumber, applicantName, applicantSurname, applicantPassword, applicantTitle, applicantEmail, applicantCellphone, applicantResidenceLineAddress, applicantResidenceCountry, previousDegree, previousDegreeUniversity, previousDegreeCountry, previousDegreeDuration, previousDegreeNQF, iTExperience, previousDegreeThesis, highestMathLevel, mathLevel1, mathLevel2, mathLevel3) "
-					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		{ 
+			updateApplicant = con.prepareStatement("REPLACE INTO capstonedb.applicant(applicantNumber, applicantName, applicantSurname, applicantPassword, applicantTitle, applicantCitizenship, applicantCitizenshipCountry, applicantPassport, applicantID, applicantRace, applicantEmail, applicantCellphone, applicantResidenceLineAddress, applicantResidenceCountry, previousDegree, previousDegreeUniversity, previousDegreeCountry, previousDegreeDuration, previousDegreeNQF, iTExperience, previousDegreeThesis, highestMathLevel, mathLevel1, mathLevel2, mathLevel3) "
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 			updateApplicant.setString(1, applicant.getApplicantNumber());
 			updateApplicant.setString(2, applicant.getFirstName());
 			updateApplicant.setString(3, applicant.getSurname());
 			updateApplicant.setString(4, applicant.getPassword());
 			updateApplicant.setString(5, applicant.getTitle());
-			updateApplicant.setString(6, applicant.getEmail());
-			updateApplicant.setString(7, applicant.getCellPhone());
-			updateApplicant.setString(8, applicant.getResidenceAddress().getLineAddress());
-			updateApplicant.setString(9, applicant.getResidenceAddress().getCountry());
-			updateApplicant.setString(10, applicant.getPreviousQualification().getDegree());
-			updateApplicant.setString(11, applicant.getPreviousQualification().getTertiaryInstitution());
-			updateApplicant.setString(12, applicant.getPreviousQualification().getCountry());
-			updateApplicant.setInt(13, applicant.getPreviousQualification().getMinDuration());
-			updateApplicant.setString(14, applicant.getPreviousQualification().getNQFEquivalence());
-			if (applicant.getPreviousQualification() instanceof TertiaryQualificationForMIT) {
-				updateApplicant.setInt(15, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getPriorITExperience());
-				updateApplicant.setString(16, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getDescriptionProjectThesis());
-				updateApplicant.setInt(17, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getHighestLevelUndergradMathematcs());
-				updateApplicant.setDouble(18, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[0].getAverage());
-				updateApplicant.setDouble(19, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[1].getAverage());
-				updateApplicant.setDouble(20, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[2].getAverage());
+			updateApplicant.setString(6, applicant.getCitizenship());
+			updateApplicant.setString(7, applicant.getCitizenshipCountry());
+			if (applicant instanceof InternationalApplicant) {
+				updateApplicant.setString(8, ((InternationalApplicant)applicant).getPassport());
+				updateApplicant.setString(9, "");
+				updateApplicant.setString(10, "");
+			} else if (applicant instanceof SouthAfricanApplicant) {
+				updateApplicant.setString(8, "");
+				updateApplicant.setString(9, ((SouthAfricanApplicant)applicant).getID());
+				updateApplicant.setString(10, ((SouthAfricanApplicant)applicant).getRace());
 			} else {
-				updateApplicant.setInt(15, 0);
-				updateApplicant.setString(16, "");
-				updateApplicant.setInt(17, 0);
-				updateApplicant.setDouble(18, 0);
-				updateApplicant.setDouble(19, 0);
-				updateApplicant.setDouble(20, 0);
+				updateApplicant.setString(8, "");
+				updateApplicant.setString(9, "");
+				updateApplicant.setString(10, "");
 			}
-			//updateApplicant = con.prepareStatement("UPDATE TABLE applicant SET applicantName = " + applicant.getFirstName() + ", applicantSurname = " + applicant.getSurname() + ", applicantPassword =  " + applicant.getPassword() + ", applicantTitle = " + applicant.getTitle() + ", applicantCitizenship = "  + applicant.getCitizenship() + ", applicantCitizenshipCountry = "  + applicant.getCitizenshipCountry() + ", applicantPassport = "  + ((InternationalApplicant)applicant).getPassport() + ", applicantID = "  + ((SouthAfricanApplicant)applicant).getID() + ", applicantRace = "  + ((SouthAfricanApplicant)applicant).getRace() + ", applicantEmail = "  + applicant.getEmail() + ", applicantCellphone = "  + applicant.getCellPhone() + ", applicantResidenceLineAddress = "  + applicant.getResidenceAddress().getLineAddress() + ", applicantResidenceCountry = "  + applicant.getResidenceAddress().getCountry() + ", previousDegree = " + applicant.getPreviousQualification().getDegree() + ", previousDegreeUniversity = " + applicant.getPreviousQualification().getTertiaryInstitution() + ", previousDegreeCountry = " + applicant.getPreviousQualification().getCountry() + ", previousDegreeDuration = " + applicant.getPreviousQualification().getMinDuration() + ", previousDegreeNQF = " + applicant.getPreviousQualification().getNQFEquivalence() + ", iTExperience = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getPriorITExperience() + ", previousDegreeThesis = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getDescriptionProjectThesis() + ", highestMathLevel = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getHighestLevelUndergradMathematcs() + ", mathLevel1 = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[0] + ", mathLevel2 = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[1] + ", mathLevel3 = " + ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[2] + ";");
+			updateApplicant.setString(11, applicant.getEmail());
+			updateApplicant.setString(12, applicant.getCellPhone());
+			updateApplicant.setString(13, applicant.getResidenceAddress().getLineAddress());
+			updateApplicant.setString(14, applicant.getResidenceAddress().getCountry());
+			updateApplicant.setString(15, applicant.getPreviousQualification().getDegree());
+			updateApplicant.setString(16, applicant.getPreviousQualification().getTertiaryInstitution());
+			updateApplicant.setString(17, applicant.getPreviousQualification().getCountry());
+			updateApplicant.setInt(18, applicant.getPreviousQualification().getMinDuration());
+			updateApplicant.setString(19, applicant.getPreviousQualification().getNQFEquivalence());
+			if (applicant.getPreviousQualification() instanceof TertiaryQualificationForMIT) {
+				updateApplicant.setInt(20, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getPriorITExperience());
+				updateApplicant.setString(21, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getDescriptionProjectThesis());
+				updateApplicant.setInt(22, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getHighestLevelUndergradMathematcs());
+				updateApplicant.setDouble(23, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[0].getAverage());
+				updateApplicant.setDouble(24, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[1].getAverage());
+				updateApplicant.setDouble(25, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[2].getAverage());
+			} else {
+				updateApplicant.setInt(20, 0);
+				updateApplicant.setString(21, "");
+				updateApplicant.setInt(22, 0);
+				updateApplicant.setDouble(23, 0);
+				updateApplicant.setDouble(24, 0);
+				updateApplicant.setDouble(25, 0);
+			}
 			updateApplicant.executeUpdate();
 			
 			updateApplication = con.prepareStatement("REPLACE INTO capstonedb.application(applicationNumber, applicantNumber, studyProgram, applicationStatus, statusReason) "
@@ -532,7 +546,7 @@ public class DataReaderWriter {
 			e.printStackTrace();
 		}
 	}
-	
+	/*
 	public void updateApplicationRecordSA(ApplicantApplicationReference applicantAndTheirApplication)
 	{
 		Applicant applicant = applicantAndTheirApplication.getApplicantRef();
@@ -658,6 +672,7 @@ public class DataReaderWriter {
 			e.printStackTrace();
 		}
 	}
+	*/
 	/**
 	 * Accesses the database and writes to the pdfFile column of the pdf table. The entry will be added if it is not currently present.
 	 * @param file The PDF file to be uploaded

@@ -5,8 +5,8 @@ public class UserController {
 	 * Method creates a controller object responsible for managing applicants and academics.
 	 */
 	private Applicant applicant;
-	private SouthAfricanApplicant rsaApplicant;
-	private InternationalApplicant internationalApplicant;
+	//private SouthAfricanApplicant rsaApplicant;
+	//private InternationalApplicant internationalApplicant;
 	private FOacademic academic;
 	private DataReaderWriter dataAccess;
 	
@@ -79,46 +79,6 @@ public class UserController {
 		this.academic = academic; 
 	}
 	
-	public InternationalApplicant getInternationalApplicant(String applicantNumber)
-	{
-		Applicant app = dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef();
-		if ((app != null) && (app.getCitizenship().equalsIgnoreCase("International")))
-		{
-			internationalApplicant = (InternationalApplicant) app;
-			return internationalApplicant;
-		}
-		return null;
-	}
-	
-	/**
-	 * Method makes the provided South African applicant the applicant of focus.
-	 * @param applicant Specified South African applicant to focus on.
-	 */
-	public void setSouthAfricanApplicantOfFocus(SouthAfricanApplicant rsaApplicant)
-	{
-		this.rsaApplicant = rsaApplicant;
-	}
-	
-	public SouthAfricanApplicant getSouthAfricanApplicant(String applicantNumber)
-	{
-		Applicant app = dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef();
-		if ((app != null) && (app.getCitizenship().contains("South African")))
-		{
-			rsaApplicant = (SouthAfricanApplicant) app;
-			return (SouthAfricanApplicant)app;
-		}
-		return null;
-	}
-	
-	/**
-	 * Method makes the provided international applicant the applicant of focus.
-	 * @param applicant Specified international applicant to focus on.
-	 */
-	public void setInternationalApplicantOfFocus(InternationalApplicant internationalApplicant)
-	{
-		this.internationalApplicant = internationalApplicant;
-	}
-	
 	public Applicant registerNewApplicant(String applicantNumber, String email, String password, String confirmPassword)
 	{
 		if (password.equals(confirmPassword))
@@ -131,22 +91,4 @@ public class UserController {
 		}
 		return null;
 	}
-	
-//	public boolean insertOrUpdateApplicant(Applicant applicant)
-//	{
-//		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(applicant.getApplicantNumber()));
-//		return true;
-//	}
-//	
-//	public boolean insertOrUpdateInternationalApplicant(InternationalApplicant intApplicant)
-//	{
-//		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(intApplicant.getApplicantNumber()));
-//		return true;
-//	}
-//	
-//	public boolean insertOrUpdateSouthAfricanApplicant(SouthAfricanApplicant southAfricanApplicant)
-//	{
-//		dataAccess.addNewApplicationRecord(dataAccess.getApplicantApplicationRefByApplicant(southAfricanApplicant.getApplicantNumber()));
-//		return true;
-//	}
 }

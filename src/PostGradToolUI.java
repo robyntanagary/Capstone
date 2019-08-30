@@ -182,8 +182,8 @@ public class PostGradToolUI {
 	private JComboBox<String> cbxApplicationStatus;
 	private JLabel lblNameOfCSVFile;
 	private Applicant applicant;
-	private InternationalApplicant intApplicant;
-	private SouthAfricanApplicant rsaApplicant;
+	//private InternationalApplicant intApplicant;
+	//private SouthAfricanApplicant rsaApplicant;
 	private FOacademic academic;
 	private Application application;
 	private JCheckBox chkbxFundingStatement;
@@ -563,11 +563,11 @@ public class PostGradToolUI {
 			public void focusLost(FocusEvent e) {
 				if (applicant.getCitizenship().equals("International"))
 				{
-					intApplicant.setPassport(txtIDPassport.getText().toString().trim());
+					((InternationalApplicant)applicant).setPassport(txtIDPassport.getText().toString().trim());
 				}
 				else
 				{
-					rsaApplicant.setID(txtIDPassport.getText().toString().trim());
+					((SouthAfricanApplicant)applicant).setID(txtIDPassport.getText().toString().trim());
 				}
 			}
 		});
@@ -579,40 +579,53 @@ public class PostGradToolUI {
 		
 		cbxCitizenship = new JComboBox<String>();
 		populateComboBox(cbxCitizenship, "Citizenship.txt");
-		cbxCitizenship.addActionListener (new ActionListener () {
+		cbxCitizenship.addActionListener (new ActionListener () { //TODO
 		    public void actionPerformed(ActionEvent e) {
-		    	if (cbxCitizenship.getSelectedIndex() > -1)
+		    	if (cbxCitizenship.getSelectedIndex() > -1) //check if item has been selected
 		    	{
-		    		//if South African, set cbxCountry to South Africa
+		    		//set citizenship of applicant
 		    		applicant.setCitizenship(cbxCitizenship.getSelectedItem().toString().trim());
 		    		boolean bInternational = cbxCitizenship.getSelectedItem().equals("International");
 		    		boolean bRSA = cbxCitizenship.getSelectedItem().toString().contains("South African");
 		    		boolean bVisible = bInternational || bRSA;
+		    		
+		    		if (bRSA) { //if SA citizenship selected, set country to SA and disable
+		    			cbxCountry.setSelectedItem("South Africa");
+		    			cbxCountry.setEnabled(false);
+		    			applicant = new SouthAfricanApplicant(applicant); //Change
+		    			userController.setApplicantOfFocus(applicant);
+		    			applicant.setCitizenshipCountry("South African");
+		    			lblIdPassport.setText("ID");
+		    		} else if (bInternational) { //if international selected
+		    			if (cbxCountry.getSelectedItem().toString().equals("South Africa")) { //if country set to SA, set to null
+		    				cbxCountry.setSelectedIndex(-1);
+		    				cbxCountry.setEnabled(true);
+		    			}
+		    			applicant = new InternationalApplicant(applicant);
+		    			userController.setApplicantOfFocus(applicant);
+		    			lblIdPassport.setText("Passport");
+		    			cbxCountry.setEnabled(true);
+		    			
+		    		}
 		    		lblIdPassport.setVisible(bVisible);
 		    		txtIDPassport.setVisible(bVisible);
 		    		lblRace.setVisible(bRSA);
 		    		cbxRace.setVisible(bRSA);
+		    		/*
 		    		if (bInternational)
 		    		{
-		    			intApplicant = new InternationalApplicant(applicant);
-		    			userController.setInternationalApplicantOfFocus(intApplicant);
-		    			lblIdPassport.setText("Passport");
-		    			cbxCountry.setEditable(true);
+		    			//populateComboBox(cbxCountry, "intCountries.txt");
 		    		}
 		    		else if (bRSA)
-		    		{
-		    			rsaApplicant = new SouthAfricanApplicant(applicant);
-		    			userController.setSouthAfricanApplicantOfFocus(rsaApplicant);
-		    			lblIdPassport.setText("ID");
-		    			cbxCountry.setSelectedItem("South Africa");
-		    			cbxCountry.setEditable(false);
-		    			rsaApplicant.setCitizenshipCountry("South African");
+		    		{    			
+		    			
+		    			
 		    			
 		    			if (cbxCitizenship.getSelectedItem().toString().contains("South African permanent resident"))
 		    			{
 		    				cbxResCountry.setSelectedItem("South Africa");
 		    			}
-		    		}
+		    		}*/
 		    	}
 			}
 		});
@@ -627,7 +640,7 @@ public class PostGradToolUI {
 		    public void actionPerformed(ActionEvent e) {
 		    	if (cbxRace.getSelectedIndex() > -1)
 		    	{
-		    		rsaApplicant.setRace(cbxRace.getSelectedItem().toString().trim());
+		    		((SouthAfricanApplicant)applicant).setRace(cbxRace.getSelectedItem().toString().trim());
 		    	}
 		    }
 		});
@@ -642,35 +655,50 @@ public class PostGradToolUI {
 		
 		cbxCountry = new JComboBox<String>();
 		populateComboBox(cbxCountry, "Countries.txt");
-		cbxCountry.addActionListener (new ActionListener () {
+		cbxCountry.addActionListener (new ActionListener () { //TODO
 		    public void actionPerformed(ActionEvent e) {
 		    	if (cbxCountry.getSelectedIndex() > -1)
 		    	{
-		    		boolean bInternationalCitizenship = cbxCitizenship.getSelectedItem().toString().trim().equals("International");
-		    		boolean bRSACitizenship = cbxCitizenship.getSelectedItem().toString().trim().contains("South African");
-		    		boolean bUnindicatedCitizenship = !(bInternationalCitizenship || bRSACitizenship);
+		    		if (cbxCitizenship.getSelectedIndex() > -1) //check if the user has selected a citizenship
+		    		{
+		    		if (cbxCountry.getSelectedIndex().toString().trim().equals(Sou))
+		    		
+		    		
+		    		boolean bInternationalCitizenship = false;;
+		    		boolean bRSACitizenship = false;
+		    		boolean bUnindicatedCitizenship = false;
+		    		if(cbxCitizenship.getSelectedIndex() > -1)
+		    		{
+			    		bInternationalCitizenship = cbxCitizenship.getSelectedItem().toString().trim().equals("International");
+			    		bRSACitizenship = cbxCitizenship.getSelectedItem().toString().trim().contains("South African");
+		    		}
+		    		else
+		    		{
+		    			bUnindicatedCitizenship = true;
+		    		}
 				
 		    		if (bUnindicatedCitizenship && cbxCountry.getSelectedItem().toString().trim().equals("South Africa"))
 		    		{
-		    			populateComboBox(cbxCitizenship, "CitizenshipRSA.txt");
-		    			cbxCitizenship.setEditable(true);
+		    			//populateComboBox(cbxCitizenship, "CitizenshipRSA.txt");
+		    			cbxCitizenship.setEnabled(true);
 		    		}
 		    		else if (bUnindicatedCitizenship && (!cbxCountry.getSelectedItem().toString().trim().equals("South Africa")))
 		    		{
 		    			populateComboBox(cbxCitizenship, "Citizenship.txt");
 						cbxCitizenship.setSelectedItem("International");
-						cbxCitizenship.setEditable(false);
+						System.out.println("Im totes working");
+						cbxCitizenship.setEnabled(false);
 						applicant.setCitizenship("International");
 						applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
-						intApplicant = new InternationalApplicant(applicant);
+						applicant = new InternationalApplicant(applicant);
 		    		}
 		    		else if (bInternationalCitizenship && (!cbxCountry.getSelectedItem().toString().trim().equals("South Africa")))
 		    		{
-		    			intApplicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
+		    			applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
 		    		}
 		    		else if (bRSACitizenship && cbxCountry.getSelectedItem().toString().trim().equals("South Africa"))
 		    		{
-		    			rsaApplicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
+		    			applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
 		    		}
 		    		else if (cbxCountry.getSelectedIndex() == -1)
 		    		{
@@ -895,8 +923,8 @@ public class PostGradToolUI {
 		pnlTertiaryQualifications.add(lblMinDurationOf);
 		
 		spnMinDuration = new JSpinner();
-		spnMinDuration.addFocusListener(new FocusAdapter() {
-			public void focusLost(FocusEvent e) {
+		spnMinDuration.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
 				applicant.getPreviousQualification().setMinDuration((int) spnMinDuration.getValue());
 			}
 		});
@@ -1026,6 +1054,7 @@ public class PostGradToolUI {
 			public void stateChanged(ChangeEvent e) {
 				int high = (int) spnLevelUndergrad.getValue();
 				undMaths = new UndergraduateMathematics[high];
+				((TertiaryQualificationForMIT) applicant.getPreviousQualification()).setHighestLevelUndergradMathematcs(high);
 				displayUndergradMathInputs(high);
 			}
 		});
@@ -1089,9 +1118,10 @@ public class PostGradToolUI {
 		
 		spnYearsITExperience = new JSpinner();
 		spnYearsITExperience.setVisible(false);
-		spnYearsITExperience.addFocusListener(new FocusAdapter() {
+		spnYearsITExperience.addChangeListener(new ChangeListener() {
 			@Override
-			public void focusLost(FocusEvent e) {
+			public void stateChanged(ChangeEvent e) {
+				System.out.println("hey I'm working!");
 				((TertiaryQualificationForMIT) applicant.getPreviousQualification()).setPriorITExperience((int) spnYearsITExperience.getValue());
 			}
 		});
@@ -1690,24 +1720,24 @@ public class PostGradToolUI {
 					public void actionPerformed(ActionEvent e) {
 						if (bApplicantSignedIn || bNewApplicationStarted) //new application -> submit
 						{
-							if (applicant.getCitizenship().equals(""))
-							{
-								data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
-							}
-							else if (applicant.getCitizenship().equals("International"))
-							{
-								//insert applicant and submit application for prototype
-								if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-								if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-								data.updateApplicationRecordInt(new ApplicantApplicationReference(intApplicant, application));
-							}
-							else
-							{
-								//insert applicant and submit application for prototype
-								if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-								if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-								data.updateApplicationRecordSA(new ApplicantApplicationReference(rsaApplicant, application));
-							}
+//							if (applicant.getCitizenship().equals(""))
+//							{
+							data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
+//							}
+//							else if (applicant.getCitizenship().equals("International"))
+//							{
+//								//insert applicant and submit application for prototype
+//								if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+//								if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
+//								data.updateApplicationRecordInt(new ApplicantApplicationReference(intApplicant, application));
+//							}
+//							else
+//							{
+//								//insert applicant and submit application for prototype
+//								if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+//								if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
+//								data.updateApplicationRecordSA(new ApplicantApplicationReference(rsaApplicant, application));
+//							}
 							
 							bNewApplicationStarted = false;
 							showApplicantEntryInterface();
@@ -1731,27 +1761,27 @@ public class PostGradToolUI {
 						
 						application.setApplicationStatus(new ApplicationStatus(appStatus.trim(), reason.trim()));
 						
-						if (applicant.getCitizenship().equals(""))
-						{
+//						if (applicant.getCitizenship().equals(""))
+//						{
 							data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
 							populateApplicationFields(applicant, application);
-						}
-						else if (applicant.getCitizenship().equals("International"))
-						{
-							//insert applicant and submit application for prototype
-							if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-							if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-							data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
-							populateApplicationFields(intApplicant, application);
-						}
-						else
-						{
-							//insert applicant and submit application for prototype
-							if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-							if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-							data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
-							populateApplicationFields(rsaApplicant, application);
-						}
+//						}
+//						else if (applicant.getCitizenship().equals("International"))
+//						{
+//							//insert applicant and submit application for prototype
+//							if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+//							if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
+//							data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
+//							populateApplicationFields(intApplicant, application);
+//						}
+//						else
+//						{
+//							//insert applicant and submit application for prototype
+//							if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+//							if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
+//							data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
+//							populateApplicationFields(rsaApplicant, application);
+//						}
 						
 						tblApplications.setModel(appController.populateApplicationsTable(model, getSubArrayList(data.getApplicantsAndTheirApplications(), startIndex, endIndex)));
 						btnMoreApplications.setVisible(true);
@@ -1956,27 +1986,27 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				application.setApplicationStatus(new ApplicationStatus("Withdrawn", "Applicant withdraws application"));
 				
-				if (applicant.getCitizenship().equals(""))
-				{
+//				if (applicant.getCitizenship().equals(""))
+//				{
 					data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
 					populateApplicationFields(applicant, application);
-				}
-				else if (applicant.getCitizenship().equals("International"))
-				{
-					//insert applicant and submit application for prototype
-					if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-					if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-					data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
-					populateApplicationFields(intApplicant, application);
-				}
-				else
-				{
-					//insert applicant and submit application for prototype
-					if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-					if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-					data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
-					populateApplicationFields(rsaApplicant, application);
-				}
+//				}
+//				else if (applicant.getCitizenship().equals("International"))
+//				{
+//					//insert applicant and submit application for prototype
+//					if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+//					if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
+//					data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
+//					populateApplicationFields(intApplicant, application);
+//				}
+//				else
+//				{
+//					//insert applicant and submit application for prototype
+//					if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
+//					if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
+//					data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
+//					populateApplicationFields(rsaApplicant, application);
+//				}
 				showSignInInterface();
 			}
 		});
@@ -1991,8 +2021,8 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				academic = null;
 				applicant = null;
-				intApplicant = null;
-				rsaApplicant = null;
+				//intApplicant = null;
+				//rsaApplicant = null;
 				application = null;
 				showSignInInterface();
 			}
@@ -2195,8 +2225,8 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				academic = null;
 				applicant = null;
-				intApplicant = null;
-				rsaApplicant = null;
+				//intApplicant = null;
+				//rsaApplicant = null;
 				application = null;
 				showSignInInterface();
 			}
@@ -2376,16 +2406,16 @@ public class PostGradToolUI {
 						    		  userController.setApplicantOfFocus(applicant);
 						    		  application = appController.getApplicationOfApplicant(applicant.getApplicantNumber());
 						    		  appController.setApplicationOfFocus(application);
-						    		  if (applicant.getCitizenship().equals("International"))
-						    		  {
-						    			  intApplicant = userController.getInternationalApplicant(applicant.getApplicantNumber());
-						    			  userController.setInternationalApplicantOfFocus(intApplicant);
-						    		  }
-						    		  else if (applicant.getCitizenship().contains("South African"))
-						    		  {
-						    			  rsaApplicant = userController.getSouthAfricanApplicant(applicant.getApplicantNumber());
-						    			  userController.setSouthAfricanApplicantOfFocus(rsaApplicant);
-						    		  }
+//						    		  if (applicant.getCitizenship().equals("International"))
+//						    		  {
+//						    			  intApplicant = userController.getInternationalApplicant(applicant.getApplicantNumber());
+//						    			  userController.setInternationalApplicantOfFocus(intApplicant);
+//						    		  }
+//						    		  else if (applicant.getCitizenship().contains("South African"))
+//						    		  {
+//						    			  rsaApplicant = userController.getSouthAfricanApplicant(applicant.getApplicantNumber());
+//						    			  userController.setSouthAfricanApplicantOfFocus(rsaApplicant);
+//						    		  }
 						    	  }
 						      }}
 						);
@@ -2552,13 +2582,13 @@ public class PostGradToolUI {
 		//Determine if South African or International Applicant
 		if (applicant.getCitizenship().equals("International")) //International Applicant
 		{
-			intApplicant = userController.getInternationalApplicant(anApplicant.getApplicantNumber());
-			userController.setInternationalApplicantOfFocus(intApplicant);
+			applicant = userController.getApplicant(anApplicant.getApplicantNumber());
+			userController.setApplicantOfFocus(applicant);
 			
 			
 			lblIdPassport.setText("Passport Number:");
 			lblIdPassport.setVisible(true);
-			String passport = intApplicant.getPassport();
+			String passport = ((InternationalApplicant)applicant).getPassport();
 			if (nullOrBlank(passport))
 			{
 				txtIDPassport.setText("");
@@ -2570,12 +2600,12 @@ public class PostGradToolUI {
 		}
 		else if (applicant.getCitizenship().contains("South African"))//South African Applicant
 		{
-			rsaApplicant = userController.getSouthAfricanApplicant(anApplicant.getApplicantNumber());
-			userController.setSouthAfricanApplicantOfFocus(rsaApplicant);
+			applicant = userController.getApplicant(anApplicant.getApplicantNumber());
+			userController.setApplicantOfFocus(applicant);
 			lblIdPassport.setText("ID number:");
 			lblIdPassport.setVisible(true);
 			
-			String id = rsaApplicant.getID();
+			String id = ((SouthAfricanApplicant)applicant).getID();
 			if (nullOrBlank(id))
 			{
 				txtIDPassport.setText("");
@@ -2587,7 +2617,7 @@ public class PostGradToolUI {
 			
 			lblRace.setVisible(true);
 			
-			String race = rsaApplicant.getRace();
+			String race = ((SouthAfricanApplicant)applicant).getRace();
 			if (!nullOrBlank(race))
 			{
 				cbxRace.setSelectedItem(race);
