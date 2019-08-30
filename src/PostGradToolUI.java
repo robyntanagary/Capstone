@@ -1,10 +1,9 @@
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
+//import java.awt.BorderLayout;
 import java.awt.Cursor;
 
 import javax.swing.JLabel;
@@ -16,15 +15,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
-import javax.swing.JMenu;
-import javax.swing.JList;
+//import javax.swing.JMenu;
+//import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
+//import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JSlider;
+//import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTable;
@@ -35,20 +34,18 @@ import java.awt.event.FocusEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
+//import javax.swing.filechooser.FileFilter;
 import javax.swing.event.ChangeEvent;
-
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+//import java.io.FileWriter;
+//import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.IOException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 
 public class PostGradToolUI {
 
@@ -197,8 +194,8 @@ public class PostGradToolUI {
 	private UndergraduateMathematics[] undMaths;
 	private DataReaderWriter data;
 	public boolean bNewApplicationStarted;
-	private JOptionPane newAppStatusAndReason;
-	private Object[] options;
+	//private JOptionPane newAppStatusAndReason;
+	//private Object[] options;
 	private JButton btnMoreApplications;
 	private JButton btnPrevApplications;
 	private int startIndex; //record in table
@@ -211,6 +208,7 @@ public class PostGradToolUI {
 	private JLabel lblPleaseWaitPDFGenerated;
 	private JLabel lblPleaseWaitPDFDownloaded;
 	private JLabel lblPleaseWaitCSVGenerated;
+	private File CSVforUpload;
 	
 	/**
 	 * Run Postgraduate Application Tool.
@@ -250,7 +248,6 @@ public class PostGradToolUI {
 	/**
 	 * general infoBox to act as pop-up messages
 	 */
-	
 	public static void infoBox(String infoMessage, String titleBar)
     {
         JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
@@ -259,7 +256,6 @@ public class PostGradToolUI {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	
 	private void initialize() {
 		frmSchoolOfIt = new JFrame();
 		frmSchoolOfIt.setTitle("School of IT");
@@ -1243,7 +1239,7 @@ public class PostGradToolUI {
 		btnUploadFile.setVisible(false);
 		btnUploadFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!appController.uploadPDF(lblPDFName.getText()))
+				if (!appController.uploadPDF(application.getApplicationNumber(), lblPDFName.getText()))
 				{
 					//show error
 				}
@@ -1273,7 +1269,7 @@ public class PostGradToolUI {
 				    {
 				    	lblPleaseWaitPDFDownloaded.setVisible(true);
 				    	frmSchoolOfIt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				    	appController.downloadPDF(applicant.getApplicantNumber(), fileToSave);
+				    	appController.downloadPDF(application.getApplicationNumber(), fileToSave);
 				    }
 				    finally
 				    {
@@ -2009,16 +2005,15 @@ public class PostGradToolUI {
 		btnChooseCSV = new JButton("Choose CSV");
 		btnChooseCSV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("File would have been copied to project file");
 				JFileChooser fileChooser = new JFileChooser(); //create a file chooser
 				fileChooser.setFileFilter(new FileExtensionFilter(".csv"));
 				int returnVal = fileChooser.showOpenDialog(frmSchoolOfIt); //show file chooser for selecting file
 				if (returnVal == JFileChooser.APPROVE_OPTION)  //user has selected file
 				{
-					File file = fileChooser.getSelectedFile(); //fetch file chosen
-					String fileName = file.getName(); //get name of file
+					CSVforUpload = fileChooser.getSelectedFile(); //fetch file chosen
+					String fileName = CSVforUpload.getName(); //get name of file
 					lblNameOfCSVFile.setText(fileName); //name of file
-					appController.chosenCSV(file); //prepare file for upload
+					appController.chosenCSV(CSVforUpload); //prepare file for upload
 					btnUploadCsv.setVisible(true);
 				}
 			}
@@ -2040,7 +2035,7 @@ public class PostGradToolUI {
 				{
 					lblPleaseWaitUntilApplicantsNotified.setVisible(true);
 					frmSchoolOfIt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-					appController.notifyApplicants(lblNameOfCSVFile.getText().toString().trim());
+					appController.notifyApplicants(CSVforUpload);
 				}
 				finally
 				{
@@ -2070,6 +2065,12 @@ public class PostGradToolUI {
 		btnGenerateCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				{
+					if (cbxLevel.getSelectedIndex()>-1 && cbxStudyPrograms.getSelectedIndex()>-1) {
+						cbxLevel.setSelectedIndex(-1);
+						cbxStudyPrograms.setSelectedIndex(-1);
+						infoBox("You can only select either a Level or a Study Program, not both.", "Error!");
+						return;
+					}
 					JFileChooser fileChooser = new JFileChooser(); //create JFileChooser for user to indicate location to save file.
 					fileChooser.setDialogTitle("Specify location to save CSV of Applicants");  
 					fileChooser.setFileFilter(new FileExtensionFilter(".csv"));

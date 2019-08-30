@@ -1,14 +1,34 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Properties;
 import java.util.Scanner;
 
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * Class responsible for managing application
@@ -112,26 +132,24 @@ public class ApplicationController {
 	 * @param pdfName Specified name of the the pdf file.
 	 * @return whether the uploading was successful.
 	 */
-	public boolean uploadPDF(String pdfName)
+	public boolean uploadPDF(String applicationNumber, String pdfName)
 	{
 		files.trimToSize();
-		File file = null;
-		for (int i=0; i<files.size(); i++)
-		{
-			if (files.get(i).getName().equalsIgnoreCase(pdfName))
-			{
+		File file = null; //Get file from list
+		for (int i=0; i<files.size(); i++) {
+			if (files.get(i).getName().equalsIgnoreCase(pdfName)) {
 				file = files.get(i);
 				break;
 			}
 		}
-		
-		if (file!=null)
-		{
-			FileExtensionFilter filter = new FileExtensionFilter(".pdf");
-			if (filter.accept(file))
-			{
-				
+		if (file!=null) {
+			FileExtensionFilter fef = new FileExtensionFilter("pdf");
+			if (!fef.accept(file)) {
+				System.out.println("Invalid file location chosen.");
+				return false;
 			}
+			//TODO 
+			return dataAccess.writePDFtoDB(file, applicationNumber);
 		}
 		return false;
 	}
@@ -146,20 +164,20 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Allows academic to download single PDF of required documentation.
+	 * Allows academic to download single PDF of required documentation. Makes call to DataReaderWriter to fulfill request.
 	 * @param pdfName Specified name of the PDF file
 	 * @param fileToSave Specified file to save.
-	 * @return
+	 * @return Whether the file was successfully downloaded or not.
 	 */
-	public boolean downloadPDF(String applicantNumber, File fileToSave)
+	public boolean downloadPDF(String applicationNumber, File dest)
 	{
-		System.out.println("Download PDF functionality to be released in stage 4");
-		/*
-		dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicationRef().getPdfPath();
-		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
-		*/
-		
-		return true;
+		//TODO
+		FileExtensionFilter fef = new FileExtensionFilter("pdf");
+		if (!fef.accept(dest)) {
+			System.out.println("Invalid file location chosen.");
+			return false;
+		}
+		return dataAccess.readPDFfromDB(dest, applicationNumber);
 	}
 	
 	/**
@@ -197,17 +215,116 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Allows academic to download a single PDF of application details.
-	 * @param applicantNumber Specified applicant 
-	 * @param application Specified application (application number)
+	 * Creates a PDF of applicant/application details and saves it to the specified location.
+	 * @param applicantNumber Applicant to generate details for.
+	 * @param applicationNumber Specified application
 	 * @param fileToSave Specified file, i.e. the PDF file
-	 * @return the PDF file of applicant details
+	 * @return whether the request failed or succeeded
 	 */
-	public boolean requestPDFofApplicantDetails(String applicantNumber, String application, File fileToSave)
+	public boolean requestPDFofApplicantDetails(String applicantNumber, String applicationNumber, File fileToSave)
 	{
-		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
-		System.out.println("PDF of applicant details will be generated and displayed in stage 4");
-		//needs logic! -maybe you can copy some code from the DataReaderWriter class
+		FileExtensionFilter fef = new FileExtensionFilter("pdf");
+		if (!fef.accept(fileToSave)) {
+			System.out.println("Invalid file location chosen.");
+			return false;
+		}
+		Applicant applicant = dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef();
+		Application application = dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicationRef();
+		Document document = new Document();
+		try { 
+			PdfWriter.getInstance(document, new FileOutputStream(fileToSave.getAbsolutePath())).setInitialLeading(16);
+			document.open();
+			Font fontA = FontFactory.getFont(FontFactory.COURIER, 16, Font.BOLD, BaseColor.BLACK);
+			Font fontB = FontFactory.getFont(FontFactory.COURIER, 14, Font.BOLD, BaseColor.BLACK);
+			Font fontC = FontFactory.getFont(FontFactory.COURIER, 12, BaseColor.BLACK);
+			Font fontCB = FontFactory.getFont(FontFactory.COURIER, 12, Font.BOLD, BaseColor.BLACK);
+			SimpleDateFormat df = new SimpleDateFormat("dd MMMMMMMMM yyyy");
+			document.add(new Chunk("University of Cape Town School of IT", fontA));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Application Details for Application " + applicationNumber + 
+					" made by Applicant " + applicantNumber, fontCB));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Information retrieved on " + df.format(new Date()), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk(" ", fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Applicant Details:", fontB));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Full Name: " + applicant.getTitle() + " "  + applicant.getFirstName() + " " + applicant.getSurname(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Citizenship: " + applicant.getCitizenship() , fontC));
+			if (applicant instanceof InternationalApplicant) {
+				document.add(Chunk.NEWLINE);
+				document.add(new Chunk("Country: " + applicant.getCitizenshipCountry() , fontC));
+				document.add(Chunk.NEWLINE);
+				document.add(new Chunk("Passport Number: " + ((InternationalApplicant) applicant).getPassport() , fontC));
+			} else { 
+				document.add(Chunk.NEWLINE);
+				document.add(new Chunk("ID Number: " + ((SouthAfricanApplicant) applicant).getID() , fontC));
+				document.add(Chunk.NEWLINE);
+				document.add(new Chunk("Race: " + ((SouthAfricanApplicant) applicant).getRace() , fontC));
+			}
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Email Address: " + applicant.getEmail() , fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Cellphone Number: " + applicant.getCellPhone() , fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Address: " + applicant.getResidenceAddress().getLineAddress() + ", " + applicant.getResidenceAddress().getCountry(), fontC));
+			
+			StudyProgram sp = application.getStudyProgram();
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk(" ", fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Application Details:", fontB));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Study Program: " + sp.getAcademicQualification(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Qualification Level: " + sp.getQualificationLevel(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Specialisation or Major: " + sp.getSpecialisationOrMajor(), fontC));
+			ApplicationStatus as = application.getApplicationStatus();
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Current Application Status: " + as.getStatusDescripition(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Reason for Application Status: " + as.getReasonDescription(), fontC));
+			
+			TertiaryQualification tq = applicant.getPreviousQualification();
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk(" ", fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Applicant Experience and Previous Qualifications:", fontB));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Previous Degree: " + tq.getDegree(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Equivalent NQF Value of degree: " + tq.getNQFEquivalence(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Minimum Years in which degree can be obtained: " + tq.getMinDuration(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Tertiary Institution where degree was obtained: " + tq.getTertiaryInstitution(), fontC));
+			document.add(Chunk.NEWLINE);
+			document.add(new Chunk("Country where degree was obtained: " + tq.getCountry(), fontC));
+			if (tq instanceof TertiaryQualificationForMIT) {
+				TertiaryQualificationForMIT tqm = (TertiaryQualificationForMIT) tq;
+				document.add(Chunk.NEWLINE);
+				document.add(new Chunk("Prior IT Experience (in years): " + tqm.getPriorITExperience(), fontC));
+				document.add(Chunk.NEWLINE);
+				document.add(new Chunk("Level of Undergraduate Mathematics Completed: " + tqm.getHighestLevelUndergradMathematcs(), fontC));
+				for (int i = 0; i < tqm.getHighestLevelUndergradMathematcs(); ++i) {
+					document.add(Chunk.NEWLINE);
+					document.add(new Chunk("Average for Year " + (i+1) + ": " + tqm.getUndergradMaths()[i].getAverage(), fontC));
+				} if (tqm.hasProjectThesis()) {
+					document.add(Chunk.NEXTPAGE);
+					document.add(new Chunk("Description of Project Thesis of Previous Degree", fontB));
+					document.add(Chunk.NEWLINE);
+					document.add(new Chunk(" ", fontC));
+					document.add(Chunk.NEWLINE);
+					document.add(new Paragraph(tqm.getDescriptionProjectThesis(), fontC));
+				}
+			}
+			document.close();
+		} catch (DocumentException | FileNotFoundException e) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -235,12 +352,10 @@ public class ApplicationController {
 		{
 			cellValues[0] = applicationRefererences.get(i).getApplicationRef().getApplicationNumber();
 			cellValues[1] = applicationRefererences.get(i).getApplicantRef().getApplicantNumber();
-			cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition(); //TODO applicationStatus is null?
-			//cellValues[2] = "NULL";
+			cellValues[2] = applicationRefererences.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
 			cellValues[3] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getDegree();
 			cellValues[4] = applicationRefererences.get(i).getApplicantRef().getPreviousQualification().getCountry();
-			cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification(); //Null?
-			//cellValues[5] = "NULL";
+			cellValues[5] = applicationRefererences.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
 		
 			model.addRow(cellValues);
 		}
@@ -262,14 +377,13 @@ public class ApplicationController {
 	 * @param csvName Specified name of the csv file
 	 * @return whether csv file has been successfully extracted and all applicants have been notified.
 	 */
-	public boolean notifyApplicants(String csvName)
+	public boolean notifyApplicants(File csvfile)
 	{
-		//
-		System.out.println(csvName);
+		System.out.println(csvfile.getName());
 		Scanner csvApplicantsList = null;
 		try
 		{
-			csvApplicantsList = new Scanner(new FileReader(csvName.toString().trim()));
+			csvApplicantsList = new Scanner(new FileReader(csvfile));
 					
 			csvApplicantsList.nextLine();
 			
@@ -280,12 +394,12 @@ public class ApplicationController {
 				String lastName = applicantRow[5]; //extract last name
 				String applicantNumber = applicantRow[1]; //extract applicant number
 				String email = applicantNumber + "@myUCT.ac.za"; //E-mail? 
-				notifyApplicant(firstName,lastName, applicantNumber, email); //notify potential applicant
+				return notifyApplicant(firstName,lastName, applicantNumber, email); //notify potential applicant
 			}
 		}
 		catch(IOException e)
 		{
-					System.out.println("Error in populating combo box.");
+					e.printStackTrace();
 					return false;
 		}
 		finally
@@ -444,18 +558,51 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Notifies potential applicants using their details.
-	 * @param firstName Specified first name of the potential applicant.
-	 * @param lastName Specified last name of the potential applicant.
-	 * @param applicantNumber Specified applicant number of the potential applicant.
-	 * @param email Specified email address of the applicant.
+	 * Notifies a potential applicant by sending them an email.
+	 * @param firstName First name of the potential applicant.
+	 * @param lastName Last name of the potential applicant.
+	 * @param applicantNumber Applicant number of the potential applicant.
+	 * @param email Email address of the applicant.
+	 * @return Whether the email was successfully sent or not.
 	 */
-	public void notifyApplicant(String firstName, String lastName, String applicantNumber, String email)
+	public boolean notifyApplicant(String firstName, String lastName, String applicantNumber, String email)
 	{
-		//needs logic
-		System.out.println(firstName + " " + lastName + " (" + applicantNumber + ") has been e-mailed at this address: " + email);
+		//TODO
+		//Get properties object
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+		
+		//get Session
+		Session session = Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication("postgradtool@gmail.com","capstone2019");
+					}
+	          	});
+  		//compose message
+		try {
+			MimeMessage message = new MimeMessage(session);
+			message.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
+			message.setSubject("Notification from UCT School of IT");
+			message.setText("Dear " + firstName + " " + lastName + "\nThank you very much "
+					+ "for applying online for a Postgraduate Degree at the University of Cape Town.\n"
+					+ "Please follow the link below to complete your application by applying directly to the School of IT.\n"
+					+ "\nwww.examplelink.co.za\n"
+					+ "\nKind regards\n"
+					+ "University of Cape Town School of IT\n"); 
+			//send message
+			Transport.send(message);
+			System.out.println(firstName + " " + lastName + " (" + applicantNumber + ") has been e-mailed at this address: " + email);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
-	
 	
 	/**
 	 * Method return file uploaded to tool as specified fileName
@@ -467,7 +614,7 @@ public class ApplicationController {
 		files.trimToSize();
 		for (int i=0; i<files.size(); i++)
 		{
-			if (files.get(i).equals(fileName)) {return files.get(i);}
+			if (files.get(i).getName().equals(fileName)) {return files.get(i);}
 		}
 		return null;
 	}
@@ -475,6 +622,7 @@ public class ApplicationController {
 
 	public void checkEligibility(Application application, JFrame frame)
 	{
+		//TODO
 		//needs DB functionality: country & prev degree determining eligibility for applied degree
 		//display message if possible
 		//adjust status

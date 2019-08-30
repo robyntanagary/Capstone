@@ -1,16 +1,9 @@
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
-import com.itextpdf.text.pdf.codec.Base64.InputStream;
-
-
 import java.sql.*;
 
 public class DataReaderWriter {
@@ -419,7 +412,7 @@ public class DataReaderWriter {
 		
 		try
 		{
-			filter = con.prepareStatement("SELECT applicationNumber FROM capstonedb.application WHERE studyProgram LIKE ? % AND applicationStatus = ?;");//TODO
+			filter = con.prepareStatement("SELECT applicationNumber FROM capstonedb.application WHERE studyProgram LIKE ? % AND applicationStatus = ?;");
 			filter.setString(1, level);
 			filter.setString(2, applicationStatus);
 			rs = filter.executeQuery();
@@ -665,58 +658,72 @@ public class DataReaderWriter {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Accesses the database and writes to the pdfFile column of the pdf table. The entry will be added if it is not currently present.
+	 * @param file The PDF file to be uploaded
+	 * @param applicationNumber The application corresponding to the PDF to be saved.
+	 * @return Whether the file was successfully saved or not.
+	 */
 	public boolean writePDFtoDB(File file, String applicationNumber)
 	{
-		String query = "UPDATE capstonedb.pdf SET pdfFile = ?  WHERE applicationNumber = ?";
-		PreparedStatement ps;
+		//TODO
+		PreparedStatement check;
+		PreparedStatement add;
+		PreparedStatement update;
 		try
 		{
-			ps = con.prepareStatement(query);
+			//check if the applicationUmber is already in the database
+			check = con.prepareStatement("SELECT * from capstonedb.pdf WHERE applicationNumber = ?;");
+			check.setString(1, applicationNumber);
+			ResultSet rs = check.executeQuery();
+			if (!rs.first()) {
+				add = con.prepareStatement("INSERT INTO capstonedb.pdf(applicationNumber, pdfFile) " + 
+						"VALUES (?, ?);");
+				add.setString(1, applicationNumber);
+				add.setNull(2, Types.BLOB);
+				add.executeUpdate();
+			}
+			update = con.prepareStatement("UPDATE capstonedb.pdf SET pdfFile = ?  WHERE applicationNumber = ?;");
 			FileInputStream input = new FileInputStream(file);
 
-			// set parameters
-			ps.setBinaryStream(1, input);
-			ps.setString(2, applicationNumber);
-			ps.executeUpdate();
+			update.setBinaryStream(1, input);
+			update.setString(2, applicationNumber);
+			update.executeUpdate();
 
-			ps.close();
-		}
-		
-		catch (SQLException | FileNotFoundException e)
-		{
-			e.printStackTrace();
+			update.close();
+			input.close();
+		} catch (SQLException | IOException e) {
 			return false;
 		}
-		
 		return true;
 	}
-	
+	/**
+	 * Accesses the database and reads from the pdfFile column of the pdf table.
+	 * @param file The location to which the file will be saved.
+	 * @param applicationNumber The application corresponding to the requested PDF.
+	 * @return Whether the file was successfully saved or not.
+	 */
 	public boolean readPDFfromDB(File file, String applicationNumber)
 	{
-		String query = "SELECT pdfFile FROM capstonedb.pdf WHERE applicationNumber = ?";
-		PreparedStatement ps;
-		try
-		{
-			ps = con.prepareStatement(query);
+		//TODO
+		PreparedStatement select;
+		try {
+			select = con.prepareStatement("SELECT pdfFile FROM capstonedb.pdf WHERE applicationNumber = ?;");
 			FileOutputStream output = new FileOutputStream(file);
 
-			ps.setString(1, applicationNumber);
-			ResultSet rs = ps.executeQuery();
+			select.setString(1, applicationNumber);
+			ResultSet rs = select.executeQuery();
 
-			while (rs.next()) {
-				InputStream input = (InputStream) rs.getBinaryStream("pdf");
+			if (rs.first()) {
+				InputStream input = (InputStream) rs.getBinaryStream("pdfFile");
 				byte[] buffer = new byte[1024];
 				while (input.read(buffer) > 0) {
 					output.write(buffer);
 				}
 			}
 			output.close();
-		}
-		
-		catch (SQLException | IOException e)
-		{
-			e.printStackTrace();
+			select.close();
+		} catch (SQLException | IOException e) {
 			return false;
 		}
 		return true;
