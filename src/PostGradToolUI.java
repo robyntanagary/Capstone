@@ -581,51 +581,45 @@ public class PostGradToolUI {
 		populateComboBox(cbxCitizenship, "Citizenship.txt");
 		cbxCitizenship.addActionListener (new ActionListener () { //TODO
 		    public void actionPerformed(ActionEvent e) {
-		    	if (cbxCitizenship.getSelectedIndex() > -1) //check if item has been selected
-		    	{
-		    		//set citizenship of applicant
-		    		applicant.setCitizenship(cbxCitizenship.getSelectedItem().toString().trim());
-		    		boolean bInternational = cbxCitizenship.getSelectedItem().equals("International");
-		    		boolean bRSA = cbxCitizenship.getSelectedItem().toString().contains("South African");
-		    		boolean bVisible = bInternational || bRSA;
-		    		
-		    		if (bRSA) { //if SA citizenship selected, set country to SA and disable
-		    			cbxCountry.setSelectedItem("South Africa");
+		    	if (cbxCitizenship.getSelectedIndex() > -1)  //if selection made
+	    		{
+		    		applicant.setCitizenship(cbxCitizenship.getSelectedItem().toString().trim()); //set citizenship of applicant
+
+		    		if (cbxCitizenship.getSelectedItem().toString().contains("South African")) { //if SA citizenship selected
+		    			applicant = new SouthAfricanApplicant(applicant); //cast the applicant to an SA applicant
+		    			userController.setApplicantOfFocus(applicant);
+		    			cbxCountry.setSelectedItem("South Africa"); //set country selection to SA and disable country selection
 		    			cbxCountry.setEnabled(false);
-		    			applicant = new SouthAfricanApplicant(applicant); //Change
+		    			applicant.setCitizenshipCountry("South African"); //set the country of the applicant
+		    			lblIdPassport.setText("ID"); //change labels/inputs
+		    			lblIdPassport.setVisible(true);
+			    		txtIDPassport.setVisible(true);
+			    		lblRace.setVisible(true);
+			    		cbxRace.setVisible(true);
+		    		} else if (cbxCitizenship.getSelectedItem().toString().trim().equals("International")) { //if international selected
+		    			applicant = new InternationalApplicant(applicant); //cast the applicant to an international applicant
 		    			userController.setApplicantOfFocus(applicant);
-		    			applicant.setCitizenshipCountry("South African");
-		    			lblIdPassport.setText("ID");
-		    		} else if (bInternational) { //if international selected
-		    			if (cbxCountry.getSelectedItem().toString().equals("South Africa")) { //if country set to SA, set to null
-		    				cbxCountry.setSelectedIndex(-1);
-		    				cbxCountry.setEnabled(true);
+		    			if (cbxCountry.getSelectedIndex() > -1 && cbxCountry.getSelectedItem().toString().trim().equals("South Africa")) { //if country selection is SA, set to null
+		    				cbxCountry.setSelectedIndex(-1); //null the selection
+		    				applicant.setCitizenshipCountry(null); //null the country of the applicant
 		    			}
-		    			applicant = new InternationalApplicant(applicant);
-		    			userController.setApplicantOfFocus(applicant);
-		    			lblIdPassport.setText("Passport");
-		    			cbxCountry.setEnabled(true);
-		    			
-		    		}
-		    		lblIdPassport.setVisible(bVisible);
-		    		txtIDPassport.setVisible(bVisible);
-		    		lblRace.setVisible(bRSA);
-		    		cbxRace.setVisible(bRSA);
-		    		/*
-		    		if (bInternational)
-		    		{
-		    			//populateComboBox(cbxCountry, "intCountries.txt");
-		    		}
-		    		else if (bRSA)
-		    		{    			
-		    			
-		    			
-		    			
-		    			if (cbxCitizenship.getSelectedItem().toString().contains("South African permanent resident"))
-		    			{
-		    				cbxResCountry.setSelectedItem("South Africa");
-		    			}
-		    		}*/
+		    			cbxCountry.setEnabled(true); //enable country selection
+		    			lblIdPassport.setText("Passport"); //change labels/inputs
+		    			lblIdPassport.setVisible(true);
+		    			txtIDPassport.setVisible(true);
+		    			lblRace.setVisible(false);
+		    			cbxRace.setVisible(false);
+		    		} else System.out.println("Error, control reached A");
+		    		
+		    	} 
+		    	else 
+		    	{
+		    		lblIdPassport.setVisible(false); //change labels/inputs
+		    		txtIDPassport.setVisible(false);
+		    		lblRace.setVisible(false);
+		    		cbxRace.setVisible(false);
+		    		applicant = new Applicant(applicant);
+	    			userController.setApplicantOfFocus(applicant);
 		    	}
 			}
 		});
@@ -637,7 +631,7 @@ public class PostGradToolUI {
 		populateComboBox(cbxRace, "Races.txt");
 		cbxRace.setVisible(false);
 		cbxRace.addActionListener (new ActionListener () {
-		    public void actionPerformed(ActionEvent e) {
+		    public void actionPerformed(ActionEvent e) { 
 		    	if (cbxRace.getSelectedIndex() > -1)
 		    	{
 		    		((SouthAfricanApplicant)applicant).setRace(cbxRace.getSelectedItem().toString().trim());
@@ -657,58 +651,28 @@ public class PostGradToolUI {
 		populateComboBox(cbxCountry, "Countries.txt");
 		cbxCountry.addActionListener (new ActionListener () { //TODO
 		    public void actionPerformed(ActionEvent e) {
-		    	if (cbxCountry.getSelectedIndex() > -1)
+		    	if (cbxCountry.getSelectedIndex() > -1)  //if selection made
 		    	{
 		    		if (cbxCitizenship.getSelectedIndex() > -1) //check if the user has selected a citizenship
 		    		{
-		    		if (cbxCountry.getSelectedIndex().toString().trim().equals(Sou))
-		    		
-		    		
-		    		boolean bInternationalCitizenship = false;;
-		    		boolean bRSACitizenship = false;
-		    		boolean bUnindicatedCitizenship = false;
-		    		if(cbxCitizenship.getSelectedIndex() > -1)
-		    		{
-			    		bInternationalCitizenship = cbxCitizenship.getSelectedItem().toString().trim().equals("International");
-			    		bRSACitizenship = cbxCitizenship.getSelectedItem().toString().trim().contains("South African");
+		    			if (cbxCitizenship.getSelectedItem().toString().contains("South African")) { //if SA citizenship selected
+		    				cbxCountry.setSelectedItem("South Africa"); //set country selection to SA and disable country selection
+			    			cbxCountry.setEnabled(false);
+			    			applicant.setCitizenshipCountry("South African"); //set the country of the applicant
+		    			} else if (cbxCitizenship.getSelectedItem().toString().trim().equals("International")) { //if international citizenship selected
+		    				if (cbxCountry.getSelectedItem().toString().trim().equals("South Africa")) { //if SA country selected
+		    					cbxCountry.setSelectedIndex(-1); //null the selection
+		    					applicant.setCitizenshipCountry(null); //null the country of the applicant
+		    				} else { //if any other country selected
+		    					applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
+		    				}
+		    			} else System.out.println("Error, control reached B");
 		    		}
-		    		else
-		    		{
-		    			bUnindicatedCitizenship = true;
-		    		}
-				
-		    		if (bUnindicatedCitizenship && cbxCountry.getSelectedItem().toString().trim().equals("South Africa"))
-		    		{
-		    			//populateComboBox(cbxCitizenship, "CitizenshipRSA.txt");
-		    			cbxCitizenship.setEnabled(true);
-		    		}
-		    		else if (bUnindicatedCitizenship && (!cbxCountry.getSelectedItem().toString().trim().equals("South Africa")))
-		    		{
-		    			populateComboBox(cbxCitizenship, "Citizenship.txt");
-						cbxCitizenship.setSelectedItem("International");
-						System.out.println("Im totes working");
-						cbxCitizenship.setEnabled(false);
-						applicant.setCitizenship("International");
-						applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
-						applicant = new InternationalApplicant(applicant);
-		    		}
-		    		else if (bInternationalCitizenship && (!cbxCountry.getSelectedItem().toString().trim().equals("South Africa")))
+		    		else //if no citizenship selected
 		    		{
 		    			applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
 		    		}
-		    		else if (bRSACitizenship && cbxCountry.getSelectedItem().toString().trim().equals("South Africa"))
-		    		{
-		    			applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
-		    		}
-		    		else if (cbxCountry.getSelectedIndex() == -1)
-		    		{
-					
-		    		}
-		    		else
-		    		{
-					//show error as citizenship does not match up with country choice
-		    		}
-		    	}
+		    	} 
 			}
 		});
 		cbxCountry.setFont(new Font("Calibri", Font.PLAIN, 12));
@@ -3280,79 +3244,89 @@ public class PostGradToolUI {
 	
 	private boolean checkPersonalDetails()
 	{
-		boolean bFieldsFine = true;
 		if (nullOrBlank(txtSurname.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide surname by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		if (nullOrBlank(txtFirstName.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide first name by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		if (cbxTitle.getSelectedIndex() == -1)
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select title.", "Item not selected", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 
-		if (cbxCitizenship.getSelectedIndex() == -1)
+		if (!(cbxCitizenship.getSelectedIndex() > -1))
 		{
-			
+			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a citizenship.", "Item not selected", JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
 		else if (cbxCitizenship.getSelectedItem().toString().contains("International"))
 		{
-			if (cbxCountry.getSelectedItem().toString().trim().contains("South Africa"))
+			if (!(cbxCountry.getSelectedIndex() > -1)) 
+			{
+				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a country.", "Item not selected", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			else if (cbxCountry.getSelectedItem().toString().trim().contains("South Africa"))
 			{
 				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please either select South African citizenship or select a different country.", "Inconsistent information", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				return false;
 			}
 			
 			if (nullOrBlank(txtIDPassport.getText().toString().trim()))
 			{
-				JOptionPane.showMessageDialog(frmSchoolOfIt, "Field not completed", "Please provide passport by clicking next to the label.", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide passport by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
+				return false;
 			}
 		}
 		else if (cbxCitizenship.getSelectedItem().toString().contains("South Africa"))
 		{
+			if (!(cbxCountry.getSelectedIndex() > -1)) 
+			{
+				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a country.", "Item not selected", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 			if (cbxCountry.getSelectedItem().toString().trim().contains("citizen") && (!(cbxCountry.getSelectedItem().toString().trim().contains("South Africa"))))
 			{
 				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please either change citizenship or select a different country.", "Inconsistent information", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				return false;
 			}
 			
 			if (nullOrBlank(txtIDPassport.getText().toString().trim()))
 			{
-				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide ID by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide an ID number by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
+				return false;
 			}
 			
 			if (cbxRace.getSelectedIndex() == -1)
 			{
-				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select race.", "Item not selected", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a race.", "Item not selected", JOptionPane.ERROR_MESSAGE);
+				return false;
 			}
 		}
 		else
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt,  "Please select a citizenship status.", "Item not selected",JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		
 		
 		if (cbxCountry.getSelectedIndex() == -1)
 		{
-			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a citizenship status.", "Item not selected",JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a country.", "Item not selected",JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
 		
-		return bFieldsFine;
+		return true;
 	}
 	
 	private boolean checkContactDetails()
