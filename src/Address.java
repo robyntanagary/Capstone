@@ -1,4 +1,7 @@
-
+/**
+ * Class models Addresses.
+ * @author  FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class Address {
 	private String lineAddress;
 	private String country;
@@ -16,32 +19,32 @@ public class Address {
 	}
 
 	/**
-	 * Retrieves the lineAddress
-	 * @return the lineAddress
+	 * Retrieves the lineAddress of the address.
+	 * @return The lineAddress of this address.
 	 */
 	public String getLineAddress() {
 		return lineAddress;
 	}
 
 	/** 
-	 * Set lineAddress of this address.
-	 * @param lineAddress the Specified lineAddress to set
+	 * Sets the lineAddress of this address.
+	 * @param lineAddress The  lineAddress to be set.
 	 */
 	public void setLineAddress(String lineAddress) {
 		this.lineAddress = lineAddress;
 	}
 
 	/**
-	 * Returns the country of this address
-	 * @return the country specified in this address.
+	 * Retrieves the country of the address.
+	 * @return The country of this address.
 	 */
 	public String getCountry() {
 		return country;
 	}
 
 	/**
-	 * Set the specified county to this address.
-	 * @param country The specified country to set.
+	 * Sets the county of this address.
+	 * @param country The country to be set.
 	 */
 	public void setCountry(String country) {
 		this.country = country;

@@ -148,7 +148,6 @@ public class ApplicationController {
 				System.out.println("Invalid file location chosen.");
 				return false;
 			}
-			//TODO 
 			return dataAccess.writePDFtoDB(file, applicationNumber);
 		}
 		return false;
@@ -171,7 +170,6 @@ public class ApplicationController {
 	 */
 	public boolean downloadPDF(String applicationNumber, File dest)
 	{
-		//TODO
 		FileExtensionFilter fef = new FileExtensionFilter("pdf");
 		if (!fef.accept(dest)) {
 			System.out.println("Invalid file location chosen.");
@@ -185,7 +183,7 @@ public class ApplicationController {
 	 * @param applicationNumber Specified application for checking if still in editable state
 	 * @return whether application is still in an editable state.
 	 */
-	public boolean applicantionEditable(String applicationNumber)
+	public boolean applicationEditable(String applicationNumber)
 	{
 		String status = dataAccess.getApplicantApplicationRefByApplication(applicationNumber).getApplicationRef().getApplicationStatus().getStatusDescripition();
 		status = status.trim();
@@ -537,8 +535,6 @@ public class ApplicationController {
 				temp += "," + filteredApplicantList.get(i).getApplicationRef().getStudyProgram().getAcademicQualification();
 				temp += "," + filteredApplicantList.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
 				temp += "," + filteredApplicantList.get(i).getApplicationRef().getApplicationStatus().getReasonDescription();
-				temp += "," + filteredApplicantList.get(i).getApplicationRef().getPdfName();
-				temp += "," + filteredApplicantList.get(i).getApplicationRef().getPdfPath();
 				
 				System.out.println(temp);
 				
@@ -569,7 +565,6 @@ public class ApplicationController {
 	 */
 	public boolean notifyApplicant(String firstName, String lastName, String applicantNumber, String email)
 	{
-		//TODO
 		//Get properties object
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");

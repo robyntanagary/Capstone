@@ -23,6 +23,18 @@ public class TertiaryQualification {
 		this.minDuration = duration;
 		this.degree = degree;
 	}
+	/**
+	 * Constructor, takes a TertiaryQualification object as a parameter.
+	 * @param tq The TertiaryQualification object to copy from.
+	 */
+	public TertiaryQualification(TertiaryQualification tq)
+	{
+		this.tertiaryInstitution = tq.getTertiaryInstitution();
+		this.country = tq.getCountry();
+		this.NQFEquivalence = tq.getNQFEquivalence();
+		this.minDuration = tq.getMinDuration();
+		this.degree = tq.getDegree();
+	}
 
 	/**
 	 * Return the tertiary institution at which this qualification has been obtained.
@@ -101,6 +113,4 @@ public class TertiaryQualification {
 	public void setDegree(String degree) {
 		this.degree = degree;
 	}
-	
-	
 }

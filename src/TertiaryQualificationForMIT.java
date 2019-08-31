@@ -6,13 +6,16 @@ public class TertiaryQualificationForMIT extends TertiaryQualification {
 	private int highestLevelUndergradMathematcs;
 	private UndergraduateMathematics[] undergradMaths;
 	
+	/**
+	 * No parameter constructor.
+	 */
 	public TertiaryQualificationForMIT()
 	{
 		super();
 		this.presenceProjectThesis = false;
 		this.descriptionProjectThesis = "";
 	}
-	
+	 
 	public TertiaryQualificationForMIT(String degree, String university, String country, int duration, String NQF)
 	{
 		super(degree, university, country, duration, NQF);
@@ -28,6 +31,24 @@ public class TertiaryQualificationForMIT extends TertiaryQualification {
 		this.descriptionProjectThesis = thesis;
 		this.highestLevelUndergradMathematcs = HighestLevel;
 		this.undergradMaths = undergradMaths;
+	}
+	/**
+	 * Constructor, takes a TertiaryQualification object as a parameter.
+	 * @param tq The TertiaryQualification object to copy from.
+	 */
+	public TertiaryQualificationForMIT(TertiaryQualification tq)
+	{
+		super(tq);
+		if (tq instanceof TertiaryQualificationForMIT) {
+			setPriorITExperience(((TertiaryQualificationForMIT) tq).getPriorITExperience());
+			PresenceProjectThesisPresent(((TertiaryQualificationForMIT) tq).hasProjectThesis());
+			setDescriptionProjectThesis(((TertiaryQualificationForMIT) tq).getDescriptionProjectThesis());
+			setHighestLevelUndergradMathematcs(((TertiaryQualificationForMIT) tq).getHighestLevelUndergradMathematcs());
+			setUndergradMaths(((TertiaryQualificationForMIT) tq).getUndergradMaths());
+		} else {
+			PresenceProjectThesisPresent(false);
+			setDescriptionProjectThesis("");
+		}
 	}
 	
 	/**

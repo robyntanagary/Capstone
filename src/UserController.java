@@ -1,21 +1,12 @@
-import java.util.ArrayList;
-
 public class UserController {
-	/**
-	 * Method creates a controller object responsible for managing applicants and academics.
-	 */
+	
 	private Applicant applicant;
-	//private SouthAfricanApplicant rsaApplicant;
-	//private InternationalApplicant internationalApplicant;
 	private FOacademic academic;
 	private DataReaderWriter dataAccess;
 	
-//	public UserController()
-//	{
-//		applicant = new Applicant();
-//		academic = new FOacademic();
-//	}
-	
+	/**
+	 * Method creates a controller object responsible for managing applicants and academics.
+	 */
 	public UserController(DataReaderWriter data)
 	{
 		//this();
@@ -28,7 +19,6 @@ public class UserController {
 		{
 			return false;
 		}
-		//System.out.println(dataAccess.getApplicant(applicantNumber).getPassword());
 		return dataAccess.getApplicant(applicantNumber).getPassword().equals(password) && dataAccess.getApplicant(applicantNumber).getEmail().equals(email);
 	}
 	

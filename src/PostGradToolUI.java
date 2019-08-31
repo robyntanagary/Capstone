@@ -219,7 +219,6 @@ public class PostGradToolUI {
 				try {
 					PostGradToolUI window1 = new PostGradToolUI();
 					window1.frmSchoolOfIt.setVisible(true);
-			
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -240,9 +239,7 @@ public class PostGradToolUI {
 		appController = new ApplicationController(data);
 		userController = new UserController(data);
 		
-		
 		initialize();
-		
 	}
 
 	/**
@@ -405,7 +402,6 @@ public class PostGradToolUI {
 						pswPassword.setText("");
 						pswConfirmPassword.setText("");
 						bApplicantSignedIn = false;
-						//showSignInInterface();
 						infoBox("Please ensure ALL fields are valid.", "Error");
 					}
 				}
@@ -594,15 +590,18 @@ public class PostGradToolUI {
 		
 		cbxCitizenship = new JComboBox<String>();
 		populateComboBox(cbxCitizenship, "Citizenship.txt");
-		cbxCitizenship.addActionListener (new ActionListener () { //TODO
+		cbxCitizenship.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
 		    	if (cbxCitizenship.getSelectedIndex() > -1)  //if selection made
 	    		{
 		    		applicant.setCitizenship(cbxCitizenship.getSelectedItem().toString().trim()); //set citizenship of applicant
 
 		    		if (cbxCitizenship.getSelectedItem().toString().contains("South African")) { //if SA citizenship selected
-		    			applicant = new SouthAfricanApplicant(applicant); //cast the applicant to an SA applicant
-		    			userController.setApplicantOfFocus(applicant);
+		    			if (!(applicant instanceof SouthAfricanApplicant)) {
+		    				applicant = new SouthAfricanApplicant(applicant); //cast the applicant to an SA applicant
+		    				userController.setApplicantOfFocus(applicant);
+		    				txtIDPassport.setText(null);
+		    			}
 		    			cbxCountry.setSelectedItem("South Africa"); //set country selection to SA and disable country selection
 		    			cbxCountry.setEnabled(false);
 		    			applicant.setCitizenshipCountry("South African"); //set the country of the applicant
@@ -622,8 +621,10 @@ public class PostGradToolUI {
 		    			lblIdPassport.setText("Passport"); //change labels/inputs
 		    			lblIdPassport.setVisible(true);
 		    			txtIDPassport.setVisible(true);
+		    			txtIDPassport.setText(null);
 		    			lblRace.setVisible(false);
 		    			cbxRace.setVisible(false);
+		    			cbxRace.setSelectedIndex(-1);
 		    		} else System.out.println("Error, control reached A");
 		    		
 		    	} 
@@ -664,7 +665,7 @@ public class PostGradToolUI {
 		
 		cbxCountry = new JComboBox<String>();
 		populateComboBox(cbxCountry, "Countries.txt");
-		cbxCountry.addActionListener (new ActionListener () { //TODO
+		cbxCountry.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
 		    	if (cbxCountry.getSelectedIndex() > -1)  //if selection made
 		    	{
@@ -847,7 +848,9 @@ public class PostGradToolUI {
 		    	if (cbxDegree.getSelectedIndex() > -1)
 		    	{
 		    		String sDegree = cbxDegree.getSelectedItem().toString().trim();
-		    		applicant.getPreviousQualification().setDegree(sDegree);
+		    		if (!sDegree.equals("Other")) { //If the selected item is not "Other", set the applicants degree to the selected option.
+		    			applicant.getPreviousQualification().setDegree(sDegree);
+		    		} 
 		    		txtDegOther.setVisible(sDegree.equals("Other"));
 		    		lblDegOther.setVisible(sDegree.equals("Other"));
 		    	}
@@ -857,7 +860,6 @@ public class PostGradToolUI {
 		pnlTertiaryQualifications.add(cbxDegree);
 		
 		txtDegOther = new JTextField();
-		//String sDegree = cbxDegree.getSelectedItem().toString().trim();
 		txtDegOther.setVisible(false);
 		txtDegOther.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
@@ -960,39 +962,38 @@ public class PostGradToolUI {
 		    	if (cbxStudyProgram.getSelectedIndex() > -1)
 		    	{
 		    		String studyProgram = cbxStudyProgram.getSelectedItem().toString();
-		    		application.setStudyProgram(appController.getStudyProgram(studyProgram));
-				
+		    		
 		    		if (studyProgram.contains("MIT") && (applicant.getPreviousQualification().getDegree().contains("Computer") || applicant.getPreviousQualification().getDegree().contains("Technology") || applicant.getPreviousQualification().getDegree().contains("Systems")))
-		    		{
+		    		{ //Reset if MIT selected and previous qualification is inconsistent
 		    			JOptionPane.showMessageDialog(frmSchoolOfIt, "Not eligible to apply for MIT", "Not Eligible", JOptionPane.ERROR_MESSAGE);
 		    			cbxStudyProgram.setSelectedIndex(-1);
 		    			lblIfOtherSpecify.setVisible(false);
 		    			txtStudyProgramOther.setVisible(false);
-					
+		    		} 
+		    		else if (studyProgram.contains("Other"))
+		    		{ //if Other was selected, make the "if other, specify" field visible
+		    			lblIfOtherSpecify.setVisible(true);
+		    			txtStudyProgramOther.setVisible(true);
+		    		}
+		    		else
+		    		{ //otherwise, set the study program of the applicant, and set checkboxes.
+		    			application.setStudyProgram(appController.getStudyProgram(studyProgram));
+		    			lblIfOtherSpecify.setVisible(false);
+		    			txtStudyProgramOther.setVisible(false);
+						
 		    			chckbxCertifiedTranscript.setSelected(appController.getStudyProgram(studyProgram).requireTranscript());
 		    			chckbxCurriculumVitaecv.setSelected(appController.getStudyProgram(studyProgram).requireCV());
 		    			chckbxResearchStatement.setSelected(appController.getStudyProgram(studyProgram).requireResearchStatement());
 		    			chckbxRefereesNames.setSelected(appController.getStudyProgram(studyProgram).requireRefereesNames());
 		    			chkbxFundingStatement.setSelected(appController.getStudyProgram(studyProgram).requireFundingStatement());
 		    			chckbxMotivation.setSelected(appController.getStudyProgram(studyProgram).requireMotivation());
-					
-		    		}
-		    		else if (studyProgram.contains("Other"))
-		    		{
-		    			lblIfOtherSpecify.setVisible(true);
-		    			txtStudyProgramOther.setVisible(true);
-		    		}
-		    		else
-		    		{
-		    			//application.setApplicationStatus(appController.checkEligibility(application, frmSchoolOfIt));
-		    			if (studyProgram.contains("MIT"))
-		    			{
-		    				String degree = applicant.getPreviousQualification().getDegree();
-		    				String university = applicant.getPreviousQualification().getTertiaryInstitution();
-		    				String country = applicant.getPreviousQualification().getCountry();
-		    				String NQF = applicant.getPreviousQualification().getNQFEquivalence();
-		    				int duration = applicant.getPreviousQualification().getMinDuration();
-		    				applicant.setPreviousQualification(new TertiaryQualificationForMIT(degree, university, country, duration, NQF));
+		    			
+		    			if (studyProgram.contains("MIT")) 
+		    			{ //If the study program is MIT related, cast the previousQual to TertiaryQualificationForMIT
+		    				applicant.setPreviousQualification(new TertiaryQualificationForMIT(applicant.getPreviousQualification()));
+		    			} else
+		    			{ //If not, cast the previousQual to TertiaryQualification
+		    				applicant.setPreviousQualification(new TertiaryQualification(applicant.getPreviousQualification()));
 		    			}
 		    			
 		    			lblPriorItExperience.setVisible(studyProgram.contains("(MIT)"));
@@ -1000,15 +1001,6 @@ public class PostGradToolUI {
 						lblLevelOfUndergraduate.setVisible(studyProgram.contains("(MIT)"));
 						spnLevelUndergrad.setVisible(studyProgram.contains("(MIT)"));
 						chckbxPreviousDegreeHadProjectThesis.setVisible(studyProgram.contains("(MIT)"));
-						lblIfOtherSpecify.setVisible(false);
-						txtStudyProgramOther.setVisible(false);
-					
-						chckbxCertifiedTranscript.setSelected(appController.getStudyProgram(studyProgram).requireTranscript());
-						chckbxCurriculumVitaecv.setSelected(appController.getStudyProgram(studyProgram).requireCV());
-						chckbxResearchStatement.setSelected(appController.getStudyProgram(studyProgram).requireResearchStatement());
-						chckbxRefereesNames.setSelected(appController.getStudyProgram(studyProgram).requireRefereesNames());
-						chkbxFundingStatement.setSelected(appController.getStudyProgram(studyProgram).requireFundingStatement());
-						chckbxMotivation.setSelected(appController.getStudyProgram(studyProgram).requireMotivation());
 				}}
 			}
 		});
@@ -1103,7 +1095,6 @@ public class PostGradToolUI {
 		spnYearsITExperience.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				System.out.println("hey I'm working!");
 				((TertiaryQualificationForMIT) applicant.getPreviousQualification()).setPriorITExperience((int) spnYearsITExperience.getValue());
 			}
 		});
@@ -1119,12 +1110,10 @@ public class PostGradToolUI {
 			public void stateChanged(ChangeEvent e) {
 				if (applicant.getPreviousQualification().getClass().equals(TertiaryQualificationForMIT.class))
 				{
-					System.out.println("1");
 					((TertiaryQualificationForMIT) applicant.getPreviousQualification()).PresenceProjectThesisPresent(chckbxPreviousDegreeHadProjectThesis.isSelected());
 					txtrProvideBriefDescription.setVisible(chckbxPreviousDegreeHadProjectThesis.isSelected());
 				}
-				System.out.println("2");
-				}
+			}
 		});
 		chckbxPreviousDegreeHadProjectThesis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1132,11 +1121,10 @@ public class PostGradToolUI {
 				{
 					((TertiaryQualificationForMIT) applicant.getPreviousQualification()).PresenceProjectThesisPresent(chckbxPreviousDegreeHadProjectThesis.isSelected());
 					txtrProvideBriefDescription.setVisible(chckbxPreviousDegreeHadProjectThesis.isSelected());
-					System.out.println("3");
+
 				}
-				System.out.println("4");
-				}
-			});
+			}
+		});
 
 		chckbxPreviousDegreeHadProjectThesis.setBounds(10, 206, 359, 23);
 		pnlProgrammeOfStudy.add(chckbxPreviousDegreeHadProjectThesis);
@@ -1703,28 +1691,10 @@ public class PostGradToolUI {
 					public void actionPerformed(ActionEvent e) {
 						if (bApplicantSignedIn || bNewApplicationStarted) //new application -> submit
 						{
-//							if (applicant.getCitizenship().equals(""))
-//							{
 							data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
-//							}
-//							else if (applicant.getCitizenship().equals("International"))
-//							{
-//								//insert applicant and submit application for prototype
-//								if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-//								if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-//								data.updateApplicationRecordInt(new ApplicantApplicationReference(intApplicant, application));
-//							}
-//							else
-//							{
-//								//insert applicant and submit application for prototype
-//								if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-//								if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-//								data.updateApplicationRecordSA(new ApplicantApplicationReference(rsaApplicant, application));
-//							}
-							
+						
 							bNewApplicationStarted = false;
 							showApplicantEntryInterface();
-							//appController.submitApplication(application);
 						}
 						else
 						{
@@ -1968,28 +1938,8 @@ public class PostGradToolUI {
 		btnRemoveApplication.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				application.setApplicationStatus(new ApplicationStatus("Withdrawn", "Applicant withdraws application"));
-				
-//				if (applicant.getCitizenship().equals(""))
-//				{
-					data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
-					populateApplicationFields(applicant, application);
-//				}
-//				else if (applicant.getCitizenship().equals("International"))
-//				{
-//					//insert applicant and submit application for prototype
-//					if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-//					if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-//					data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
-//					populateApplicationFields(intApplicant, application);
-//				}
-//				else
-//				{
-//					//insert applicant and submit application for prototype
-//					if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-//					if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-//					data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
-//					populateApplicationFields(rsaApplicant, application);
-//				}
+				data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
+				populateApplicationFields(applicant, application);
 				showSignInInterface();
 			}
 		});
@@ -2004,8 +1954,6 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				academic = null;
 				applicant = null;
-				//intApplicant = null;
-				//rsaApplicant = null;
 				application = null;
 				showSignInInterface();
 			}
@@ -2125,7 +2073,6 @@ public class PostGradToolUI {
 					    	{
 					    		appStatus = "%";
 					    	}
-					    	//System.out.println(sp + " " + level + " " + appStatus);
 					    	appController.getFilteredApplicantListAsCSV(appController.getFilteredList(sp, level, appStatus), fileToSave);
 					    }
 					finally
@@ -2209,8 +2156,6 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				academic = null;
 				applicant = null;
-				//intApplicant = null;
-				//rsaApplicant = null;
 				application = null;
 				showSignInInterface();
 			}
@@ -2362,7 +2307,7 @@ public class PostGradToolUI {
 				tblApplications.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						//fetch application
+						//fetch application TODO
 						
 						//check if application is viewable
 					}
@@ -2390,16 +2335,6 @@ public class PostGradToolUI {
 						    		  userController.setApplicantOfFocus(applicant);
 						    		  application = appController.getApplicationOfApplicant(applicant.getApplicantNumber());
 						    		  appController.setApplicationOfFocus(application);
-//						    		  if (applicant.getCitizenship().equals("International"))
-//						    		  {
-//						    			  intApplicant = userController.getInternationalApplicant(applicant.getApplicantNumber());
-//						    			  userController.setInternationalApplicantOfFocus(intApplicant);
-//						    		  }
-//						    		  else if (applicant.getCitizenship().contains("South African"))
-//						    		  {
-//						    			  rsaApplicant = userController.getSouthAfricanApplicant(applicant.getApplicantNumber());
-//						    			  userController.setSouthAfricanApplicantOfFocus(rsaApplicant);
-//						    		  }
 						    	  }
 						      }}
 						);
@@ -2436,7 +2371,6 @@ public class PostGradToolUI {
 		txtrMessage.setText(theirApplication.getApplicationStatus().generateMessageForApplicant());
 		
 		txtApplicantNumber.setText(anApplicant.getApplicantNumber());
-		
 		String surname = anApplicant.getSurname();
 		if (!nullOrBlank(surname))
 		{
@@ -2448,7 +2382,6 @@ public class PostGradToolUI {
 		{
 			txtFirstName.setText(firstName);
 		}
-		
 		String title = anApplicant.getTitle();
 		if (!nullOrBlank(title))
 		{
@@ -2459,12 +2392,15 @@ public class PostGradToolUI {
 		if (!nullOrBlank(citizenship))
 		{
 			cbxCitizenship.setSelectedItem(citizenship);
-		}
-		
-		String citCountry = anApplicant.getCitizenshipCountry();
-		if (!nullOrBlank(citCountry))
-		{
-			cbxCountry.setSelectedItem(citCountry);
+			String citCountry = anApplicant.getCitizenshipCountry();
+			if (citizenship.contains("South African")) {
+				if (!nullOrBlank(citCountry)) {
+					cbxCountry.setSelectedItem(citCountry);
+				} else {
+					anApplicant.setCitizenshipCountry("South Africa");
+					cbxCountry.setSelectedItem("South Africa");
+				}
+			}
 		}
 		
 		String email = anApplicant.getEmail();
@@ -2478,7 +2414,7 @@ public class PostGradToolUI {
 		{
 			txtCellphone.setText(cell);
 		}
-		
+
 		String line = anApplicant.getResidenceAddress().getLineAddress();
 		if (!nullOrBlank(line))
 		{
@@ -2494,10 +2430,9 @@ public class PostGradToolUI {
 		{
 			cbxResCountry.setSelectedItem("Other");
 			lblResCountryOther .setVisible(true);
-			txtResCountryOther.setText(anApplicant.getPreviousQualification().getDegree());
+			txtResCountryOther.setText(resCountry);
 		}
 
-		
 		String degUni = anApplicant.getPreviousQualification().getTertiaryInstitution();
 		if (!nullOrBlank(degUni))
 		{
@@ -2515,7 +2450,6 @@ public class PostGradToolUI {
 			txtDegCountryOther.setText(anApplicant.getPreviousQualification().getCountry());
 			
 		}
-		
 		if (itemListedInComboBox(anApplicant.getPreviousQualification().getDegree(), cbxDegree)) 
 		{
 			cbxDegree.setSelectedItem(anApplicant.getPreviousQualification().getDegree());
@@ -2524,10 +2458,9 @@ public class PostGradToolUI {
 		{
 			cbxDegree.setSelectedItem("Other");
 			lblDegOther.setVisible(true);
-			System.out.println(anApplicant.getPreviousQualification().getDegree());
 			txtDegOther.setText(anApplicant.getPreviousQualification().getDegree());
 		}
-		
+
 		if (!nullOrBlank(anApplicant.getPreviousQualification().getNQFEquivalence()))
 		{
 			cbxNQF.setSelectedItem(anApplicant.getPreviousQualification().getNQFEquivalence());
@@ -2701,7 +2634,7 @@ public class PostGradToolUI {
 		}
 		catch(IOException e)
 		{
-			System.out.println("Error in populating combo box.");
+			System.out.println("Error populating combo box.");
 		}
 		finally
 		{
@@ -2811,7 +2744,7 @@ public class PostGradToolUI {
 		mntmRequiredDocumentation.setSelected(false);
 		
 		
-		if (appController.applicantionEditable(application.getApplicationNumber()))
+		if (appController.applicationEditable(application.getApplicationNumber()))
 		{
 			btnEditApplication.setVisible(true);
 		}
@@ -2880,7 +2813,9 @@ public class PostGradToolUI {
 		txtFirstName.setEditable(bEdit);
 		cbxTitle.setEnabled(bEdit);
 		cbxCitizenship.setEnabled(bEdit);
-		cbxCountry.setEnabled(bEdit);
+		if (cbxCitizenship.getSelectedIndex() > -1 && cbxCitizenship.getSelectedItem().toString().contains("South Africa")) {
+			cbxCountry.setEnabled(false);
+		} else cbxCountry.setEnabled(bEdit);
 		txtIDPassport.setEditable(bEdit);
 		cbxRace.setEnabled(bEdit);
 		
@@ -3230,9 +3165,11 @@ public class PostGradToolUI {
 		
 		btnNext.setEnabled(false);
 		
-		//btnSaveUpdate.setVisible(false);
-		if (bApplicantSignedIn) {btnSubmitReturn.setVisible(true);} //for application process completion
-		else {btnSubmitReturn.setVisible(true);}
+		if (bApplicantSignedIn) {  //for application process completion
+			btnSubmitReturn.setVisible(true);
+		} else {
+			btnSubmitReturn.setVisible(true);
+		}
 		
 		//
 		if ((!bApplicantSignedIn) && bSignIn) //academic signed-in -> fields view only
@@ -3244,20 +3181,18 @@ public class PostGradToolUI {
 		}
 		else //applicant signed in
 		{
-			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
+			//Editable if application is editable and user selected edit mode.
+			boolean bEditable = ((appController.applicationEditable(application.getApplicationNumber()) && bEdit) || bNewApplicationStarted); 
 			btnChoosePDF.setVisible(bEditable);
 			btnUploadFile.setVisible(bEditable);
 			btnDownloadPDF.setVisible(!bEditable);
-			
 				
 			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
 			{
-				//btnSaveUpdate.setText("Save");
 				btnSubmitReturn.setText("Submit");
 			}
 			else //existing application
 			{
-				//btnSaveUpdate.setText("Update");
 				btnSubmitReturn.setText("Return");
 			}
 		}
@@ -3352,135 +3287,129 @@ public class PostGradToolUI {
 	
 	private boolean checkContactDetails()
 	{
-		boolean bFieldsFine = true;
-		
 		if (nullOrBlank(txtEmail.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide email by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if (!txtEmail.getText().toString().trim().contains("@"))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Email must contain @.", "Field cannot be read", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
-		/*if (nullOrBlank(txtCellphone.getText().toString().trim()))
+		/*if (nullOrBlank(txtCellphone.getText().toString().trim())) //TODO
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide cell phone by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if ((txtCellphone.getText().toString().trim().charAt(0) == '+') && (txtCellphone.getText().toString().trim().length() != 12))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Phone number should either start with code or 0, i.e. +27762613100 or 0762613100", "Field cannot be read", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if ((txtCellphone.getText().toString().trim().charAt(0) == '0') && (txtCellphone.getText().toString().trim().length() != 10))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Phone number should either start with code or 0, i.e. +27762613100 or 0762613100", "Field cannot be read", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if ((txtCellphone.getText().toString().trim().charAt(0) != '0') && (txtCellphone.getText().toString().trim().charAt(0) != '+'))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Phone number should either start with code or 0, i.e. +27762613100 or 0762613100", "Field cannot be read", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}*/
 		
 		if (nullOrBlank(txtrLineAddress.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide line address", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		if (cbxResCountry.getSelectedIndex() == -1)
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select country of residence.", "Item not selected", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if (cbxResCountry.getSelectedItem().toString().trim().contains("Other"))
 		{
 			if (nullOrBlank(txtResCountryOther.getText().toString().trim()))
 			{
 				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide country of residence by clicking next to the label requesting you to specify.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				return false;
 			}
 			else if ((cbxCitizenship.getSelectedItem().toString().trim().contains("South African permanent resident")) && (!(txtResCountryOther.getText().toString().trim().contains("South Africa"))))
 			{
 				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please either change citizenship or select South Africa as country of residence.", "Inconsistent information", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;		
+				return false;		
 			}
 		}
 		else if ((cbxCitizenship.getSelectedItem().toString().trim().contains("South African permanent resident")) && (!(cbxResCountry.getSelectedItem().toString().trim().contains("South Africa"))))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please either change citizenship or select South Africa as country of residence.", "Inconsistent information", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
-		return bFieldsFine;
+		return true;
 	}
 	
 	private boolean checkQualificationDetails()
 	{
-		boolean bFieldsFine = true;
-		
 		if (cbxDegCountry.getSelectedIndex() == -1)
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select country where previous degree had been obtained.", "Item not selected", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if ((cbxDegCountry.getSelectedItem().toString().trim().contains("Other")) && (nullOrBlank(txtDegCountryOther.getText().toString().trim())))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide country where previous degree has been obtained by clicking next to the label requesting you to specify.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		if (cbxDegree.getSelectedIndex() == -1)
 		{
 			
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a previous degree.", "Item not selected", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if ((cbxDegree.getSelectedItem().toString().trim().contains("Other")) && (nullOrBlank(txtDegOther.getText().toString().trim())))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide previous degree by clicking next to the label requesting you to specify.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		if (cbxNQF.getSelectedIndex() == -1)
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select NQF of previous degree.", "Item not selected", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		if (nullOrBlank(spnMinDuration.getValue().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide minimum time that were needed to complete the previous degree", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
 		if (nullOrBlank(txtDegUniversity.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide university that awarded previous degree.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
-		return bFieldsFine;
+		return true;
 	}
 	
 	private boolean checkStudyProgramDetails()
-	{
-		boolean bFieldsFine = true;
-		
+	{		
 		if (cbxStudyProgram.getSelectedIndex() == -1)
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select study programme.", "Item not selected", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		else if (cbxStudyProgram.getSelectedItem().toString().trim().contains("Other"))
 		{
 			if (nullOrBlank(txtStudyProgramOther.getText().toString().trim()))
 			{
 				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide study prgramme for which you are applying next to the label requesting you to specify.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				return false;
 			}
 		}
 		else if (cbxStudyProgram.getSelectedItem().toString().trim().contains("MIT"))
@@ -3488,7 +3417,7 @@ public class PostGradToolUI {
 			if (nullOrBlank(spnYearsITExperience.getValue().toString()))
 			{
 				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide the number of years of IT experience that you have.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				return false;
 			}
 			
 			int level = (int) spnLevelUndergrad.getValue();
@@ -3499,7 +3428,7 @@ public class PostGradToolUI {
 				if (nullOrBlank(average))
 				{
 					JOptionPane.showMessageDialog(frmSchoolOfIt,"Please provide average for Undergraduate Mathematics 1",  "Field not completed", JOptionPane.ERROR_MESSAGE);
-					bFieldsFine = false;
+					return false;
 				}
 				else
 				{
@@ -3514,7 +3443,7 @@ public class PostGradToolUI {
 					catch (NumberFormatException e) 
 					{
 						JOptionPane.showMessageDialog(frmSchoolOfIt, "Please enter an average as an integer or decimal number, i.e 80 or 80.0 or 80.00 for 80%", "Incorrect format or type", JOptionPane.ERROR_MESSAGE);
-						bFieldsFine = false;
+						return false;
 			        }
 					
 				}
@@ -3526,7 +3455,7 @@ public class PostGradToolUI {
 				if (nullOrBlank(average))
 				{
 					JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide average for Undergraduate Mathematics 2", "Field not completed", JOptionPane.ERROR_MESSAGE);
-					bFieldsFine = false;
+					return false;
 				}
 				else
 				{
@@ -3541,7 +3470,7 @@ public class PostGradToolUI {
 					catch (NumberFormatException e) 
 					{
 						JOptionPane.showMessageDialog(frmSchoolOfIt, "Incorrect format or type", "Please enter an average as an integer or decimal number, i.e 80 or 80.0 or 80.00 for 80%", JOptionPane.ERROR_MESSAGE);
-						bFieldsFine = false;
+						return false;
 			        }
 					
 				}
@@ -3553,7 +3482,7 @@ public class PostGradToolUI {
 				if (nullOrBlank(average))
 				{
 					JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide average for Undergraduate Mathematics 3", "Field not completed", JOptionPane.ERROR_MESSAGE);
-					bFieldsFine = false;
+					return false;
 				}
 				else
 				{
@@ -3568,7 +3497,7 @@ public class PostGradToolUI {
 					catch (NumberFormatException e) 
 					{
 						JOptionPane.showMessageDialog(frmSchoolOfIt, "Please enter an average as an integer or decimal number, i.e 80 or 80.0 or 80.00 for 80%", "Incorrect format or type", JOptionPane.ERROR_MESSAGE);
-						bFieldsFine = false;
+						return false;
 			        }
 					
 				}
@@ -3577,25 +3506,23 @@ public class PostGradToolUI {
 			if ((chckbxPreviousDegreeHadProjectThesis.isSelected()) && (nullOrBlank(txtrProvideBriefDescription.getText().toString().trim()) || (txtrProvideBriefDescription.getText().toString().trim().equals("Provide Brief Description of Project or Thesis Component"))))
 			{
 				JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide description of thesis component.", "Field not completed", JOptionPane.ERROR_MESSAGE);
-				bFieldsFine = false;
+				return false;
 			}
 		}	
 		//check eligibility 
 		
-		return bFieldsFine;
+		return true;
 	}
 	
 	private boolean checkAdditionalDocuments()
-	{
-		boolean bFieldsFine = true;
-		
+	{		
 		if (nullOrBlank(lblPDFName.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please choose a single PDF with all required documents and then upload it.", "PDF not uploaded", JOptionPane.ERROR_MESSAGE);
-			bFieldsFine = false;
+			return false;
 		}
 		
-		return bFieldsFine;
+		return true;
 	}
 	
 	private void displayUndergradMathInputs(int level)

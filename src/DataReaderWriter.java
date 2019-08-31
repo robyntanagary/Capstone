@@ -27,7 +27,7 @@ public class DataReaderWriter {
 		{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			con = DriverManager.getConnection(url, username, password);
-			System.out.println("Successfully connect to the database");
+			System.out.println("Successfully connected to the database");
 		}
 		catch(Exception e)
 		{
@@ -258,7 +258,11 @@ public class DataReaderWriter {
 		
 		return applicant;
 	}
-	
+	/**
+	 * 
+	 * @param applicantNumber The applicant number of of the Application to be fetched.
+	 * @return The fetched Application.
+	 */
 	public Application getApplicationOfApplicant(String applicantNumber)
 	{
 		PreparedStatement getApplication;
@@ -295,7 +299,11 @@ public class DataReaderWriter {
 		
 		return application;
 	}
-	
+	/**
+	 * 
+	 * @param appNumber The application number of the Application to be fetched.
+	 * @return The fetched application.
+	 */
 	public Application getApplicationOfApplicant2(String appNumber)
 	{
 		PreparedStatement getApplication;
@@ -349,7 +357,6 @@ public class DataReaderWriter {
 		Application application = null;
 		
 		application = getApplicationOfApplicant2(applicationNumber);
-		System.out.println(application.getApplicantNumber());
 		applicant = getApplicant(application.getApplicantNumber());
 		ApplicantApplicationReference aar = new ApplicantApplicationReference(applicant, application);
 		
@@ -474,10 +481,10 @@ public class DataReaderWriter {
 				updateApplicant.setString(21, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getDescriptionProjectThesis());
 				updateApplicant.setInt(22, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getHighestLevelUndergradMathematcs());
 				for (int i = 0; i < 3; ++i) {
-					if (((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getHighestLevelUndergradMathematcs() < i+1) {
+					if (((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getHighestLevelUndergradMathematcs() > i) {
 						updateApplicant.setDouble(23+i, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[i].getAverage());
 					} else {
-						updateApplicant.setDouble(23+i, ((TertiaryQualificationForMIT)applicant.getPreviousQualification()).getUndergradMaths()[i].getAverage());
+						updateApplicant.setDouble(23+i, 0);
 					}
 				}
 			} else {

@@ -11,7 +11,11 @@ public class InternationalApplicant extends Applicant {
 	public InternationalApplicant(Applicant applicant)
 	{
 		super(applicant);
-		passport = "";
+		if (applicant instanceof InternationalApplicant) {
+			setPassport(((InternationalApplicant) applicant).getPassport());
+		} else {
+			setPassport("");
+		}
 	}
 
 	/**

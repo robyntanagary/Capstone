@@ -14,9 +14,13 @@ public class SouthAfricanApplicant extends Applicant{
 	public SouthAfricanApplicant(Applicant applicant)
 	{
 		super(applicant);
-		
-		ID = "";
-		race = "";
+		if (applicant instanceof SouthAfricanApplicant) {
+			setRace(((SouthAfricanApplicant) applicant).getRace());
+			setID(((SouthAfricanApplicant) applicant).getID());
+		} else {
+			setRace("");
+			setID("");
+		}
 	}
 
 	/**

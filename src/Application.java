@@ -66,13 +66,13 @@ public class Application {
 	
 	public boolean changeStatus(String status)
 	{
-		//needs logic!!!
+		//needs logic!!!//TODO
 		return true;
 	}
 	
 	public boolean addReasonForStatus(String statusReason)
 	{
-		//needs logic!!
+		//needs logic!!//TODO
 		return true;
 	}
 	/**
