@@ -1,17 +1,25 @@
 /**
- * Class models Addresses.
- * @author  FYTTAN001, LXXWEN005, MCKROB018
+ * Class Address models addresses of Applicants.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
  */
 public class Address {
 	private String lineAddress;
 	private String country;
 	
+	/**
+	 * No parameter constructor, creates a basic address object.
+	 */
 	public Address()
 	{
 		setLineAddress("");
 		setCountry("");
 	}
 	
+	/**
+	 * Standard constructor, creates an address object from the supplied fields.
+	 * @param line The lineAdress of the address.
+	 * @param country The country of the address.
+	 */
 	public Address(String line, String country)
 	{
 		setLineAddress(line);
@@ -19,7 +27,6 @@ public class Address {
 	}
 
 	/**
-	 * Retrieves the lineAddress of the address.
 	 * @return The lineAddress of this address.
 	 */
 	public String getLineAddress() {
@@ -27,15 +34,13 @@ public class Address {
 	}
 
 	/** 
-	 * Sets the lineAddress of this address.
-	 * @param lineAddress The  lineAddress to be set.
+	 * @param lineAddress The lineAddress to be set.
 	 */
 	public void setLineAddress(String lineAddress) {
 		this.lineAddress = lineAddress;
 	}
 
 	/**
-	 * Retrieves the country of the address.
 	 * @return The country of this address.
 	 */
 	public String getCountry() {
@@ -43,12 +48,9 @@ public class Address {
 	}
 
 	/**
-	 * Sets the county of this address.
 	 * @param country The country to be set.
 	 */
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
-	
 }

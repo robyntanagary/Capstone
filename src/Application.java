@@ -1,4 +1,7 @@
-
+/**
+ * Class Application models applications in the system.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class Application {
 	private String applicantNumber;
 	private String applicationNumber;
@@ -7,6 +10,10 @@ public class Application {
 	private String pdfName;
 	private String pdfPath;
 	
+	/**
+	 * Creates an application corresponding to a specific applicant.
+	 * @param applicantNumber
+	 */
 	public Application(String applicantNumber)
 	{
 		this.applicantNumber = applicantNumber;
@@ -17,6 +24,14 @@ public class Application {
 		applicationStatus = new ApplicationStatus();
 	}
 	
+	/**
+	 * Creates an application object using the given fields.
+	 * @param applicationNumber The number of the application.
+	 * @param applicantNumber The number of the applicant who made the application.
+	 * @param applicationStatus The status of the application.
+	 * @param statusReason The reason for the status of the application.
+	 * @param studyProgram The study program applied for.
+	 */
 	public Application(String applicationNumber, String applicantNumber, String applicationStatus, String statusReason, String studyProgram)
 	{
 		this.applicationNumber = applicationNumber;
@@ -24,7 +39,7 @@ public class Application {
 		this.applicationStatus = new ApplicationStatus(applicationStatus, statusReason);
 		this.studyProgram = new StudyProgram(studyProgram);
 		pdfName = "";
-		pdfPath = "";
+		pdfName = "";
 	}
 	
 	/**
@@ -64,42 +79,6 @@ public class Application {
 		this.studyProgram = studyProgram;
 	}
 	
-	public boolean changeStatus(String status)
-	{
-		//needs logic!!!//TODO
-		return true;
-	}
-	
-	public boolean addReasonForStatus(String statusReason)
-	{
-		//needs logic!!//TODO
-		return true;
-	}
-	/**
-	 * @return the pdfName
-	 */
-	public String getPdfName() {
-		return pdfName;
-	}
-	/**
-	 * @param pdfName the pdfName to set
-	 */
-	public void setPdfName(String pdfName) {
-		this.pdfName = pdfName;
-	}
-	/**
-	 * @return the pdfPath
-	 */
-	public String getPdfPath() {
-		return pdfPath;
-	}
-	/**
-	 * @param pdfPath the pdfPath to set
-	 */
-	public void setPdfPath(String pdfPath) {
-		this.pdfPath = pdfPath;
-	}
-	
 	public void setApplicantNumber(String appNumber)
 	{
 		applicantNumber = appNumber;
@@ -108,5 +87,33 @@ public class Application {
 	public String getApplicantNumber()
 	{
 		return applicantNumber;
+	}
+
+	/**
+	 * @return the pdfName
+	 */
+	public String getPdfName() {
+		return pdfName;
+	}
+
+	/**
+	 * @param pdfName the pdfName to set
+	 */
+	public void setPdfName(String pdfName) {
+		this.pdfName = pdfName;
+	}
+
+	/**
+	 * @return the pdfPath
+	 */
+	public String getPdfPath() {
+		return pdfPath;
+	}
+
+	/**
+	 * @param pdfPath the pdfPath to set
+	 */
+	public void setPdfPath(String pdfPath) {
+		this.pdfPath = pdfPath;
 	}
 }

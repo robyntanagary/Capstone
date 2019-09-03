@@ -1,4 +1,7 @@
-
+/**
+ * Class StudyProgram models study programs
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class StudyProgram {
 	private String qualificationLevel;
 	private String academicQualification;
@@ -13,11 +16,18 @@ public class StudyProgram {
 	private boolean requireSupervisors;
 	private boolean requireStartDate;
 	
+	/**
+	 * No parameter constructor, creates a basic study program object.
+	 */
 	public StudyProgram()
 	{
 		this("");
 	}
 	
+	/**
+	 * Creates a study program object from the name of the study program.
+	 * @param studyProgramName the name of the study program.
+	 */
 	public StudyProgram(String studyProgramName)
 	{
 		academicQualification = studyProgramName.trim();
@@ -190,6 +200,21 @@ public class StudyProgram {
 		
 	}
 	
+	/**
+	 * Creates a study program object using the supplied fields.
+	 * @param qualificationLevel The qualification level of the study program.
+	 * @param academicQualification The qualification of the study program.
+	 * @param specialisationOrMajor The specialization of the study program.
+	 * @param requireTranscript Whether or not the study program requires a transcript.
+	 * @param requireCV Whether or not the study program requires a CV.
+	 * @param requireResearchOutline Whether or not the study program requires a research outline.
+	 * @param requireRefereesNames Whether or not the study program requires referee names.
+	 * @param requireMotivation Whether or not the study program requires a motivation.
+	 * @param requireFundingStatement Whether or not the study program requires a funding statement.
+	 * @param requireResearchSummary Whether or not the study program requires a research summary.
+	 * @param requireSupervisors Whether or not the study program requires supervisors.
+	 * @param requireStartDate Whether or not the study program requires a start date.
+	 */
 	public StudyProgram(String qualificationLevel, String academicQualification, String specialisationOrMajor, boolean requireTranscript, boolean requireCV, boolean requireResearchOutline, boolean requireRefereesNames, boolean requireMotivation, boolean requireFundingStatement, boolean requireResearchSummary, boolean requireSupervisors, boolean requireStartDate)
 	{
 		this.qualificationLevel = qualificationLevel;

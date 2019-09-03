@@ -1,3 +1,8 @@
+/**
+ * Class UserController manages applicants and academics as well as the sign-in/sign-up
+ * process involved.
+ * @author  FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class UserController {
 	
 	private Applicant applicant;
@@ -5,14 +10,20 @@ public class UserController {
 	private DataReaderWriter dataAccess;
 	
 	/**
-	 * Method creates a controller object responsible for managing applicants and academics.
+	 * Method creates a UserController object.
 	 */
 	public UserController(DataReaderWriter data)
 	{
-		//this();
 		dataAccess = data;
 	}
 	
+	/**
+	 * Checks if the given parameters specify an applicant that currently exists in the system.
+	 * @param applicantNumber The number of the applicant.
+	 * @param password The password of the applicant.
+	 * @param email The email of the applicant.
+	 * @return Whether or not the given parameters specify an applicant that currently exists in the system.
+	 */
 	public boolean isApplicant(String applicantNumber, String password, String email)
 	{
 		if(dataAccess.getApplicant(applicantNumber) == null)
@@ -23,9 +34,9 @@ public class UserController {
 	}
 	
 	/**
-	 * Method returns applicant object having the corresponding applicant number.
-	 * @param applicantNumber Specifies the applicant to be return.
-	 * @return Applicant having the specified applicant number.
+	 * Method returns an applicant object which corresponds to the given applicant number.
+	 * @param applicantNumber The number of the applicant.
+	 * @return The applicant object which corresponds to the given applicant number.
 	 */
 	public Applicant getApplicant(String applicantNumber)
 	{
@@ -33,7 +44,7 @@ public class UserController {
 	}
 	
 	/**
-	 * Method makes the provided applicant the applicant of focus.
+	 * Sets the provided applicant as the applicant of focus.
 	 * @param applicant Specified applicant to focus on.
 	 */
 	public void setApplicantOfFocus(Applicant applicant)
@@ -41,6 +52,13 @@ public class UserController {
 		this.applicant = applicant;
 	}
 	
+	/**
+	 * Checks if the given parameters specify an academic that currently exists in the system.
+	 * @param staffNumber The number of the academic.
+	 * @param password The password of the academic.
+	 * @param email The email of the academic.
+	 * @return Whether or not the given parameters specify an academic that currently exists in the system.
+	 */
 	public boolean isFOacademic(String staffNumber, String password, String email)
 	{
 		FOacademic academic = dataAccess.getAcademic(staffNumber);
@@ -49,39 +67,47 @@ public class UserController {
 		{
 			return false;
 		}
-		
 		if (academic.getPassword().equals(password) && academic.getEmail().equals(email))
 		{
 			return true;
 		}
-		
 		return false; 
 	}
 	
+	/**
+	 * Method returns an academic object which corresponds to the given staff number.
+	 * @param staffNumber The number of the academic.
+	 * @return The academic object which corresponds to the given staff number.
+	 */
 	public FOacademic getFOacademic(String staffNumber)
 	{
 		FOacademic academic = dataAccess.getAcademic(staffNumber);
-		
 		return academic;
 	}
 	
 	/**
-	 * Sets the logged-in academic as the academic who processed the application whose statuses he / she changes during this session.
-	 * @param academic Specified academic processing applications by changing their statuses. 
+	 * Sets the given academic as the academic who processed the applications whose statuses 
+	 * he/she changed during this session.
+	 * @param academic Specified academic who is processing applications. 
 	 */
 	public void setFOAcademicEvaluating(FOacademic academic)
 	{
 		this.academic = academic; 
 	}
 	
+	/**
+	 * Creates and returns a new applicant object using the supplied fields.
+	 * @param applicantNumber The number of the new applicant.
+	 * @param email The email of the new applicant.
+	 * @param password The password of the new applicant.
+	 * @param confirmPassword The confirmed password of the new applicant.
+	 * @return The new applicant object.
+	 */
 	public Applicant registerNewApplicant(String applicantNumber, String email, String password, String confirmPassword)
 	{
 		if (password.equals(confirmPassword))
 		{
 			applicant = new Applicant(applicantNumber, email, password, confirmPassword);
-			//Application theirApplication = new Application();
-			//dataAccess.getApplicantsAndTheirApplications().add(new ApplicantApplicationReference(applicant, theirApplication));
-			//with DB, insert new applicant
 			return applicant;
 		}
 		return null;

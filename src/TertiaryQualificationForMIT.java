@@ -1,4 +1,7 @@
-
+/**
+ * Class TertiaryQualificationForMIT models tertiary qualifications specific to MIT applications.
+ * @author TertiaryQualificationForMIT
+ */
 public class TertiaryQualificationForMIT extends TertiaryQualification {
 	private int priorITExperience;
 	private boolean presenceProjectThesis;
@@ -7,7 +10,7 @@ public class TertiaryQualificationForMIT extends TertiaryQualification {
 	private UndergraduateMathematics[] undergradMaths;
 	
 	/**
-	 * No parameter constructor.
+	 * No parameter constructor, creates a basic tertiary qualifcation for MIT object.
 	 */
 	public TertiaryQualificationForMIT()
 	{
@@ -16,6 +19,14 @@ public class TertiaryQualificationForMIT extends TertiaryQualification {
 		this.descriptionProjectThesis = "";
 	}
 	 
+	/**
+	 * Creates a tertiary qualification for MIT object using the supplied fields.
+	 * @param degree The degree of the tertiary qualification.
+	 * @param university The university that awarded the tertiary qualification.
+	 * @param country The country in which the tertiary qualification was awarded.
+	 * @param duration The minimum duration of the tertiary qualification.
+	 * @param NQF The NQF equivalent of the of the tertiary qualification.
+	 */
 	public TertiaryQualificationForMIT(String degree, String university, String country, int duration, String NQF)
 	{
 		super(degree, university, country, duration, NQF);
@@ -23,6 +34,19 @@ public class TertiaryQualificationForMIT extends TertiaryQualification {
 		this.descriptionProjectThesis = "";
 	}
 	
+	/**
+	 * Creates a tertiary qualification for MIT object using the supplied fields.
+	 * @param degree The degree of the tertiary qualification.
+	 * @param university The university that awarded the tertiary qualification.
+	 * @param country The country in which the tertiary qualification was awarded.
+	 * @param duration The minimum duration of the tertiary qualification.
+	 * @param NQF The NQF equivalent of the of the tertiary qualification.
+	 * @param itExperience The number of years of IT experience.
+	 * @param hasThesis Whether or not the tertiary qualification has a thesis.
+	 * @param thesis The thesis of the tertiary qualification.
+	 * @param HighestLevel The highest level of undergraduate math achieved.
+	 * @param undergradMaths Array containing the undergraduates math details.
+	 */
 	public TertiaryQualificationForMIT(String degree, String university, String country, int duration, String NQF, int itExperience, boolean hasThesis, String thesis, int HighestLevel, UndergraduateMathematics[] undergradMaths)
 	{
 		super(degree, university, country, duration, NQF);

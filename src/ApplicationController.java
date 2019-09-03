@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -10,17 +9,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Scanner;
-
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.swing.JFrame;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -31,7 +26,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 /**
- * Class responsible for managing application
+ * Class responsible for managing applications.
  * @author FYTTAN001, LXXWEN005, MCKROB018
  */
 public class ApplicationController {
@@ -50,7 +45,7 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Method creates a controller object responsible for managing applications, while enabling accesses to data
+	 * Method creates a controller object responsible for managing applications, while enabling database access.
 	 * @param data Specified data to be used by the controller.
 	 */
 	public ApplicationController(DataReaderWriter data)
@@ -82,7 +77,7 @@ public class ApplicationController {
 	/**
 	 * Method checks if the applicant has already an application in the system.
 	 * @param applicantNumber Specified applicant number of the applicant of focus.
-	 * @return whether the applicant does not yet have an application in the system.
+	 * @return Whether the applicant does not yet have an application in the system.
 	 */
 	public boolean noExistingApplication(String applicantNumber)
 	{
@@ -92,21 +87,20 @@ public class ApplicationController {
 	/**
 	 * Creates a new application for the applicant of focus.
 	 * @param applicantNumber Applicant number of the applicant of focus.
-	 * @return an application for the applicant with the Created status.
+	 * @return New application for the applicant with the "Created" status.
 	 */
 	public Application createNewApplication(String applicantNumber)
 	{
 		application = new Application(applicantNumber);
 		int applicationNumber = dataAccess.getMaxApplicationNumber() + 1;
 		application.setApplicationNumber(String.valueOf(applicationNumber));
-		//dataAccess.setApplicationOfApplicant(applicantNumber, application);
 		return application;
 	}
 	
 	/**
 	 * Submits the specified application.
 	 * @param anApplication Specified application to submit.
-	 * @return whether application have successfully been submitted
+	 * @return Whether application was successfully submitted or not.
 	 */
 	public boolean submitApplication(Application anApplication)
 	{
@@ -118,19 +112,19 @@ public class ApplicationController {
 	/**
 	 * Updates data with permanent application changes.
 	 * @param anApplication Specified application that will result in permanent changes to the data.
-	 * @return whether the insert or update have been successful.
+	 * @return Whether the insert or update was successful or not.
 	 */
 	public boolean insertOrUpdateApplication(Application anApplication)
 	{
-		//for prototype, only update
 		dataAccess.updateApplicationRecord((dataAccess.getApplicantApplicationRefByApplication(anApplication.getApplicationNumber())));
 		return true;
 	}
 	
 	/**
-	 * Uploads single pdf of documents that applicant provides.
-	 * @param pdfName Specified name of the the pdf file.
-	 * @return whether the uploading was successful.
+	 * Uploads single PDF of details that applicant provides.
+	 * @param applicationNumber The application number of the application for which the PDF is being uploaded.
+	 * @param pdfName Specified name of the the pdf file to be uploaded.
+	 * @return Whether the PDF was uploaded successfully or not.
 	 */
 	public boolean uploadPDF(String applicationNumber, String pdfName)
 	{
@@ -145,7 +139,6 @@ public class ApplicationController {
 		if (file!=null) {
 			FileExtensionFilter fef = new FileExtensionFilter("pdf");
 			if (!fef.accept(file)) {
-				System.out.println("Invalid file location chosen.");
 				return false;
 			}
 			return dataAccess.writePDFtoDB(file, applicationNumber);
@@ -154,7 +147,7 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Method adds uploaded pdf file to file list so that it can be uploaded upon request.
+	 * Method adds chosen pdf file to file list so that it can be uploaded upon request.
 	 * @param file Specified file to be uploaded.
 	 */
 	public void chosenPDF(File file)
@@ -164,15 +157,14 @@ public class ApplicationController {
 	
 	/**
 	 * Allows academic to download single PDF of required documentation. Makes call to DataReaderWriter to fulfill request.
-	 * @param pdfName Specified name of the PDF file
-	 * @param fileToSave Specified file to save.
+	 * @param applicantNumber Number of applicant whose PDF will be downloaded.
+	 * @param dest Destination to which the PDF should be saved.
 	 * @return Whether the file was successfully downloaded or not.
 	 */
 	public boolean downloadPDF(String applicationNumber, File dest)
 	{
 		FileExtensionFilter fef = new FileExtensionFilter("pdf");
 		if (!fef.accept(dest)) {
-			System.out.println("Invalid file location chosen.");
 			return false;
 		}
 		return dataAccess.readPDFfromDB(dest, applicationNumber);
@@ -181,7 +173,7 @@ public class ApplicationController {
 	/**
 	 * Checks whether application is still in editable state.
 	 * @param applicationNumber Specified application for checking if still in editable state
-	 * @return whether application is still in an editable state.
+	 * @return Whether application is still in an editable state.
 	 */
 	public boolean applicationEditable(String applicationNumber)
 	{
@@ -191,9 +183,9 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Method fetches details of study programme that has been specified by its name.
-	 * @param studyProgramName Specified name of the study programme to fetch.
-	 * @return the study programme with the specified name.
+	 * Method fetches details of study program that has been specified by its name.
+	 * @param studyProgramName Specified name of the study program to fetch.
+	 * @return The study program with the specified name.
 	 */
 	public StudyProgram getStudyProgram(String studyProgramName)
 	{
@@ -203,7 +195,7 @@ public class ApplicationController {
 	/**
 	 * Checks if application is still in viewable state.
 	 * @param applicationNumber Specified application to check for viewable state.
-	 * @return whether the application is still in a viewable state.
+	 * @return Whether the application is still in a viewable state.
 	 */
 	public boolean applicantionViewable(String applicationNumber)
 	{
@@ -215,15 +207,14 @@ public class ApplicationController {
 	/**
 	 * Creates a PDF of applicant/application details and saves it to the specified location.
 	 * @param applicantNumber Applicant to generate details for.
-	 * @param applicationNumber Specified application
-	 * @param fileToSave Specified file, i.e. the PDF file
-	 * @return whether the request failed or succeeded
+	 * @param applicationNumber Specified application to generate details for.
+	 * @param fileToSave Specified file, i.e. the PDF file.
+	 * @return Whether the request failed or succeeded.
 	 */
 	public boolean requestPDFofApplicantDetails(String applicantNumber, String applicationNumber, File fileToSave)
 	{
 		FileExtensionFilter fef = new FileExtensionFilter("pdf");
 		if (!fef.accept(fileToSave)) {
-			System.out.println("Invalid file location chosen.");
 			return false;
 		}
 		Applicant applicant = dataAccess.getApplicantApplicationRefByApplicant(applicantNumber).getApplicantRef();
@@ -327,9 +318,9 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Populates the table with application information
-	 * @param model Specified table model that needs to be populated
-	 * @return the populated table model
+	 * Populates the table with application information.
+	 * @param model Specified table model that needs to be populated.
+	 * @return The populated table model.
 	 */
 	public DefaultTableModel populateApplicationsTable(DefaultTableModel model, ArrayList<ApplicantApplicationReference> applicationRefererences)
 	{
@@ -362,8 +353,8 @@ public class ApplicationController {
 	}
 	
 	/**
-	 * Method adds uploaded csv file to file list so that it can be uploaded upon request.
-	 * @param file Specified file to be uploaded.
+	 * Method adds chosen csv file to file list so that it can be processed upon request.
+	 * @param file Specified file to be processed.
 	 */
 	public void chosenCSV(File file)
 	{
@@ -377,7 +368,6 @@ public class ApplicationController {
 	 */
 	public boolean notifyApplicants(File csvfile)
 	{
-		System.out.println(csvfile.getName());
 		Scanner csvApplicantsList = null;
 		try
 		{
@@ -391,14 +381,14 @@ public class ApplicationController {
 				String firstName = applicantRow[6]; //extract first name
 				String lastName = applicantRow[5]; //extract last name
 				String applicantNumber = applicantRow[1]; //extract applicant number
-				String email = applicantNumber + "@myUCT.ac.za"; //E-mail? 
+				String email = applicantNumber + "@myUCT.ac.za"; //E-mail 
 				return notifyApplicant(firstName,lastName, applicantNumber, email); //notify potential applicant
 			}
 		}
 		catch(IOException e)
 		{
-					e.printStackTrace();
-					return false;
+			e.printStackTrace();
+			return false;
 		}
 		finally
 		{
@@ -426,7 +416,6 @@ public class ApplicationController {
 		
 		else if(!studyProgram.equals("%"))
 		{
-			System.out.println("hey bro! :D :D");
 			return dataAccess.filterStudyProgram(studyProgram, applicationStatus);
 		}
 		
@@ -440,16 +429,15 @@ public class ApplicationController {
 	 * Generates CSV file of the list of application details
 	 * @param filteredApplicantList Specified list from which csv should be genereated
 	 * @param fileToSave File specified by JFileChooser save dailog. 
+	 * @return Whether the action was successful or not
 	 */
-	public void getFilteredApplicantListAsCSV(ArrayList<ApplicantApplicationReference> filteredApplicantList, File fileToSave)
+	public boolean getFilteredApplicantListAsCSV(ArrayList<ApplicantApplicationReference> filteredApplicantList, File fileToSave)
 	{
-		System.out.println(fileToSave + " hey bruv");
-		//method will definitely need debugging as I am not sure what JFileChooser save dialog returns 
 		String fullFilePathOfWhereToSaveFile = fileToSave.toString();
 		PrintWriter writer = null;
 		
 		filteredApplicantList.trimToSize();
-		if (filteredApplicantList.size() == 0) {return;}
+		if (filteredApplicantList.size() == 0) {return true;}
 		
 		try
 		{
@@ -536,15 +524,13 @@ public class ApplicationController {
 				temp += "," + filteredApplicantList.get(i).getApplicationRef().getApplicationStatus().getStatusDescripition();
 				temp += "," + filteredApplicantList.get(i).getApplicationRef().getApplicationStatus().getReasonDescription();
 				
-				System.out.println(temp);
-				
 				writer.println(temp);
 			}
 			
 		}
 		catch(IOException e)
 		{
-			System.out.println("error");
+			return false;
 		}
 		finally
 		{
@@ -552,6 +538,55 @@ public class ApplicationController {
 			{
 				writer.close();
 			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Sends an email to an applicant to confirm the email address.
+	 * @param firstName First name of the potential applicant.
+	 * @param lastName Last name of the potential applicant.
+	 * @param applicantNumber Applicant number of the potential applicant.
+	 * @param email Email address of the applicant.
+	 * @return Whether the email was successfully sent or not.
+	 */
+	public boolean confirmEmail(String firstName, String lastName, String applicantNumber, String email)
+	{
+		//Get properties object
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+		
+		//get Session
+		Session session = Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication("postgradtool@gmail.com","capstone2019");
+					}
+	          	});
+  		//compose message
+		try {
+			MimeMessage message = new MimeMessage(session);
+			message.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
+			message.setSubject("Email Confirmation - UCT School of IT");
+			message.setText("Dear " + firstName + " " + lastName + "\n"
+					+ "Thank you very much for signing up on the University of Cape Town School of IT "
+					+ "internal applications system.\n"
+					+ "Please click the link below to confirm your email address.\n"
+					+ "\nwww.examplelink.co.za\n"
+					+ "\nKind regards\n"
+					+ "University of Cape Town School of IT\n"); 
+			//send message
+			Transport.send(message);
+			System.out.println(firstName + " " + lastName + " (" + applicantNumber + ") has been sent an email confirmation"
+					+ "link at this address: " + email);
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 	
@@ -586,15 +621,15 @@ public class ApplicationController {
 			MimeMessage message = new MimeMessage(session);
 			message.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
 			message.setSubject("Notification from UCT School of IT");
-			message.setText("Dear " + firstName + " " + lastName + "\nThank you very much "
-					+ "for applying online for a Postgraduate Degree at the University of Cape Town.\n"
+			message.setText("Dear " + firstName + " " + lastName + "\n"
+					+ "Thank you very much for applying online for a Postgraduate Degree at the University of Cape Town.\n"
 					+ "Please follow the link below to complete your application by applying directly to the School of IT.\n"
 					+ "\nwww.examplelink.co.za\n"
 					+ "\nKind regards\n"
 					+ "University of Cape Town School of IT\n"); 
 			//send message
 			Transport.send(message);
-			System.out.println(firstName + " " + lastName + " (" + applicantNumber + ") has been e-mailed at this address: " + email);
+			System.out.println(firstName + " " + lastName + " (" + applicantNumber + ") has been emailed at this address: " + email);
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -614,14 +649,5 @@ public class ApplicationController {
 			if (files.get(i).getName().equals(fileName)) {return files.get(i);}
 		}
 		return null;
-	}
-	
-
-	public void checkEligibility(Application application, JFrame frame)
-	{
-		//TODO
-		//needs DB functionality: country & prev degree determining eligibility for applied degree
-		//display message if possible
-		//adjust status
 	}
 }

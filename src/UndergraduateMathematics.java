@@ -1,8 +1,16 @@
-
+/**
+ * Class UndergraduateMathematics models the undergraduate mathematics details of an applicant.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class UndergraduateMathematics {
 	private int level;
 	private double average;
 	
+	/**
+	 * Standard constructor, creates an UndergraduateMathematics object from the specified fields.
+	 * @param level
+	 * @param average
+	 */
 	public UndergraduateMathematics(int level, double average)
 	{
 		this.level = level;

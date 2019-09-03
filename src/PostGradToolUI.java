@@ -3,9 +3,7 @@ import javax.swing.JFrame;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
 import javax.swing.JPanel;
-//import java.awt.BorderLayout;
 import java.awt.Cursor;
-
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -15,15 +13,11 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
-//import javax.swing.JMenu;
-//import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-//import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-//import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTable;
@@ -34,18 +28,13 @@ import java.awt.event.FocusEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-//import javax.swing.filechooser.FileFilter;
 import javax.swing.event.ChangeEvent;
 import java.io.File;
 import java.io.FileReader;
-//import java.io.FileWriter;
-//import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.IOException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class PostGradToolUI {
 
@@ -161,7 +150,6 @@ public class PostGradToolUI {
 	private JButton btnNext;
 	private String[] appStatuses;
 	private String[] appReasons;
-	//private JButton btnSaveUpdate;
 	private JButton btnSubmitReturn;
 	private JButton btnChangeStatus;
 	private JButton btnPdfOfApplication;
@@ -182,8 +170,6 @@ public class PostGradToolUI {
 	private JComboBox<String> cbxApplicationStatus;
 	private JLabel lblNameOfCSVFile;
 	private Applicant applicant;
-	//private InternationalApplicant intApplicant;
-	//private SouthAfricanApplicant rsaApplicant;
 	private FOacademic academic;
 	private Application application;
 	private JCheckBox chkbxFundingStatement;
@@ -194,8 +180,6 @@ public class PostGradToolUI {
 	private UndergraduateMathematics[] undMaths;
 	private DataReaderWriter data;
 	public boolean bNewApplicationStarted;
-	//private JOptionPane newAppStatusAndReason;
-	//private Object[] options;
 	private JButton btnMoreApplications;
 	private JButton btnPrevApplications;
 	private int startIndex; //record in table
@@ -227,7 +211,7 @@ public class PostGradToolUI {
 	}
 
 	/**
-	 * Prepare application by initiating controllers and setting up form and pannels.
+	 * Prepare application by initiating controllers and setting up form and panels.
 	 */
 	public PostGradToolUI() {
 		bNewApplicationStarted = false;
@@ -243,7 +227,7 @@ public class PostGradToolUI {
 	}
 
 	/**
-	 * general infoBox to act as pop-up messages
+	 * General infoBox to act as pop-up messages
 	 */
 	public static void infoBox(String infoMessage, String titleBar)
     {
@@ -361,27 +345,6 @@ public class PostGradToolUI {
 						
 						populateApplicationFields(applicant, application);
 						showApplicantEntryInterface();
-						
-						//For application completion in prototype
-						/*
-						if (appController.noExistingApplication(number)) //first-time application
-						{
-							System.out.println("First-time applicant");
-							System.out.println("About to create an applicant");
-							bNewApplicationStarted = true;
-							application = appController.createNewApplication(number);
-							btnSubmitReturn.setText("Submit");
-						}
-						else
-						{
-							System.out.println("Second-time applicant");
-							bNewApplicationStarted = false;
-							application = appController.getApplicationOfApplicant(number);
-							appController.setApplicationOfFocus(application);
-							btnSubmitReturn.setText("Return");
-							btnSubmitReturn.setText("Submit");
-						}
-						*/
 					}
 					else if (userController.isFOacademic(number, password, email)) //in the case of an academic
 					{
@@ -427,26 +390,19 @@ public class PostGradToolUI {
 					
 					else if(applicant != null)
 					{		
-						System.out.println("Email Authorisation.");
+						appController.confirmEmail(applicant.getFirstName(), applicant.getSurname(), applicant.getApplicantNumber(), applicant.getApplicantNumber() + "@myUCT.ac.za");
 						bNewApplicationStarted = true;
 						application = appController.createNewApplication(number);
-						
-						//data.addNewApplicationRecord(new ApplicantApplicationReference(applicant, application));
 						
 						populateApplicationFields(applicant, application);
 						bEdit = true;
 						showPersonalDetails();
-						
-						//lblConfirmPassword.setVisible(false);
-						//pswConfirmPassword.setVisible(false);
-						//showSignInInterface();
 					}
 					else
 					{
 						pswPassword.setText("");
 						pswConfirmPassword.setText("");
 						infoBox("Your password was repeated incorrectly.", "Error");
-						//showSignInInterface();
 					}
 		
 				}
@@ -625,8 +581,7 @@ public class PostGradToolUI {
 		    			lblRace.setVisible(false);
 		    			cbxRace.setVisible(false);
 		    			cbxRace.setSelectedIndex(-1);
-		    		} else System.out.println("Error, control reached A");
-		    		
+		    		} 		    		
 		    	} 
 		    	else 
 		    	{
@@ -682,7 +637,7 @@ public class PostGradToolUI {
 		    				} else { //if any other country selected
 		    					applicant.setCitizenshipCountry(cbxCountry.getSelectedItem().toString().trim());
 		    				}
-		    			} else System.out.println("Error, control reached B");
+		    			}
 		    		}
 		    		else //if no citizenship selected
 		    		{
@@ -827,8 +782,6 @@ public class PostGradToolUI {
 		    			txtDegCountryOther.setVisible(sDegCountry.equals("Other"));
 		    			lblPreviousDegree.setVisible(sDegCountry.equals("Other"));
 		    		}
-		    		//txtDegCountryOther.setVisible(sDegCountry.equals("Other"));
-		    		//lblPreviousDegree.setVisible(sDegCountry.equals("Other"));
 		    	}
 		    }
 		});
@@ -1173,35 +1126,30 @@ public class PostGradToolUI {
 		pnlAdditionalDocumentation.add(txtrTheFollowingDocuments);
 		
 		chckbxCertifiedTranscript = new JCheckBox("Certified Transcript");
-		//chckbxCertifiedTranscript.setSelected(application.getStudyProgram().requireTranscript());
 		chckbxCertifiedTranscript.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxCertifiedTranscript.setEnabled(false);
 		chckbxCertifiedTranscript.setBounds(10, 45, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxCertifiedTranscript);
 		
 		chckbxCurriculumVitaecv = new JCheckBox("Curriculum Vitae (CV)");
-		//chckbxCurriculumVitaecv.setSelected(application.getStudyProgram().requireCV());
 		chckbxCurriculumVitaecv.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxCurriculumVitaecv.setEnabled(false);
 		chckbxCurriculumVitaecv.setBounds(232, 45, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxCurriculumVitaecv);
 		
 		chckbxResearchStatement = new JCheckBox("Research Statement");
-		//chckbxResearchStatement.setSelected(application.getStudyProgram().requireResearchStatement());
 		chckbxResearchStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxResearchStatement.setEnabled(false);
 		chckbxResearchStatement.setBounds(10, 71, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxResearchStatement);
 		
 		chckbxRefereesNames = new JCheckBox("Referees' Names");
-		//chckbxRefereesNames.setSelected(application.getStudyProgram().requireRefereesNames());
 		chckbxRefereesNames.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxRefereesNames.setEnabled(false);
 		chckbxRefereesNames.setBounds(232, 69, 141, 23);
 		pnlAdditionalDocumentation.add(chckbxRefereesNames);
 		
 		chckbxMotivation = new JCheckBox("Motivation");
-		//chckbxMotivation.setSelected(application.getStudyProgram().requireMotivation());
 		chckbxMotivation.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chckbxMotivation.setEnabled(false);
 		chckbxMotivation.setBounds(232, 95, 141, 23);
@@ -1226,11 +1174,10 @@ public class PostGradToolUI {
 					appController.chosenPDF(file);//prepare file for upload
 					application.setPdfName(file.getName());
 					application.setPdfPath(file.toString());
-					System.out.println("upload pdf!");
 					btnUploadFile.setVisible(true);
 				}
-				}
-			});
+			}
+		});
 		
 		btnChoosePDF.setFont(new Font("Calibri", Font.PLAIN, 12));
 		btnChoosePDF.setBounds(202, 194, 119, 23);
@@ -1242,11 +1189,11 @@ public class PostGradToolUI {
 			public void actionPerformed(ActionEvent e) {
 				if (!appController.uploadPDF(application.getApplicationNumber(), lblPDFName.getText()))
 				{
-					//show error
+					infoBox("An error occurred while uploading the file. Please ensure that the file you supplied is a PDF file. ", "Error");
 				}
 				btnUploadFile.setVisible(false);
 			}
-			});
+		});
 		btnUploadFile.setFont(new Font("Calibri", Font.PLAIN, 12));
 		btnUploadFile.setBounds(202, 225, 119, 23);
 		pnlAdditionalDocumentation.add(btnUploadFile);
@@ -1270,7 +1217,10 @@ public class PostGradToolUI {
 				    {
 				    	lblPleaseWaitPDFDownloaded.setVisible(true);
 				    	frmSchoolOfIt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				    	appController.downloadPDF(application.getApplicationNumber(), fileToSave);
+				    	if (!appController.downloadPDF(application.getApplicationNumber(), fileToSave)) {
+				    		infoBox("An error occurred while downloading the file. Please ensure that the file name you supplied included "
+				    				+ "the \".pdf\" extension. Otherwise, the requested PDF may not be contained in the database.", "Error");
+				    	}
 				    }
 				    finally
 				    {
@@ -1293,7 +1243,6 @@ public class PostGradToolUI {
 		
 		
 		chkbxFundingStatement = new JCheckBox("Funding Statement");
-		//chkbxFundingStatement.setSelected(application.getStudyProgram().requireFundingStatement());
 		chkbxFundingStatement.setFont(new Font("Calibri", Font.PLAIN, 12));
 		chkbxFundingStatement.setEnabled(false);
 		chkbxFundingStatement.setBounds(10, 95, 141, 23);
@@ -1686,181 +1635,120 @@ public class PostGradToolUI {
 		btnNext.setBounds(136, 260, 89, 23);
 		pnlApplicationUI.add(btnNext);
 		
-				btnSubmitReturn = new JButton("Submit");
-				btnSubmitReturn.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if (bApplicantSignedIn || bNewApplicationStarted) //new application -> submit
-						{
-							data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
-						
-							bNewApplicationStarted = false;
-							showApplicantEntryInterface();
-						}
-						else
-						{
-							showAcademicEntryInterface();
-						}
-					}
-				});
-				btnSubmitReturn.setFont(new Font("Calibri", Font.PLAIN, 12));
-				btnSubmitReturn.setBounds(136, 294, 89, 23);
-				pnlApplicationUI.add(btnSubmitReturn);
+		btnSubmitReturn = new JButton("Submit");
+		btnSubmitReturn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (bApplicantSignedIn || bNewApplicationStarted) //new application -> submit
+				{
+					data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
 				
-				btnChangeStatus = new JButton("Change Status");
-				btnChangeStatus.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						String appStatus = (String) JOptionPane.showInputDialog(frmSchoolOfIt.getContentPane(), "Choose new application status", "Application Status", JOptionPane.QUESTION_MESSAGE,  null, appStatuses, appStatuses[0]);
-						String reason = (String) JOptionPane.showInputDialog(frmSchoolOfIt.getContentPane(), "Reason for application change:", "Reason for New Status", JOptionPane.QUESTION_MESSAGE,  null, appReasons, appReasons[0]);
-						
-						application.setApplicationStatus(new ApplicationStatus(appStatus.trim(), reason.trim()));
-						
-//						if (applicant.getCitizenship().equals(""))
-//						{
-							data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
-							populateApplicationFields(applicant, application);
-//						}
-//						else if (applicant.getCitizenship().equals("International"))
-//						{
-//							//insert applicant and submit application for prototype
-//							if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-//							if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-//							data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
-//							populateApplicationFields(intApplicant, application);
-//						}
-//						else
-//						{
-//							//insert applicant and submit application for prototype
-//							if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-//							if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-//							data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
-//							populateApplicationFields(rsaApplicant, application);
-//						}
-						
-						tblApplications.setModel(appController.populateApplicationsTable(model, getSubArrayList(data.getApplicantsAndTheirApplications(), startIndex, endIndex)));
-						btnMoreApplications.setVisible(true);
-						btnPrevApplications.setVisible(false);
-						//JOptionPane.showMessageDialog(frmSchoolOfIt.getContentPane(), cbxApplicationApplicationStatus, "Choose new application status", JOptionPane.QUESTION_MESSAGE);
-						//JOptionPane.showMessageDialog(frmSchoolOfIt.getContentPane(), cbxApplicationStatusReason, "Reason for application change:", JOptionPane.QUESTION_MESSAGE);
-						
-						
-						//newAppStatusAndReason.show;
-						/*
-						if (btnChangeStatus.getText().equals("Change Status"))
-						{
-							btnChangeStatus.setText("Commit Appl. Status Changes");
-							
-							cbxApplicationApplicationStatus.setSelectedItem(txtApplicationStatus.getText().toString().trim());
-							cbxApplicationApplicationStatus.setVisible(true);
-							cbxApplicationApplicationStatus.setEditable(true);
-							txtApplicationStatus.setVisible(false);
-							
-							cbxApplicationStatusReason.setSelectedItem(txtApplicationReasonStatus.getText().toString().trim());
-							cbxApplicationStatusReason.setVisible(true);
-							cbxApplicationStatusReason.setEditable(true);
-							txtStatusReason.setVisible(false);
-						}
-						else
-						{
-							btnChangeStatus.setText("Change Status");
-							
-							String status = cbxApplicationApplicationStatus.getSelectedItem().toString();
-							txtApplicationStatus.setText(status);
-							cbxApplicationApplicationStatus.setVisible(false);
-							txtApplicationStatus.setVisible(true);
-							
-							String reason = cbxApplicationStatusReason.getSelectedItem().toString();
-							txtApplicationReasonStatus.setText(reason);
-							cbxApplicationStatusReason.setVisible(false);
-							txtStatusReason.setVisible(true);
-							
-							newAppStatusAndReason.setVisible(true);
-							
-						}
-						*/
-					}
-				});
-				btnChangeStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
-				btnChangeStatus.setBounds(44, 360, 181, 23);
-				pnlApplicationUI.add(btnChangeStatus);
+					bNewApplicationStarted = false;
+					showApplicantEntryInterface();
+				}
+				else
+				{
+					showAcademicEntryInterface();
+				}
+			}
+		});
+		btnSubmitReturn.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnSubmitReturn.setBounds(136, 294, 89, 23);
+		pnlApplicationUI.add(btnSubmitReturn);
+		
+		btnChangeStatus = new JButton("Change Status");
+		btnChangeStatus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String appStatus = (String) JOptionPane.showInputDialog(frmSchoolOfIt.getContentPane(), "Choose new application status", "Application Status", JOptionPane.QUESTION_MESSAGE,  null, appStatuses, appStatuses[0]);
+				String reason = (String) JOptionPane.showInputDialog(frmSchoolOfIt.getContentPane(), "Reason for application change:", "Reason for New Status", JOptionPane.QUESTION_MESSAGE,  null, appReasons, appReasons[0]);
 				
-				btnPdfOfApplication = new JButton("PDF of Application Details");
-				btnPdfOfApplication.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						JFileChooser fileChooser = new JFileChooser(); //create JFileChooser for user to indicate location to save file.
-						fileChooser.setDialogTitle("Specify location to save PDF of Application Details");   
-						fileChooser.setFileFilter(new FileExtensionFilter(".pdf"));
-						int returnVal = fileChooser.showSaveDialog(frmSchoolOfIt); //show save dialog
-						 
-						if (returnVal == JFileChooser.APPROVE_OPTION) { //if the user has selected a location and filename
-						    File fileToSave = fileChooser.getSelectedFile(); //get information about file
-						    try
-						    {
-						    	lblPleaseWaitPDFGenerated.setVisible(true);
-								frmSchoolOfIt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-						    	appController.requestPDFofApplicantDetails(applicant.getApplicantNumber(), appController.getApplicationOfApplicant(applicant.getApplicantNumber()).getApplicationNumber(), fileToSave);
-						    }
-						    finally
-						    {
-						    	lblPleaseWaitPDFGenerated.setVisible(false);
-						    	frmSchoolOfIt.setCursor(Cursor.getDefaultCursor());
-						    }
-						}
-						
-					}
-				});
-				btnPdfOfApplication.setFont(new Font("Calibri", Font.PLAIN, 12));
-				btnPdfOfApplication.setBounds(44, 326, 181, 23);
-				pnlApplicationUI.add(btnPdfOfApplication);
+				application.setApplicationStatus(new ApplicationStatus(appStatus.trim(), reason.trim()));
 				
-				lblPleaseWaitPDFGenerated = new JLabel("Generating PDF... Please Wait");
-				lblPleaseWaitPDFGenerated.setFont(new Font("Calibri", Font.ITALIC, 12));
-				lblPleaseWaitPDFGenerated.setVisible(false);
-				lblPleaseWaitPDFGenerated.setBounds(44, 356, 298, 14);
-				pnlApplicationUI.add(lblPleaseWaitPDFGenerated);
+				data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
+				populateApplicationFields(applicant, application);
 				
+				tblApplications.setModel(appController.populateApplicationsTable(model, getSubArrayList(data.getApplicantsAndTheirApplications(), startIndex, endIndex)));
+				btnMoreApplications.setVisible(true);
+				btnPrevApplications.setVisible(false);
+
+			}
+		});
+		btnChangeStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnChangeStatus.setBounds(44, 360, 181, 23);
+		pnlApplicationUI.add(btnChangeStatus);
+		
+		btnPdfOfApplication = new JButton("PDF of Application Details");
+		btnPdfOfApplication.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser(); //create JFileChooser for user to indicate location to save file.
+				fileChooser.setDialogTitle("Specify location to save PDF of Application Details");   
+				fileChooser.setFileFilter(new FileExtensionFilter(".pdf"));
+				int returnVal = fileChooser.showSaveDialog(frmSchoolOfIt); //show save dialog
+				 
+				if (returnVal == JFileChooser.APPROVE_OPTION) { //if the user has selected a location and filename
+				    File fileToSave = fileChooser.getSelectedFile(); //get information about file
+				    try
+				    {
+				    	lblPleaseWaitPDFGenerated.setVisible(true);
+						frmSchoolOfIt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				    	if (!appController.requestPDFofApplicantDetails(applicant.getApplicantNumber(), appController.getApplicationOfApplicant(applicant.getApplicantNumber()).getApplicationNumber(), fileToSave)) {
+				    		infoBox("An error occurred while generating the file. Please ensure that the file name you supplied included "
+				    				+ "the \".pdf\" extension.", "Error");
+				    	}
+				    }
+				    finally
+				    {
+				    	lblPleaseWaitPDFGenerated.setVisible(false);
+				    	frmSchoolOfIt.setCursor(Cursor.getDefaultCursor());
+				    }
+				}
 				
-				lblApplicationNumber = new JLabel("Application Number:");
-				lblApplicationNumber.setFont(new Font("Calibri", Font.PLAIN, 16));
-				lblApplicationNumber.setBounds(32, 6, 199, 23);
-				pnlApplicationUI.add(lblApplicationNumber);
+			}
+		});
+		btnPdfOfApplication.setFont(new Font("Calibri", Font.PLAIN, 12));
+		btnPdfOfApplication.setBounds(44, 326, 181, 23);
+		pnlApplicationUI.add(btnPdfOfApplication);
+		
+		lblPleaseWaitPDFGenerated = new JLabel("Generating PDF... Please Wait");
+		lblPleaseWaitPDFGenerated.setFont(new Font("Calibri", Font.ITALIC, 12));
+		lblPleaseWaitPDFGenerated.setVisible(false);
+		lblPleaseWaitPDFGenerated.setBounds(44, 356, 298, 14);
+		pnlApplicationUI.add(lblPleaseWaitPDFGenerated);
+		
+		lblApplicationNumber = new JLabel("Application Number:");
+		lblApplicationNumber.setFont(new Font("Calibri", Font.PLAIN, 16));
+		lblApplicationNumber.setBounds(32, 6, 199, 23);
+		pnlApplicationUI.add(lblApplicationNumber);
+		
+		lblApplicationApplicationStatus = new JLabel("Application Status:");
+		lblApplicationApplicationStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblApplicationApplicationStatus.setBounds(32, 40, 158, 14);
+		pnlApplicationUI.add(lblApplicationApplicationStatus);
+		
+		lblApplicationReasonForStatus = new JLabel("Reason for Status:");
+		lblApplicationReasonForStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
+		lblApplicationReasonForStatus.setBounds(32, 59, 158, 14);
+		pnlApplicationUI.add(lblApplicationReasonForStatus);
+		
+		txtApplicationNumber = new JTextField();
+		txtApplicationNumber.setEditable(false);
+		txtApplicationNumber.setFont(new Font("Calibri", Font.PLAIN, 16));
+		txtApplicationNumber.setBounds(232, 5, 273, 20);
+		pnlApplicationUI.add(txtApplicationNumber);
+		txtApplicationNumber.setColumns(10);
+		
+		txtApplicationStatus = new JTextField();
+		txtApplicationStatus.setEditable(false);
+		txtApplicationStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
+		txtApplicationStatus.setColumns(10);
+		txtApplicationStatus.setBounds(232, 35, 273, 20);
+		pnlApplicationUI.add(txtApplicationStatus);
 				
-				lblApplicationApplicationStatus = new JLabel("Application Status:");
-				lblApplicationApplicationStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
-				lblApplicationApplicationStatus.setBounds(32, 40, 158, 14);
-				pnlApplicationUI.add(lblApplicationApplicationStatus);
-				
-				lblApplicationReasonForStatus = new JLabel("Reason for Status:");
-				lblApplicationReasonForStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
-				lblApplicationReasonForStatus.setBounds(32, 59, 158, 14);
-				pnlApplicationUI.add(lblApplicationReasonForStatus);
-				
-				txtApplicationNumber = new JTextField();
-				txtApplicationNumber.setEditable(false);
-				txtApplicationNumber.setFont(new Font("Calibri", Font.PLAIN, 16));
-				txtApplicationNumber.setBounds(232, 5, 273, 20);
-				pnlApplicationUI.add(txtApplicationNumber);
-				txtApplicationNumber.setColumns(10);
-				
-				txtApplicationStatus = new JTextField();
-				txtApplicationStatus.setEditable(false);
-				txtApplicationStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
-				txtApplicationStatus.setColumns(10);
-				txtApplicationStatus.setBounds(232, 35, 273, 20);
-				pnlApplicationUI.add(txtApplicationStatus);
-				
-				txtApplicationReasonStatus = new JTextField();
-				txtApplicationReasonStatus.setEditable(false);
-				txtApplicationReasonStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
-				txtApplicationReasonStatus.setColumns(10);
-				txtApplicationReasonStatus.setBounds(232, 56, 273, 20);
-				pnlApplicationUI.add(txtApplicationReasonStatus);
-		//String sDegCountry = cbxDegCountry.getSelectedItem().toString().trim();
-		//btnViewApplication.setEnabled(!tblApplications.getSelectionModel().isSelectionEmpty());
-		//options = new Object[] {};
-		//newAppStatusAndReason = new JOptionPane("Please select status followed by reason", JOptionPane.QUESTION_MESSAGE, JOptionPane.DEFAULT_OPTION, null,options, null);
-		//newAppStatusAndReason.add(cbxApplicationApplicationStatus);
-		//newAppStatusAndReason.add(cbxApplicationStatusReason);
-		//frmSchoolOfIt.getContentPane().add(newAppStatusAndReason);
+		txtApplicationReasonStatus = new JTextField();
+		txtApplicationReasonStatus.setEditable(false);
+		txtApplicationReasonStatus.setFont(new Font("Calibri", Font.PLAIN, 12));
+		txtApplicationReasonStatus.setColumns(10);
+		txtApplicationReasonStatus.setBounds(232, 56, 273, 20);
+		pnlApplicationUI.add(txtApplicationReasonStatus);
 		
 		frmSchoolOfIt.getContentPane().add(pnlApplicantEntry);
 		pnlApplicantEntry.setLayout(null);
@@ -1996,7 +1884,9 @@ public class PostGradToolUI {
 				{
 					lblPleaseWaitUntilApplicantsNotified.setVisible(true);
 					frmSchoolOfIt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-					appController.notifyApplicants(CSVforUpload);
+					if (!appController.notifyApplicants(CSVforUpload)) {
+						infoBox("An error occurred while notifying applicants.", "Error");
+					}
 				}
 				finally
 				{
@@ -2029,7 +1919,7 @@ public class PostGradToolUI {
 					if (cbxLevel.getSelectedIndex()>-1 && cbxStudyPrograms.getSelectedIndex()>-1) {
 						cbxLevel.setSelectedIndex(-1);
 						cbxStudyPrograms.setSelectedIndex(-1);
-						infoBox("You can only select either a Level or a Study Program, not both.", "Error!");
+						infoBox("You can only select either a Level or a Study Program, not both.", "Error");
 						return;
 					}
 					JFileChooser fileChooser = new JFileChooser(); //create JFileChooser for user to indicate location to save file.
@@ -2073,7 +1963,9 @@ public class PostGradToolUI {
 					    	{
 					    		appStatus = "%";
 					    	}
-					    	appController.getFilteredApplicantListAsCSV(appController.getFilteredList(sp, level, appStatus), fileToSave);
+					    	 if (!appController.getFilteredApplicantListAsCSV(appController.getFilteredList(sp, level, appStatus), fileToSave)) {
+					    		 infoBox("An error occurred while generating the CSV.", "Error");
+					    	 }
 					    }
 					finally
 					{
@@ -2205,140 +2097,48 @@ public class PostGradToolUI {
 		});	
 		pnlAcademicEntryUI.add(btnPrevApplications);
 		
-		/*
-		btnSaveUpdate = new JButton("Save / Update");
-		btnSaveUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (applicant.getCitizenship().equals(""))
-				{
-					
-					userController.insertOrUpdateApplicant(applicant);
-				}
-				else if (applicant.getCitizenship().equals("International"))
-				{
-					if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-					if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-					userController.insertOrUpdateInternationalApplicant(intApplicant);
-				}
-				else
-				{
-					if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-					if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-					userController.insertOrUpdateSouthAfricanApplicant(rsaApplicant);
-				}
-				
-				appController.insertOrUpdateApplication(application);
-			}
-		});
-		btnSaveUpdate.setFont(new Font("Calibri", Font.PLAIN, 12));
-		btnSaveUpdate.setBounds(42, 283, 89, 23);
-		pnlApplicationUI.add(btnSaveUpdate);
-		*/
-		
 		populateComboBox(cbxApplicationApplicationStatus, "ApplicationStatusesForCombo.txt");
 		cbxApplicationApplicationStatus.setFont(new Font("Calibri", Font.PLAIN, 11));
 		cbxApplicationApplicationStatus.setBounds(232, 34, 273, 22);
 		cbxApplicationApplicationStatus.setEditable(true);
-		cbxApplicationApplicationStatus.addActionListener (new ActionListener () {
-		    public void actionPerformed(ActionEvent e) {
-				/*
-		    	application.changeStatus(cbxApplicationApplicationStatus.getSelectedItem().toString().trim());
-				
-				if (applicant.getCitizenship().equals(""))
-				{
-					data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
+		populateComboBox(cbxApplicationStatusReason, "StatusReasonsForCombo.txt");
+		cbxApplicationStatusReason.setFont(new Font("Calibri", Font.PLAIN, 11));
+		cbxApplicationStatusReason.setBounds(232, 59, 273, 22);
+		cbxApplicationStatusReason.setEditable(true);
+		JScrollPane scrollBars = new JScrollPane();
+		frmSchoolOfIt.getContentPane().add(scrollBars);
+		
+		tblApplications = new JTable();
+		scrollBars.setViewportView(tblApplications);
+		scrollBars.setVisible(true);
+		scrollBars.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		 
+		tblApplications.setFont(new Font("Calibri", Font.PLAIN, 12));
+		model = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Application #", "Applicant #", "Application Status", "Previous Qualification", "Instituition of Previous Qualification", "Programme of Study"  
 				}
-				else if (applicant.getCitizenship().equals("International"))
+			); 
+		tblApplications.setModel(appController.populateApplicationsTable(model, getSubArrayList(data.getApplicantsAndTheirApplications(), startIndex, 12)));
+		tblApplications.getColumnModel().getColumn(0).setPreferredWidth(89);
+		tblApplications.getColumnModel().getColumn(3).setPreferredWidth(116);
+		tblApplications.getColumnModel().getColumn(4).setPreferredWidth(106);
+		tblApplications.getColumnModel().getColumn(5).setResizable(false);
+		tblApplications.setBounds(33, 36, 871, 220);
+		tblApplications.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (tblApplications.getSelectedRow() > 0)
 				{
-					//insert applicant and submit application for prototype
-					if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-					if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-					data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
+					applicant = userController.getApplicant(tblApplications.getValueAt(tblApplications.getSelectedRow(), 1).toString().trim());
+					userController.setApplicantOfFocus(applicant);
+					application = appController.getApplicationOfApplicant(applicant.getApplicantNumber());
+					appController.setApplicationOfFocus(application);
 				}
-				else
-				{
-					//insert applicant and submit application for prototype
-					if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-					if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-					data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
-				}
-				*/
 			}
 		});
-				populateComboBox(cbxApplicationStatusReason, "StatusReasonsForCombo.txt");
-				cbxApplicationStatusReason.setFont(new Font("Calibri", Font.PLAIN, 11));
-				cbxApplicationStatusReason.setBounds(232, 59, 273, 22);
-				cbxApplicationStatusReason.setEditable(true);
-				cbxApplicationApplicationStatus.addActionListener (new ActionListener () {
-				    public void actionPerformed(ActionEvent e) {
-				    	/*
-						application.addReasonForStatus(cbxApplicationStatusReason.getSelectedItem().toString().trim());
-						
-						if (applicant.getCitizenship().equals(""))
-						{
-							data.updateApplicationRecord(new ApplicantApplicationReference(applicant, application));
-						}
-						else if (applicant.getCitizenship().equals("International"))
-						{
-							//insert applicant and submit application for prototype
-							if (intApplicant.getResidenceAddress().equals(null)) {intApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-							if (intApplicant.getPreviousQualification().equals(null)) {intApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-							data.updateApplicationRecord(new ApplicantApplicationReference(intApplicant, application));
-						}
-						else
-						{
-							//insert applicant and submit application for prototype
-							if (rsaApplicant.getResidenceAddress().equals(null)) {rsaApplicant.setResidenceAddress(applicant.getResidenceAddress());}   
-							if (rsaApplicant.getPreviousQualification().equals(null)) {rsaApplicant.setPreviousQualification(applicant.getPreviousQualification()); }
-							data.updateApplicationRecord(new ApplicantApplicationReference(rsaApplicant, application));
-						}
-						*/
-					}
-				});
-				JScrollPane scrollBars = new JScrollPane();
-				 frmSchoolOfIt.getContentPane().add(scrollBars);
-				
-				 tblApplications = new JTable();
-				 scrollBars.setViewportView(tblApplications);
-				 scrollBars.setVisible(true);
-				 scrollBars.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-				 
-				
-				tblApplications.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						//fetch application TODO
-						
-						//check if application is viewable
-					}
-				});
-				tblApplications.setFont(new Font("Calibri", Font.PLAIN, 12));
-				model = new DefaultTableModel(
-						new Object[][] {
-						},
-						new String[] {
-							"Application #", "Applicant #", "Application Status", "Previous Qualification", "Instituition of Previous Qualification", "Programme of Study"  
-						}
-					); 
-				tblApplications.setModel(appController.populateApplicationsTable(model, getSubArrayList(data.getApplicantsAndTheirApplications(), startIndex, 12)));
-				tblApplications.getColumnModel().getColumn(0).setPreferredWidth(89);
-				tblApplications.getColumnModel().getColumn(3).setPreferredWidth(116);
-				tblApplications.getColumnModel().getColumn(4).setPreferredWidth(106);
-				tblApplications.getColumnModel().getColumn(5).setResizable(false);
-				tblApplications.setBounds(33, 36, 871, 220);
-				tblApplications.getSelectionModel().addListSelectionListener(
-						new ListSelectionListener() {
-						      public void valueChanged(ListSelectionEvent e) {
-						    	  if (tblApplications.getSelectedRow() > 0)
-						    	  {
-						    		  applicant = userController.getApplicant(tblApplications.getValueAt(tblApplications.getSelectedRow(), 1).toString().trim());
-						    		  userController.setApplicantOfFocus(applicant);
-						    		  application = appController.getApplicationOfApplicant(applicant.getApplicantNumber());
-						    		  appController.setApplicationOfFocus(application);
-						    	  }
-						      }}
-						);
-				pnlAcademicEntryUI.add(tblApplications);
+		pnlAcademicEntryUI.add(tblApplications);
 	}
 	
 	/**
@@ -2357,11 +2157,13 @@ public class PostGradToolUI {
 	
 	/**
 	 * Method populates application field values with the current information of the applicant and their application
-	 * @param anApplicant Specified Applicant whose fields / characteristics should be used to populate UI fields.
+	 * @param anApplicant Specified Applicant whose fields/characteristics should be used to populate UI fields.
 	 * @param theirApplication Specified Application of the Applicant that will be used to populate UI Fields.
 	 */
 	public void populateApplicationFields(Applicant anApplicant, Application theirApplication)
 	{
+		clearApplicationFields();
+		
 		txtApplicationNumber.setText(theirApplication.getApplicationNumber());
 		txtApplicationStatus.setText(theirApplication.getApplicationStatus().getStatusDescripition());
 		txtApplicationReasonStatus.setText(theirApplication.getApplicationStatus().getReasonDescription());
@@ -2612,9 +2414,97 @@ public class PostGradToolUI {
 		{
 			lblPDFName.setText(pdf);
 		}
-		
 	}
 	
+	/**
+	 * Method clears all application interface fields.
+	 */
+	public void clearApplicationFields()
+	{
+		txtApplicationNumber.setText("");
+		txtApplicationStatus.setText("");
+		txtApplicationReasonStatus.setText("");
+		txtApplicantApplicationNumber.setText("");
+		txtApplicantApplicationStatus.setText("");
+		txtStatusReason.setText("");
+		txtrMessage.setText("");
+		
+		txtApplicantNumber.setText("");
+		txtSurname.setText("");
+		txtFirstName.setText("");
+		cbxTitle.setSelectedIndex(-1);
+		cbxCitizenship.setSelectedIndex(-1);
+		cbxCountry.setSelectedIndex(-1);
+
+		txtEmail.setText("");
+		txtCellphone.setText("");
+		txtrLineAddress.setText("");
+		cbxResCountry.setSelectedIndex(-1);
+		lblResCountryOther.setVisible(false);
+		txtResCountryOther.setText("");
+		txtResCountryOther.setVisible(false);
+
+		txtDegUniversity.setText("");
+		cbxDegCountry.setSelectedIndex(-1);
+		lbldegCountry.setVisible(false);
+		txtDegCountryOther.setText("");
+		txtDegCountryOther.setVisible(false);
+		cbxDegree.setSelectedIndex(-1);
+		lblDegOther.setVisible(false);
+		txtDegOther.setText("");
+		cbxNQF.setSelectedIndex(-1);
+		spnMinDuration.setValue(Integer.valueOf(1));
+		cbxStudyProgram.setSelectedIndex(-1);
+		lblIfOtherSpecify.setVisible(false);
+		txtStudyProgramOther.setText("");
+		txtStudyProgramOther.setVisible(false);
+
+		chckbxCertifiedTranscript.setSelected(true);
+		chckbxCurriculumVitaecv.setSelected(true);
+		chckbxResearchStatement.setSelected(true);
+		chckbxRefereesNames.setSelected(true);
+		chkbxFundingStatement.setSelected(true);
+		chckbxMotivation.setSelected(true);
+		
+		lblPDFName.setText("");
+		
+		lblIdPassport.setText("");
+		lblIdPassport.setVisible(false);
+		txtIDPassport.setText("");
+		txtIDPassport.setVisible(false);
+		lblRace.setVisible(false);
+		cbxRace.setSelectedIndex(-1);
+		cbxRace.setVisible(false);
+
+		lblPriorItExperience.setVisible(false);
+		spnYearsITExperience.setValue(Integer.valueOf(0));
+		spnYearsITExperience.setVisible(false);
+		spnLevelUndergrad.setValue(Integer.valueOf(0));
+		spnLevelUndergrad.setVisible(false);
+		lblLevelOfUndergraduate.setVisible(true);
+		lblAveragesPerMathematics.setVisible(false);
+		lblAverageMathLevel1.setVisible(false);
+		lblAverageMathLevel2.setVisible(false);
+		lblAverageMathLevel3.setVisible(false);
+		txtAverageMathLevel1.setVisible(false);
+		txtAverageMathLevel2.setVisible(false);
+		txtAverageMathLevel3.setVisible(false);
+		txtAverageMathLevel1.setText("");
+		txtAverageMathLevel2.setText("");
+		txtAverageMathLevel3.setText("");
+		txtrProvideBriefDescription.setText("");
+		chckbxPreviousDegreeHadProjectThesis.setSelected(false);
+		txtrProvideBriefDescription.setVisible(false);
+		chckbxPreviousDegreeHadProjectThesis.setVisible(false);
+		
+		lblPDFName.setText("");		
+	}
+	
+	/**
+	 * Populates the given combo box using the given text file.
+	 * @param comboBox The combo box to be populated.
+	 * @param fileName The text file to populate the combo box with.
+	 */
 	private void populateComboBox(JComboBox<String> comboBox, String fileName)
 	{
 		//clean combo box to avoid duplicates
@@ -2648,6 +2538,12 @@ public class PostGradToolUI {
 		comboBox.setSelectedIndex(-1);
 	}
 	
+	/**
+	 * Check if a specific item is listed in a given combo box.
+	 * @param item The item to search for in the combo box.
+	 * @param comboBox The combo box to be searched.
+	 * @return Whether or not a specific item is listed in a given combo box.
+	 */
 	private boolean itemListedInComboBox(String item, JComboBox<String> comboBox)
 	{
 		boolean bFound = false;
@@ -2663,9 +2559,11 @@ public class PostGradToolUI {
 		return bFound;
 	}
 	
+	/**
+	 * Show the sign in interface.
+	 */
 	private void showSignInInterface()
 	{
-		//data.writeDataBack();
 		pnlSignInUI.setVisible(true);
 		pnlApplicationUI.setVisible(false);
 		pnlApplicantEntry.setVisible(false);
@@ -2689,9 +2587,11 @@ public class PostGradToolUI {
 		lblConfirmPassword.setVisible(false);
 		pswConfirmPassword.setVisible(false);
 		btnSign.setText("Sign-In");
-		//JOptionPane.showMessageDialog(frmSchoolOfIt,"To all potential applicants:" + "\n" + "If one does not already have a UCT Student Number," + "\n" + "then one needs to first apply at UCT Online Applications " + "\n" + "-one will then receive an Applicant number" + "\n" + "and the School of IT will notify you once you can apply.");
 	}
 	
+	/**
+	 * Show the interface that the academics first see when entering the system.
+	 */
 	private void showAcademicEntryInterface()
 	{
 		pnlSignInUI.setVisible(false);
@@ -2720,6 +2620,9 @@ public class PostGradToolUI {
 		btnMoreApplications.setVisible(true);
 	}
 	
+	/**
+	 * Show the interface that returning applicants first see when entering the system.
+	 */
 	private void showApplicantEntryInterface()
 	{
 		bApplicantSignedIn = true; 
@@ -2763,6 +2666,9 @@ public class PostGradToolUI {
 		}
 	}
 	
+	/**
+	 * Show the personal details application interface.
+	 */
 	private void showPersonalDetails()
 	{
 		btnNext.setEnabled(true);
@@ -2819,53 +2725,19 @@ public class PostGradToolUI {
 		txtIDPassport.setEditable(bEdit);
 		cbxRace.setEnabled(bEdit);
 		
-		/*
-		if ((!bApplicantSignedIn) && (bSignIn)) //academic signed-in -> fields view only
+		if (bApplicantSignedIn) //for application process completion
 		{
-			txtApplicantNumber.setEditable(false);
-			txtSurname.setEditable(false);
-			txtFirstName.setEditable(false);
-			cbxTitle.setEnabled(false);
-			cbxCitizenship.setEnabled(false);
-			cbxCountry.setEnabled(false);
-			txtIDPassport.setEditable(false);
-			cbxRace.setEnabled(false);
-			btnPdfOfApplication.setVisible(true);
-			btnChangeStatus.setVisible(true);
-			
-		}
-		else //applicant signed in
+			btnSubmitReturn.setVisible(false);
+		} 
+		else
 		{
-			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
-			
-			txtApplicantNumber.setEditable(bEditable);
-			txtSurname.setEditable(bEditable);
-			txtFirstName.setEditable(bEditable);
-			cbxTitle.setEditable(bEditable);
-			cbxCitizenship.setEditable(bEditable);
-			cbxCountry.setEditable(bEditable);
-			txtIDPassport.setEditable(bEditable);
-			cbxRace.setEditable(bEditable);
-				
-			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
-			{
-				//btnSaveUpdate.setText("Save");
-				btnSubmitReturn.setText("Submit");
-			}
-			else //existing application
-			{
-				//btnSaveUpdate.setText("Update");
-				btnSubmitReturn.setText("Return");
-			}
+			btnSubmitReturn.setVisible(true);
 		}
-		*/
-		
-		//btnSaveUpdate.setVisible(false);
-		if (bApplicantSignedIn) {btnSubmitReturn.setVisible(false);} //for application process completion
-		else {btnSubmitReturn.setVisible(true);}
-		
 	}
 	
+	/**
+	 * Show the contact details application interface.
+	 */
 	private void showContactDetails()
 	{
 		btnPrevious.setEnabled(true);
@@ -2901,44 +2773,29 @@ public class PostGradToolUI {
 		txtrLineAddress.setEditable(bEdit);
 		cbxResCountry.setEnabled(bEdit);
 		txtResCountryOther.setEditable(bEdit);
-		
-		/*
-		if ((!bApplicantSignedIn) && bSignIn) //academic signed-in -> fields view only
-		{
-			txtEmail.setEditable(false);
-			txtCellphone.setEnabled(false);
-			txtrLineAddress.setEditable(false);
-			cbxResCountry.setEnabled(false);
-			txtResCountryOther.setEditable(false);
 			
+		if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
+		{
+			btnSubmitReturn.setText("Submit");
 		}
-		else //applicant signed in
+		else //existing application
 		{
-			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
-			
-			txtEmail.setEditable(bEditable);
-			txtCellphone.setEditable(bEditable);
-			txtrLineAddress.setEditable(bEditable);
-			cbxResCountry.setEditable(bEditable);
-			txtResCountryOther.setEditable(bEditable);
-		*/		
-			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
-			{
-				//btnSaveUpdate.setText("Save");
-				btnSubmitReturn.setText("Submit");
-			}
-			else //existing application
-			{
-				//btnSaveUpdate.setText("Update");
-				btnSubmitReturn.setText("Return");
-			}
-		//}
-		
-		//btnSaveUpdate.setVisible(false);
-		if (bApplicantSignedIn) {btnSubmitReturn.setVisible(false);} //for application process completion
-		else {btnSubmitReturn.setVisible(true);}
+			btnSubmitReturn.setText("Return");
+		}
+
+		if (bApplicantSignedIn) //for application process completion
+		{
+			btnSubmitReturn.setVisible(false);
+		} 
+		else
+		{
+			btnSubmitReturn.setVisible(true);
+		}
 	}
 	
+	/**
+	 * Show the tertiary qualifications application interface.
+	 */
 	private void showTertiaryQualifications()
 	{
 		btnPrevious.setEnabled(true);
@@ -2976,48 +2833,29 @@ public class PostGradToolUI {
 		txtDegOther.setEditable(bEdit);
 		cbxNQF.setEnabled(bEdit);
 		spnMinDuration.setEnabled(bEdit);
-		
-		/*
-		if ((!bApplicantSignedIn) && bSignIn) //academic signed-in -> fields view only
-		{
-			cbxDegCountry.setEnabled(false);
-			txtDegCountryOther.setEditable(false);
-			cbxDegree.setEnabled(false);
-			txtDegOther.setEditable(false);
-			cbxNQF.setEnabled(false);
-			spnMinDuration.setEnabled(false);
-			txtDegUniversity.setEditable(false);
 			
+		if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
+		{
+			btnSubmitReturn.setText("Submit");
 		}
-		else //applicant signed in
+		else //existing application
 		{
-			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
-			
-			cbxDegCountry.setEditable(bEditable);
-			txtDegCountryOther.setEditable(bEditable);
-			cbxDegree.setEditable(bEditable);
-			txtDegOther.setEditable(bEditable);
-			cbxNQF.setEditable(bEditable);
-			spnMinDuration.setEnabled(bEditable);
-			txtDegUniversity.setEditable(bEditable);
-		*/		
-			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
-			{
-				//btnSaveUpdate.setText("Save");
-				btnSubmitReturn.setText("Submit");
-			}
-			else //existing application
-			{
-				//btnSaveUpdate.setText("Update");
-				btnSubmitReturn.setText("Return");
-			}
-		//}
+			btnSubmitReturn.setText("Return");
+		}
 		
-		//btnSaveUpdate.setVisible(false);
-		if (bApplicantSignedIn) {btnSubmitReturn.setVisible(false);} //for application process completion
-		else {btnSubmitReturn.setVisible(true);}
+		if (bApplicantSignedIn) //for application process completion
+		{
+			btnSubmitReturn.setVisible(false);
+		}
+		else 
+		{
+			btnSubmitReturn.setVisible(true);
+		}
 	}
 	
+	/**
+	 * Show the study program application interface.
+	 */
 	private void showStudyProgram()
 	{
 		btnPrevious.setEnabled(true);
@@ -3085,55 +2923,29 @@ public class PostGradToolUI {
 			chckbxPreviousDegreeHadProjectThesis.setVisible(false);
 		
 		}
-		/*
-		if ((!bApplicantSignedIn) && bSignIn) //academic signed-in -> fields view only
+		
+		if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
 		{
-			cbxStudyProgram.setEditable(false);
-			txtStudyProgramOther.setEditable(false);
-			spnYearsITExperience.setEnabled(false);
-			spnLevelUndergrad.setEnabled(false);
-			txtAverageMathLevel1.setEditable(false);
-			txtAverageMathLevel2.setEditable(false);
-			txtAverageMathLevel3.setEditable(false);
-			chckbxPreviousDegreeHadProjectThesis.setEnabled(false);
-			txtrProvideBriefDescription.setEnabled(false);
-			
-			btnPdfOfApplication.setVisible(true);
-			btnChangeStatus.setVisible(true);
-			
+			btnSubmitReturn.setText("Submit");
 		}
-		else //applicant signed in
+		else //existing application
 		{
-			boolean bEditable = (appController.applicantionEditable(application.getApplicationNumber()));
-			
-			cbxStudyProgram.setEditable(bEditable);
-			txtStudyProgramOther.setEditable(bEditable);
-			spnYearsITExperience.setEnabled(bEditable);
-			spnLevelUndergrad.setEnabled(bEditable);
-			txtAverageMathLevel1.setEditable(bEditable);
-			txtAverageMathLevel2.setEditable(bEditable);
-			txtAverageMathLevel3.setEditable(bEditable);
-			chckbxPreviousDegreeHadProjectThesis.setEnabled(bEditable);
-			txtrProvideBriefDescription.setEnabled(bEditable);
-			*/
-			if (application.getApplicationStatus().getStatusCode().equalsIgnoreCase("CRTD")) //new application
-			{
-				//btnSaveUpdate.setText("Save");
-				btnSubmitReturn.setText("Submit");
-			}
-			else //existing application
-			{
-				//btnSaveUpdate.setText("Update");
-				btnSubmitReturn.setText("Return");
-				
-			//}
+			btnSubmitReturn.setText("Return");
 		}
 		
-		//btnSaveUpdate.setVisible(false);
-		if (bApplicantSignedIn) {btnSubmitReturn.setVisible(false);} //for application process completion
-		else {btnSubmitReturn.setVisible(true);}
+		if (bApplicantSignedIn) //for application process completion
+		{
+			btnSubmitReturn.setVisible(false);
+		}
+		else 
+		{
+			btnSubmitReturn.setVisible(true);
+		}
 	}
 	
+	/**
+	 * Show the additional documentation application interface.
+	 */
 	private void showAdditionalDocumentation()
 	{
 		btnPrevious.setEnabled(true);
@@ -3198,6 +3010,10 @@ public class PostGradToolUI {
 		}
 	}
 	
+	/**
+	 * Checks if all the personal details fields have all been populated and are all acceptable.
+	 * @return True if details acceptable, false otherwise.
+	 */
 	private boolean checkPersonalDetails()
 	{
 		if (nullOrBlank(txtSurname.getText().toString().trim()))
@@ -3274,8 +3090,6 @@ public class PostGradToolUI {
 			return false;
 		}
 		
-		
-		
 		if (cbxCountry.getSelectedIndex() == -1)
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please select a country.", "Item not selected",JOptionPane.ERROR_MESSAGE);
@@ -3285,6 +3099,10 @@ public class PostGradToolUI {
 		return true;
 	}
 	
+	/**
+	 * Checks if all the contact details fields have all been populated and are all acceptable.
+	 * @return True if details acceptable, false otherwise.
+	 */
 	private boolean checkContactDetails()
 	{
 		if (nullOrBlank(txtEmail.getText().toString().trim()))
@@ -3298,7 +3116,7 @@ public class PostGradToolUI {
 			return false;
 		}
 		
-		/*if (nullOrBlank(txtCellphone.getText().toString().trim())) //TODO
+		if (nullOrBlank(txtCellphone.getText().toString().trim()))
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Please provide cell phone by clicking next to the label.", "Field not completed", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -3317,7 +3135,7 @@ public class PostGradToolUI {
 		{
 			JOptionPane.showMessageDialog(frmSchoolOfIt, "Phone number should either start with code or 0, i.e. +27762613100 or 0762613100", "Field cannot be read", JOptionPane.ERROR_MESSAGE);
 			return false;
-		}*/
+		}
 		
 		if (nullOrBlank(txtrLineAddress.getText().toString().trim()))
 		{
@@ -3351,6 +3169,10 @@ public class PostGradToolUI {
 		return true;
 	}
 	
+	/**
+	 * Checks if all the qualification details fields have all been populated and are all acceptable.
+	 * @return True if details acceptable, false otherwise.
+	 */
 	private boolean checkQualificationDetails()
 	{
 		if (cbxDegCountry.getSelectedIndex() == -1)
@@ -3397,6 +3219,10 @@ public class PostGradToolUI {
 		return true;
 	}
 	
+	/**
+	 * Checks if all the study program details fields have all been populated and are all acceptable.
+	 * @return True if details acceptable, false otherwise.
+	 */
 	private boolean checkStudyProgramDetails()
 	{		
 		if (cbxStudyProgram.getSelectedIndex() == -1)
@@ -3509,11 +3335,13 @@ public class PostGradToolUI {
 				return false;
 			}
 		}	
-		//check eligibility 
-		
 		return true;
 	}
 	
+	/**
+	 * Checks if the user has uploaded additional documents.
+	 * @return True if additional documents uploaded, false otherwise. 
+	 */
 	private boolean checkAdditionalDocuments()
 	{		
 		if (nullOrBlank(lblPDFName.getText().toString().trim()))
@@ -3525,6 +3353,10 @@ public class PostGradToolUI {
 		return true;
 	}
 	
+	/**
+	 * Displays the inputs for the undergraduate math averages.
+	 * @param level The number of undergraduate math inputs to display.
+	 */
 	private void displayUndergradMathInputs(int level)
 	{
 		lblAveragesPerMathematics.setVisible((level > 0));
@@ -3538,11 +3370,19 @@ public class PostGradToolUI {
 		txtAverageMathLevel3.setVisible((level > 2));
 	}
 	
+	/**
+	 * Checks if the given string is null or blank.
+	 * @param input The given string.
+	 * @return Whether the given string is null or blank. 
+	 */
 	private boolean nullOrBlank(String input)
 	{
 		return input.equals(null) || input.isEmpty() || input.equals("") || input.equals(" ");
 	}
 	
+	/**
+	 * Populates the lists for application statuses and status change reasons.
+	 */
 	private void populateLists()
 	{
 		//read items
@@ -3569,14 +3409,14 @@ public class PostGradToolUI {
 		}
 		catch(IOException e)
 		{
-					System.out.println("Error in populating combo box.");
+			System.out.println("Error in populating combo box.");
 		}
 		finally
 		{
 			if (reader != null)
-				{
-					reader.close();
-				}
+			{
+				reader.close();
+			}
 		}
 		
 		statuses.trimToSize();
@@ -3589,6 +3429,13 @@ public class PostGradToolUI {
 		appReasons = reasons.toArray(appReasons);
 	}
 	
+	/**
+	 * Get a sub array from an original array.
+	 * @param arrayList The original array.
+	 * @param startIncl The start index of the sub array (inclusive).
+	 * @param endExcl The end index of the sub array (exclusive).
+	 * @return The sub array.
+	 */
 	private ArrayList<ApplicantApplicationReference> getSubArrayList(ArrayList<ApplicantApplicationReference> arrayList, int startIncl, int endExcl)
 	{
 		arrayList.trimToSize();

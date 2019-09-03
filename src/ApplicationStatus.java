@@ -1,22 +1,37 @@
-
+/**
+ * Class models application status for applications.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class ApplicationStatus {
 	private String statusCode;
 	private String statusDescription;
 	private String reasonCode;
 	private String reasonDescription;
 	
+	/**
+	 * No parameter constructor, create a new application status.
+	 */
 	public ApplicationStatus()
 	{
 		setStatus("Created");	
 		setReason("Applicant started application process");
 	}
 	
+	/**
+	 * Create an application status using the given fields.
+	 * @param statusDescription The description of the status.
+	 * @param reasonDescription The reason for the status.
+	 */
 	public ApplicationStatus(String statusDescription, String reasonDescription)
 	{
 		setStatus(statusDescription);	
 		setReason(reasonDescription);
 	}
 	
+	/**
+	 * Generate message for applicant describing application status.
+	 * @return The generated message for the applicant.
+	 */
 	public String generateMessageForApplicant()
 	{
 		if ((statusCode.equalsIgnoreCase("ADMT")) && (reasonCode.equalsIgnoreCase("FIRM")))
@@ -143,7 +158,6 @@ public class ApplicationStatus {
 	}
 
 	/**
-	 * Return code for status of application
 	 * @return the code for status of application
 	 */
 	public String getStatusCode() {
@@ -151,7 +165,6 @@ public class ApplicationStatus {
 	}
 
 	/**
-	 * Return the description of status of this application.
 	 * @return the statusDescripition
 	 */
 	public String getStatusDescripition() {
@@ -159,7 +172,6 @@ public class ApplicationStatus {
 	}
 
 	/**
-	 * Return code of the reason referenced for status of application
 	 * @return the code of the reason referenced for status of application
 	 */
 	public String getReasonCode() {
@@ -167,13 +179,16 @@ public class ApplicationStatus {
 	}
 
 	/**
-	 * Return code of the reason referenced for status of application
 	 * @return the reasonDescription
 	 */
 	public String getReasonDescription() {
 		return reasonDescription;
 	}
 	
+	/**
+	 * Set the status code of the application using the status description.
+	 * @param statusDescription The status description of the application.
+	 */
 	private void setStatus(String statusDescription)
 	{
 		this.statusDescription = statusDescription;
@@ -193,6 +208,10 @@ public class ApplicationStatus {
 		else {this.statusCode = "";}
 	}
 	
+	/**
+	 * Set the reason code of the application using the reason description.
+	 * @param statusDescription The reason description of the application.
+	 */
 	private void setReason(String statusReason)
 	{
 		reasonDescription = statusReason;

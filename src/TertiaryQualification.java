@@ -1,4 +1,7 @@
-
+/**
+ * Class TertiaryQualification models tertiary qualifications.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class TertiaryQualification {
 	private String tertiaryInstitution;
 	private String country;
@@ -6,6 +9,9 @@ public class TertiaryQualification {
 	private int minDuration;
 	private String degree;
 	
+	/**
+	 * No parameter constructor, creates a basic tertiary qualification object.
+	 */
 	public TertiaryQualification()
 	{
 		setTertiaryInstitution("");
@@ -15,6 +21,14 @@ public class TertiaryQualification {
 		setDegree("");
 	}
 	
+	/**
+	 * Creates a tertiary qualification object using the supplied fields.
+	 * @param degree The degree of the tertiary qualification.
+	 * @param university The university that awarded the tertiary qualification.
+	 * @param country The country in which the tertiary qualification was awarded.
+	 * @param duration The minimum duration of the tertiary qualification.
+	 * @param NQF The NQF equivalent of the of the tertiary qualification.
+	 */
 	public TertiaryQualification(String degree, String university, String country, int duration, String NQF)
 	{
 		this.tertiaryInstitution = university;

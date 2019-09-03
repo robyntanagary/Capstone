@@ -9,6 +9,9 @@ public class Applicant extends User {
 	private Address residenceAddress;
 	private TertiaryQualification previousQualification;
 	
+	/**
+	 * No parameter constructor, create a basic applicant object.
+	 */
 	public Applicant()
 	{
 		super();
@@ -19,6 +22,10 @@ public class Applicant extends User {
 		this.previousQualification = new TertiaryQualification();
 	}
 	
+	/**
+	 * Copy constructor, create an applicant object that is identical to the given applicant object.
+	 * @param applicant The applicant object to be copied.
+	 */
 	public Applicant(Applicant applicant)
 	{
 		super((User) applicant);
@@ -29,6 +36,13 @@ public class Applicant extends User {
 		this.previousQualification = applicant.getPreviousQualification();
 	}
 	
+	/**
+	 * Standard constructor, create an applicant object using the given fields.
+	 * @param applicantNumber The applicant number for the new applicant.
+	 * @param email The email for the new applicant.
+	 * @param password The password for the new applicant.
+	 * @param confirmPassword The confirmed password for the new applicant.
+	 */
 	public Applicant(String applicantNumber, String email, String password, String confirmPassword)
 	{
 		super(email, password);
@@ -40,80 +54,70 @@ public class Applicant extends User {
 	}
 	
 	/**
-	 * Method return the country in which thus applicant has citizenship.
-	 * @return Country in which applicant has this applicant has citizenship
+	 * @return Country in which this applicant has citizenship.
 	 */
 	public String getCitizenshipCountry() {
 		return citizenshipCountry;
 	}
 	
 	/**
-	 * Method set the county in which this applicant has citizenship to the specified country.
-	 * @param citizenshipCountry
+	 * @param citizenshipCountry The county in which this applicant has citizenship.
 	 */
 	public void setCitizenshipCountry(String citizenshipCountry) {
 		this.citizenshipCountry = citizenshipCountry;
 	}
 	
 	/**
-	 * Method return whether applicant is a RSA citizen, permanent RSA resident, or an international applicant.
-	 * @return whether applicant is a RSA citizen, permanent RSA resident, or an international applicant.
+	 * @return Whether applicant is a RSA citizen, permanent RSA resident, or an international applicant.
 	 */
 	public String getCitizenship() {
 		return citizenship;
 	}
 	
 	/**
-	 * Method sets whether applicant is a RSA citizen, permanent RSA resident, or an international applicant.
-	 * @param citizenshipCountry Specify whether applicant is a RSA citizen, permanent RSA resident, or an international applicant.
+	 * @param citizenshipCountry Whether applicant is a RSA citizen, permanent RSA resident, or an international applicant.
 	 */
 	public void setCitizenship(String citizenship) {
 		this.citizenship = citizenship;
 	}
 	
 	/**
-	 * Method return the applicant number of this applicant.
-	 * @return the applicant number belong to this applicant. 
+	 * @return The applicant number of this applicant. 
 	 */
 	public String getApplicantNumber() {
 		return applicantNumber;
 	}
 	
 	/**
-	 * Method sets the applicant number of this applicant.
-	 * @param applicantNumber The specified applicant number belonging to this applicant.
+	 * @param applicantNumber The applicant number to be set.
 	 */
 	public void setApplicantNumber(String applicantNumber) {
 		this.applicantNumber = applicantNumber;
 	}
 	
 	/**
-	 * Method returns the residence address of this applicant.
-	 * @return the residence address of this applicant.
+	 * @return The residence address of the applicant.
 	 */
 	public Address getResidenceAddress() {
 		return residenceAddress;
 	}
 	
 	/**
-	 * Method sets the residence address of this applicant
-	 * @param residenceAddress The specified residence address of this applicant.
+	 * @param residenceAddress The residence address to be set.
 	 */
 	public void setResidenceAddress(Address residenceAddress) {
 		this.residenceAddress = residenceAddress;
 	}
 	
 	/**
-	 * Method returns this applicant's previous qualification.
-	 * @return the previous qualification of this applicant.
+	 * @return The previous qualification of this applicant.
 	 */
 	public TertiaryQualification getPreviousQualification() {
 		return previousQualification;
 	}
 	
 	/**
-	 * Method sets this applicant's previous qualification.
-	 * @param previousQualification The specified previous qualification of this applicant.
+	 * @param previousQualification The previous qualification to be set.
 	 */
 	public void setPreviousQualification(TertiaryQualification previousQualification) {
 		this.previousQualification = previousQualification;

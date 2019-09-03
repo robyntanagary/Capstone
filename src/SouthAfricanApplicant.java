@@ -1,9 +1,15 @@
-
+/**
+ * Class SouthAfricanApplicant models South African applicants, it is a subclass of Applicant.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class SouthAfricanApplicant extends Applicant{
 	
 	private String ID;
 	private String race;
 	
+	/**
+	 * No Parameter constructor, creates a basic south african applicant object.
+	 */
 	public SouthAfricanApplicant()
 	{
 		super();
@@ -11,6 +17,10 @@ public class SouthAfricanApplicant extends Applicant{
 		race = "";
 	}
 	
+	/**
+	 * Creates an south african applicant using all the available details from an applicant object.
+	 * @param applicant The applicant object to be copied.
+	 */
 	public SouthAfricanApplicant(Applicant applicant)
 	{
 		super(applicant);
@@ -24,7 +34,6 @@ public class SouthAfricanApplicant extends Applicant{
 	}
 
 	/**
-	 * Return RSA applicant's ID number
 	 * @return The ID number belonging to this RSA applicant.
 	 */
 	public String getID() {
@@ -32,7 +41,6 @@ public class SouthAfricanApplicant extends Applicant{
 	}
 
 	/**
-	 * Set this RSA applicant's ID number to the specified ID number.
 	 * @param iD The specified ID number of this RSA applicant.
 	 */
 	public void setID(String iD) {
@@ -40,7 +48,6 @@ public class SouthAfricanApplicant extends Applicant{
 	}
 
 	/**
-	 * Return this RSA applicant's race.
 	 * @return this RSA applicant's race.
 	 */
 	public String getRace() {
@@ -48,7 +55,6 @@ public class SouthAfricanApplicant extends Applicant{
 	}
 
 	/**
-	 * Sets this RSA applicant's race
 	 * @param race The specified race of this RSA applicant. 
 	 */
 	public void setRace(String race) {

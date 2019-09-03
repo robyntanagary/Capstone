@@ -1,13 +1,23 @@
-
+/**
+ * Class InternationalApplicant models international applicants, it is a subclass of Applicant.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class InternationalApplicant extends Applicant {
 	private String passport;
 	
+	/**
+	 * No parameter constructor, creates a basic international applicant.
+	 */
 	public InternationalApplicant()
 	{
 		super();
 		setPassport("");
 	}
 	
+	/**
+	 * Creates an international applicant using all the available details from an applicant object.
+	 * @param applicant The applicant object to copy.
+	 */
 	public InternationalApplicant(Applicant applicant)
 	{
 		super(applicant);
@@ -19,7 +29,6 @@ public class InternationalApplicant extends Applicant {
 	}
 
 	/**
-	 * Method return the passport number belonging to this international applicant.
 	 * @return the international applicant's passport number.
 	 */
 	public String getPassport() {
@@ -27,7 +36,6 @@ public class InternationalApplicant extends Applicant {
 	}
 
 	/**
-	 * Method sets this international applicant's passport number.
 	 * @param passport The specified passport number belonging to this international applicant.
 	 */
 	public void setPassport(String passport) {

@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.sql.*;
-
+/**
+ * Class DataReaderWriter manages access and queries to the database.
+ * @author FYTTAN001, LXXWEN005, MCKROB018
+ */
 public class DataReaderWriter {
 	public int maxApplicationNumber;
 	static Connection con = null;
@@ -14,6 +17,9 @@ public class DataReaderWriter {
 	static String username = "root";
 	static String password = "root";
 	
+	/**
+	 * Construct a DataReaderWriter object.
+	 */
 	public DataReaderWriter()
 	{
 		maxApplicationNumber = 0;
@@ -21,6 +27,9 @@ public class DataReaderWriter {
 		initializeMaxAppNum();
 	}
 	
+	/**
+	 * Connect to the database.
+	 */
 	private void connectToDB()
 	{
 		try
@@ -36,6 +45,9 @@ public class DataReaderWriter {
 		}
 	}
 	
+	/**
+	 * Find and set the current max application number.
+	 */
 	public void initializeMaxAppNum()
 	{
 		PreparedStatement getMax;
@@ -55,6 +67,9 @@ public class DataReaderWriter {
 		}
 	}
 	
+	/**
+	 * @return An array of all applicant-application references.
+	 */
 	public ArrayList<ApplicantApplicationReference> getApplicantsAndTheirApplications()
 	{
 		PreparedStatement getApplicationNumbers ;
@@ -80,6 +95,11 @@ public class DataReaderWriter {
 		return list;
 	}
 	
+	/**
+	 * Fetches the academic corresponding the given staff number.
+	 * @param staffNumber The staff number of the academic to be fetched.
+	 * @return The fetched academic object.
+	 */
 	public FOacademic getAcademic(String staffNumber)
 	{
 		FOacademic academic = null;
@@ -126,6 +146,11 @@ public class DataReaderWriter {
 		return academic;
 	}
 	
+	/**
+	 * Fetches the applicant corresponding the given applicant number.
+	 * @param applicantNumber The applicant number of the applicant to be fetched.
+	 * @return The fetched applicant object.
+	 */
 	public Applicant getApplicant(String applicantNumber)
 	{
 		PreparedStatement getApplicant;
@@ -258,10 +283,11 @@ public class DataReaderWriter {
 		
 		return applicant;
 	}
+	
 	/**
-	 * 
-	 * @param applicantNumber The applicant number of of the Application to be fetched.
-	 * @return The fetched Application.
+	 * Fetches the application of an applicant given the applicant number.
+	 * @param applicantNumber The applicant number of of the application to be fetched.
+	 * @return The fetched application.
 	 */
 	public Application getApplicationOfApplicant(String applicantNumber)
 	{
@@ -299,9 +325,10 @@ public class DataReaderWriter {
 		
 		return application;
 	}
+	
 	/**
-	 * 
-	 * @param appNumber The application number of the Application to be fetched.
+	 * Fetches the application of an applicant given the application number.
+	 * @param appNumber The application number of the application to be fetched.
 	 * @return The fetched application.
 	 */
 	public Application getApplicationOfApplicant2(String appNumber)
@@ -341,16 +368,28 @@ public class DataReaderWriter {
 		return application;
 	}
 	
+	/**
+	 * @return The max application number.
+	 */
 	public int getMaxApplicationNumber()
 	{
 		return maxApplicationNumber;
 	}
 	
+	/**
+	 * @param max The max application number to be set.
+	 */
 	public void setMaximumApplicationNumber(int max)
 	{
 		maxApplicationNumber = max;
 	}
 	
+	/**
+	 * Creates and returns an ApplicantApplicationReference object containing the applicant and application 
+	 * corresponding to the given application number.
+	 * @param applicationNumber The application number to get the applicant-application reference of.
+	 * @return An ApplicantApplicationReference object.
+	 */
 	public ApplicantApplicationReference getApplicantApplicationRefByApplication(String applicationNumber)
 	{
 		Applicant applicant = null;
@@ -363,6 +402,12 @@ public class DataReaderWriter {
 		return aar;
 	}
 	
+	/**
+	 * Creates and returns an ApplicantApplicationReference object containing the applicant and application 
+	 * corresponding to the given applicant number.
+	 * @param applicantNumber The applicant number to get the applicant-application reference of.
+	 * @return An ApplicantApplicationReference object.
+	 */
 	public ApplicantApplicationReference getApplicantApplicationRefByApplicant(String applicantNumber)
 	{
 		Applicant applicant = null;
@@ -375,6 +420,12 @@ public class DataReaderWriter {
 		return aar;
 	}
 	
+	/**
+	 * Filter the applicants and application pairs by study program level and application status.
+	 * @param level The study program level to filter by.
+	 * @param applicationStatus The application status to filter by.
+	 * @return An array of applicant-application references that meet the filter criteria.
+	 */
 	public ArrayList<ApplicantApplicationReference> filterLevel(String level, String applicationStatus)
 	{
 		ArrayList<ApplicantApplicationReference> list = new ArrayList<ApplicantApplicationReference>();
@@ -393,15 +444,19 @@ public class DataReaderWriter {
 				list.add(getApplicantApplicationRefByApplication(rs.getString("applicationNumber")));
 			}
 		}
-		
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
 		return list;
 	}
 	
+	/**
+	 * Filter the applicants and application pairs by study program and application status.
+	 * @param studyProgram The study program to filter by.
+	 * @param applicationStatus The application status to filter by.
+	 * @return An array of applicant-application references that meet the filter criteria.
+	 */
 	public ArrayList<ApplicantApplicationReference> filterStudyProgram(String studyProgram, String applicationStatus)
 	{
 		ArrayList<ApplicantApplicationReference> list = new ArrayList<ApplicantApplicationReference>();
@@ -421,20 +476,16 @@ public class DataReaderWriter {
 				list.add(getApplicantApplicationRefByApplication(rs.getString("applicationNumber")));
 			}
 		}
-		
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		
 		return list;
 	}
 	
-	
-
 	/**
-	 * Method update existing application 
-	 * @param applicantAndTheirApplication Specified applicant and their application
+	 * Update the applicant and application tables in the database with the given applicant-application reference.
+	 * @param applicantAndTheirApplication The specified applicant-application reference to update the database with.
 	 */
 	public void updateApplicationRecord(ApplicantApplicationReference applicantAndTheirApplication)
 	{
@@ -521,7 +572,6 @@ public class DataReaderWriter {
 	 */
 	public boolean writePDFtoDB(File file, String applicationNumber)
 	{
-		//TODO
 		PreparedStatement check;
 		PreparedStatement add;
 		PreparedStatement update;
@@ -552,6 +602,7 @@ public class DataReaderWriter {
 		}
 		return true;
 	}
+	
 	/**
 	 * Accesses the database and reads from the pdfFile column of the pdf table.
 	 * @param file The location to which the file will be saved.
@@ -560,7 +611,6 @@ public class DataReaderWriter {
 	 */
 	public boolean readPDFfromDB(File file, String applicationNumber)
 	{
-		//TODO
 		PreparedStatement select;
 		try {
 			select = con.prepareStatement("SELECT pdfFile FROM capstonedb.pdf WHERE applicationNumber = ?;");
