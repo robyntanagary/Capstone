@@ -389,14 +389,22 @@ public class PostGradToolUI {
 					}
 					
 					else if(applicant != null)
-					{		
-						appController.confirmEmail(applicant.getFirstName(), applicant.getSurname(), applicant.getApplicantNumber(), applicant.getApplicantNumber() + "@myUCT.ac.za");
-						bNewApplicationStarted = true;
-						application = appController.createNewApplication(number);
-						
-						populateApplicationFields(applicant, application);
-						bEdit = true;
-						showPersonalDetails();
+					{	
+						try
+						{
+					    	frmSchoolOfIt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					    	bNewApplicationStarted = true;
+							application = appController.createNewApplication(number);
+							
+							populateApplicationFields(applicant, application);
+							bEdit = true;
+							showPersonalDetails();
+							appController.confirmEmail(applicant.getFirstName(), applicant.getSurname(), applicant.getApplicantNumber(), applicant.getApplicantNumber() + "@myUCT.ac.za");
+					    }
+					    finally
+					    {
+					    	frmSchoolOfIt.setCursor(Cursor.getDefaultCursor());
+					    }
 					}
 					else
 					{
@@ -2162,7 +2170,23 @@ public class PostGradToolUI {
 	 */
 	public void populateApplicationFields(Applicant anApplicant, Application theirApplication)
 	{
+		/*
+		Applicant temp;
+		if (anApplicant instanceof InternationalApplicant) {
+			temp = new InternationalApplicant(anApplicant);
+		} else if (anApplicant instanceof SouthAfricanApplicant) {
+			temp = new SouthAfricanApplicant(anApplicant);
+		} else {
+			temp = new Applicant(anApplicant);
+		}
 		clearApplicationFields();
+		if (temp instanceof InternationalApplicant) {
+			anApplicant = new InternationalApplicant(temp);
+		} else if (temp instanceof SouthAfricanApplicant) {
+			anApplicant = new SouthAfricanApplicant(temp);
+		} else {
+			anApplicant = new Applicant(temp);
+		}*/
 		
 		txtApplicationNumber.setText(theirApplication.getApplicationNumber());
 		txtApplicationStatus.setText(theirApplication.getApplicationStatus().getStatusDescripition());
@@ -2446,7 +2470,6 @@ public class PostGradToolUI {
 
 		txtDegUniversity.setText("");
 		cbxDegCountry.setSelectedIndex(-1);
-		lbldegCountry.setVisible(false);
 		txtDegCountryOther.setText("");
 		txtDegCountryOther.setVisible(false);
 		cbxDegree.setSelectedIndex(-1);

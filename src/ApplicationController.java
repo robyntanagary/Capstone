@@ -382,7 +382,8 @@ public class ApplicationController {
 				String lastName = applicantRow[5]; //extract last name
 				String applicantNumber = applicantRow[1]; //extract applicant number
 				String email = applicantNumber + "@myUCT.ac.za"; //E-mail 
-				return notifyApplicant(firstName,lastName, applicantNumber, email); //notify potential applicant
+				boolean result = notifyApplicant(firstName,lastName, applicantNumber, email); //notify potential applicant
+				if (!result) return false;
 			}
 		}
 		catch(IOException e)
@@ -573,7 +574,7 @@ public class ApplicationController {
 			MimeMessage message = new MimeMessage(session);
 			message.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
 			message.setSubject("Email Confirmation - UCT School of IT");
-			message.setText("Dear " + firstName + " " + lastName + "\n"
+			message.setText("Dear Applicant\n"
 					+ "Thank you very much for signing up on the University of Cape Town School of IT "
 					+ "internal applications system.\n"
 					+ "Please click the link below to confirm your email address.\n"
